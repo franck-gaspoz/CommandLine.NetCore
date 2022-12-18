@@ -32,15 +32,39 @@ The library provides functionalities needed to build console applications runnin
         - as string shortcuts (dynamic ansi vt strings)
         - throught API methods
 
-# Usage
+# Howto
+
+## 1. link to library
+
+download the nuget from command line or add it from Visual Studio
+
+``` dos
+@rem version 1.0.0 or any new one
+dotnet add package CommandLine.NetCore --version 1.0.0
+```
+
+link to the library in your main class (example: Program.cs):
 
 ``` csharp
 using CommandLine.NetCore;
 ```
 
+from your main method, transfer control to the library **CommandLine.NetCore** :
+
+``` csharp
+// <summary>
+/// command line input
+/// <para>commandName (commandArgs|globalArg)*</para>
+/// </summary>
+/// <param name="args">arguments</param>
+/// <returns>status code</returns>
+public static int Main(string[] args)
+    => new CommandLineInterface.Run(args);
+```
+
 # Version history
 
-1.0.0 new library
+1.0.0 init
 
 ___
 
