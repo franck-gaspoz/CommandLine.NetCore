@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 using static CommandLine.NetCore.Services.CmdLine.Globals;
 
-namespace CommandLine.NetCore.GlobalArgs;
+namespace CommandLine.NetCore.Service.CmdLine.GlobalArgs;
 
 internal abstract class Arg
 {

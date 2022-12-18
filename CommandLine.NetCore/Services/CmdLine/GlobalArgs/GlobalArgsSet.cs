@@ -2,11 +2,11 @@
 using System.Reflection;
 
 using CommandLine.NetCore.Extensions;
-using CommandLine.NetCore.GlobalArgs;
+using CommandLine.NetCore.Services.CmdLine;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Service.CmdLine.GlobalArgs;
 
 internal class GlobalArgsSet
 {

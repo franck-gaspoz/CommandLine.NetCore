@@ -2,7 +2,7 @@
 
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.GlobalArgs;
+using CommandLine.NetCore.Service.CmdLine.GlobalArgs;
 using CommandLine.NetCore.Services.CmdLine;
 
 using CommandLine.NetCore.Services.Text;

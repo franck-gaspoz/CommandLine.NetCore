@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Configuration;
 
-namespace CommandLine.NetCore.GlobalArgs;
+namespace CommandLine.NetCore.Service.CmdLine.GlobalArgs;
 
 internal class SGlobalArg : GlobalArg
 {

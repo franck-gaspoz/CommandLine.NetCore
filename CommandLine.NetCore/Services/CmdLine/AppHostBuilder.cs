@@ -32,7 +32,8 @@ internal sealed class AppHostBuilder
                         ConfigFilePath,
                         optional: false);
                     var cultureConfigFileName = $"{ConfigFilePrefix}{Thread.CurrentThread.CurrentCulture.Name}{ConfigFilePostfix}";
-                    configure.AddJsonFile(cultureConfigFileName, optional: false);
+                    if (File.Exists(cultureConfigFileName))
+                        configure.AddJsonFile(cultureConfigFileName, optional: false);
                 })
             .ConfigureServices(
                 services => services

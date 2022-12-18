@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using CommandLine.NetCore.GlobalArgs;
+using CommandLine.NetCore.Services.CmdLine;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Service.CmdLine.GlobalArgs;
 
 internal sealed class SettedGlobalArgsSet
 {

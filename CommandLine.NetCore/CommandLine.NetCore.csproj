@@ -78,10 +78,6 @@
 		</None>		
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Commands\Examples\" />
-	</ItemGroup>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="xcopy &quot;$(ProjectDir)README.md&quot; &quot;$(SolutionDir)&quot; /Y" />
 	</Target>
