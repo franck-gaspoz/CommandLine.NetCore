@@ -59,7 +59,7 @@ from your main method, transfer control to the library **CommandLine.NetCore** :
 /// <param name="args">arguments</param>
 /// <returns>status code</returns>
 public static int Main(string[] args)
-    => new CommandLineInterface.Run(args);
+    => CommandLineInterface.Run(args);
 ```
 
 ## 2. Test the integrated **help** command:

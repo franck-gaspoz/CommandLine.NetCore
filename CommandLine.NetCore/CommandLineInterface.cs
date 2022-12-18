@@ -15,7 +15,7 @@ namespace CommandLine.NetCore;
 /// <summary>
 /// command line interface
 /// </summary>
-public class CommandLineInterface
+public static class CommandLineInterface
 {
     /// <summary>
     /// run the command line arguments

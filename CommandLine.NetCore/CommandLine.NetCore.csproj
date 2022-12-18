@@ -54,6 +54,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Config\appSettings.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="LICENSE.md">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Pack>True</Pack>
@@ -77,7 +80,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Commands\Examples\" />
-	  <Folder Include="Config\" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
