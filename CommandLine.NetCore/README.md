@@ -34,7 +34,7 @@ The library provides functionalities needed to build console applications runnin
 
 # Howto
 
-## 1. link to library
+## 1. Run the command line
 
 download the nuget from command line or add it from Visual Studio
 
@@ -43,7 +43,7 @@ download the nuget from command line or add it from Visual Studio
 dotnet add package CommandLine.NetCore --version 1.0.0
 ```
 
-link to the library in your main class (example: Program.cs):
+link to the library in your console application main class (example: Program.cs):
 
 ``` csharp
 using CommandLine.NetCore;
@@ -60,6 +60,19 @@ from your main method, transfer control to the library **CommandLine.NetCore** :
 /// <returns>status code</returns>
 public static int Main(string[] args)
     => new CommandLineInterface.Run(args);
+```
+
+## 2. Test the integrated **help** command:
+
+Any console application built with the library **ComandLine.NetCore** implements by 
+default a command named **help** that dump any available help about commands that are 
+implemented in the software that uses the library and in the library itself. 
+
+As an example, you can build the test application console, provided in the project `CommandLine.NetCore.Example`, 
+Just execute in your favorite shell the command (available in the folder `bin/Release/net6.0`):
+
+``` dos
+./CommandLine.NetCore.Example.exe help
 ```
 
 # Version history
