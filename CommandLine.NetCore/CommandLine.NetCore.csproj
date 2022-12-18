@@ -1,9 +1,78 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+
+		<RootNamespace>CommandLine.NetCore</RootNamespace>
+		<AssemblyName>CommandLine.NetCore</AssemblyName>
+		<NeutralLanguage>en-US</NeutralLanguage>
+
+		<PackageId>CommandLine.NetCore</PackageId>
+		<IsPackable>true</IsPackable>
+		<Authors>Franck Gaspoz</Authors>
+		<Company>Franck Gaspoz</Company>
+		<Product>AnsiVtConsole.NetCore</Product>
+		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
+		<Copyright>(c) Franck Gaspoz 2022 Licence MIT</Copyright>
+		<Version>1.0.0</Version>
+		<InformationalVersion>1.0.0</InformationalVersion>
+
+		<PackageReleaseNotes>milestone 1</PackageReleaseNotes>
+		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>argument-parser pattern-command console-app console-application command-line-tool command-line ansi ansi-colors vt vt100 console color shell prompt bash powershell linux csharp netcore6 cli cmd command line tool</PackageTags>
+		<PackageIcon>content\assets\ascii-icon.png</PackageIcon>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+
+		<Platforms>AnyCPU</Platforms>
+
+		<PackageReadmeFile>content\README.md</PackageReadmeFile>
+
+		<PackageLicenseFile>content\LICENSE.md</PackageLicenseFile>
+
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<Optimize>false</Optimize>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="LICENSE.md">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>True</Pack>
+			<PackagePath>contentFiles/any/;content/</PackagePath>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</None>
+		<None Update="README.md">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>True</Pack>
+			<PackagePath>contentFiles/any/;content/</PackagePath>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</None>
+		<None Update="assets/ascii-icon.png">
+			<Pack>True</Pack>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>True</Pack>
+			<PackagePath>contentFiles/any/;content/</PackagePath>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</None>		
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy &quot;$(ProjectDir)README.md&quot; &quot;$(SolutionDir)&quot; /Y" />
+	</Target>
 
 </Project>
