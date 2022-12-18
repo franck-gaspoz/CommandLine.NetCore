@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Config\appSettings.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    <None Update="Config\appSettings.ext.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
