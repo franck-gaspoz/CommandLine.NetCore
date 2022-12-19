@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CommandLine.NetCore.Example": {
+      "commandName": "Project",
+      "commandLineArgs": "help"
+    }
+  }
+}

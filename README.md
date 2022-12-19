@@ -68,12 +68,116 @@ Any console application built with the library **ComandLine.NetCore** implements
 default a command named **help** that dump any available help about commands that are 
 implemented in the software that uses the library and in the library itself. 
 
-As an example, you can build the test application console, provided in the project `CommandLine.NetCore.Example`, 
-Just execute in your favorite shell the command (available in the folder `bin/Release/net6.0`):
+As an example, you can build the example application console, provided in the project `CommandLine.NetCore.Example`, 
+Just execute in your favorite shell this command (available in the folder `bin/Release/net6.0`):
 
 ``` dos
 ./CommandLine.NetCore.Example.exe help
 ```
+
+To get the help for a particular command, the syntax is `help {commandName}`. In this example you
+get help about the command help:
+
+``` dos
+./CommandLine.NetCore.Example.exe help help
+```
+
+## 3. Configure the library and a console application built with it
+
+The library settings provides the description of the application and of the commands, and also the translation of texts.
+You should override these settings according to your needs.
+
+Every settings are pushed throught `IHostBuilder.ConfigureAppConfiguration`. 
+Settings are looked up by this way, in the specified order:
+
+provided by the library CommandLine.NetCore:
+
+- `appSettings.core.json` : this file contains the settings needed by the core functionalities
+of the library: decription of the library, texts and description of the integrated command, in
+the default language (en-us)
+
+- `appSettings.core.{culture}.json` : same as above, any of these files provides translations for the
+culture specified by the tag `{culture}` according to available cultures specified in `Microsoft.`.
+The settings file that matches the current platform culture is loaded if it exists.
+
+provided by your application;
+
+- `appSettings.json` : dscription of the commands provided by your application, the texts, and any
+settings in the default language (en-us)
+
+- `appSettings.{culture}.json` : same as above for the translations of the culture specified by the tag
+`{culture}`
+
+The settings must conform with the following conventions:
+
+**Informations about application**
+
+``` json
+"App": {
+    "Title": "CommandLine.NetCore",
+    "ReleaseDate": "10/12/2022"
+  }
+```
+
+**Texts**
+
+``` json
+"Texts": {
+    "{TextId}": "Text"
+  }
+```
+
+**Description of the commands**
+
+``` json
+"Commands": {
+    "{CommandName}": {
+        "ShortDesc": "short description of the command",
+        "LongDesc": {
+            "{Syntax 1}" : "Description of the functionality provided by the syntax 1",
+            ...
+            "{Syntax n}" : "Description of the functionality provided by the syntax n",
+        }
+    }
+  }
+```
+
+example of the command **`help`** :
+
+``` json
+"Commands": {
+    "Help": {
+        "ShortDesc": "output a of list of all commands and global arguments or output help about a command",
+        "LongDesc": {
+            "help" : "output a of list of all commands and global arguments",
+            "help commandName" : "output help for the command with the name 'commandName'"
+        }
+    }
+  }
+```
+
+**Description of the global arguments**
+
+``` json
+"GlobalArgs": {
+    "{ArgumentName}": {
+        "{Syntax}" : "Description of the functionality provided by the argument syntax"
+    }
+  }
+```
+
+example of the global argument **s** :
+
+``` json
+"GlobalArgs": {
+    "s": {
+        "-s" : "turn off any output (silent mode)"
+    }
+  }
+```
+
+by convention (POSIX), single letter arguments are prefixed by `-`, whereas arguments with
+several letters are prefixed by `--`
 
 # Version history
 

@@ -30,9 +30,24 @@ internal abstract class Arg
         ParametersCount = parametersCount;
     }
 
-    public string Description() =>
-        _config.GetValue<string>("GlobalArgs:" + Name)!
-        ?? _texts._("GlobalArgHelpNotFound", Name)!;
+    public KeyValuePair<string, string> Description()
+    {
+        var desc = _config.GetSection("GlobalArgs:" + Name);
+
+        if (!desc.Exists() || !desc.GetChildren().Any())
+        {
+            return new KeyValuePair<string, string>(
+                _texts._("GlobalArgHelpNotFound", Name),
+                string.Empty);
+        }
+
+        var kvp = desc.GetChildren().First();
+
+        return new KeyValuePair<string, string>(
+            kvp.Key,
+            kvp.Value ?? string.Empty
+            );
+    }
 
     public string Prefix => GetPrefixFromArgName(Name);
 

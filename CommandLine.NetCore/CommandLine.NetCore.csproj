@@ -54,7 +54,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Config\appSettings.json">
+		<None Update="Config\appSettings.core.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="LICENSE.md">

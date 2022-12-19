@@ -17,10 +17,12 @@ internal sealed class AppHostBuilder
     /// build the app host and run it async
     /// </summary>
     /// <param name="args">command line args</param>
-    /// <param name="buildAction">eventually custom build action</param>
+    /// <param name="configureDelegate">optional configure delegate</param>
+    /// <param name="buildDelegate">optional build delegate</param>
     public AppHostBuilder(
         List<string> args,
-        Action<IHostBuilder>? buildAction = null)
+        Action<IConfigurationBuilder>? configureDelegate = null,
+        Action<IHostBuilder>? buildDelegate = null)
     {
         var hostBuilder = Host.CreateDefaultBuilder();
 
@@ -29,13 +31,26 @@ internal sealed class AppHostBuilder
                 configure =>
                 {
                     configure.AddJsonFile(
-                        ConfigFilePath,
+                        ConfigFilePrefix + ConfigFileCoreName + ConfigFilePostfix,
                         optional: false);
-                    var cultureRootConfigFileName = $"{ConfigFilePrefix}{Thread.CurrentThread.CurrentCulture.Name}{ConfigFilePostfix}";
-                    configure.AddJsonFile(cultureRootConfigFileName, optional: true);
-                    var extensionRootConfigFileName = $"{ConfigFilePrefix}ext{ConfigFilePostfix}";
-                    configure.AddJsonFile(extensionRootConfigFileName, optional: true);
-                })
+
+                    configure.AddJsonFile(
+                        ConfigFilePrefix + ConfigFileCoreName + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix,
+                        optional: true);
+
+                    configure.AddJsonFile(
+                        ConfigFilePrefix + ConfigFilePostfix,
+                        optional: true);
+
+                    configure.AddJsonFile(
+                        ConfigFilePrefix + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix,
+                        optional: true);
+                });
+
+        if (configureDelegate is not null)
+            hostBuilder.ConfigureAppConfiguration(configureDelegate);
+
+        hostBuilder
             .ConfigureServices(
                 services => services
                     .AddSingleton<Texts>()
@@ -45,7 +60,7 @@ internal sealed class AppHostBuilder
                     .AddSettedGlobalArguments()
                     .ConfigureOutput());
 
-        buildAction?.Invoke(hostBuilder);
+        buildDelegate?.Invoke(hostBuilder);
 
         AppHost = hostBuilder.Build();
         AppHost.RunAsync();

@@ -3,6 +3,7 @@
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.Text;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -25,18 +26,23 @@ public static class CommandLineInterface
     /// <para>output to console command results and any error</para>
     /// </summary>
     /// <param name="args">command line arguments</param>
-    /// <param name="buildAction">an optional IHostBuilder build action</param>
+    /// <param name="configureDelegate">optional configure delegate</param>
+    /// <param name="buildDelegate">optional build delegate</param>
     /// <returns>exit code</returns>
     public static int Run(
         string[] args,
-        Action<IHostBuilder>? buildAction = null
+        Action<IConfigurationBuilder>? configureDelegate = null,
+        Action<IHostBuilder>? buildDelegate = null
         )
     {
         var argList = args.ToList();
 
         try
         {
-            var host = new AppHostBuilder(argList, buildAction).AppHost;
+            var host = new AppHostBuilder(
+                argList,
+                configureDelegate,
+                buildDelegate).AppHost;
             var texts = host.Services.GetRequiredService<Texts>();
             var console = host.Services.GetRequiredService<IAnsiVtConsole>();
             var commandSet = host.Services.GetRequiredService<CommandsSet>();

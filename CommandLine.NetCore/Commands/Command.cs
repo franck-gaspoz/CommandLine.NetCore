@@ -84,12 +84,32 @@ public abstract class Command
         ?? Texts._("CommandShortHelpNotFound", ClassNameToCommandName())!;
 
     /// <summary>
-    /// long description of the command
+    /// long descriptions of the command
     /// </summary>
-    /// <returns>text of the description</returns>
-    public string LongDescription()
-        => Config.GetValue<string>($"Commands:{ClassNameToCommandName()}:LongDesc")!
-        ?? Texts._("CommandLongHelpNotFound", ClassNameToCommandName())!;
+    /// <returns>text of the descriptions of each command syntax. key is the syntax, value is the description</returns>
+    public List<KeyValuePair<string, string>> LongDescriptions()
+    {
+        var descs = Config.GetSection($"Commands:{ClassNameToCommandName()}:LongDesc");
+
+        if (!descs.Exists() || !descs.GetChildren().Any())
+        {
+            return new List<KeyValuePair<string, string>> {
+                new KeyValuePair<string,string>(
+                    Texts._("CommandLongHelpNotFound", ClassNameToCommandName()),
+                    string.Empty)
+            };
+        }
+
+        var r = new List<KeyValuePair<string, string>>();
+        foreach (var desc in descs.GetChildren())
+        {
+            r.Add(
+                new KeyValuePair<string, string>(
+                    desc.Key, desc.Value ?? string.Empty));
+        }
+
+        return r;
+    }
 
     /// <summary>
     /// returns the command name from this class type

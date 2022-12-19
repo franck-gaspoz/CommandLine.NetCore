@@ -66,13 +66,14 @@ internal sealed class HelpCommand : Command
             foreach (var kvp in _globalArgsSet.Args)
             {
                 var globalArg = (GlobalArg)_serviceProvider.GetRequiredService(kvp.Value);
-                Console.Out.WriteLine(ArgNameColor + globalArg.Prefix + kvp.Key + $"{StOff} : " + globalArg.Description());
+                var argDesc = globalArg.Description();
+                Console.Out.WriteLine(ArgNameColor + argDesc.Key + $"{StOff} : " + argDesc.Value);
             }
         }
         else
         {
             var command = _commandsSet.GetCommand(args[0]);
-            DumpLongDescription(command.LongDescription());
+            DumpLongDescriptions(command.LongDescriptions());
         }
         Console.Out.WriteLine();
         Console.Out.WriteLine(Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
@@ -118,26 +119,22 @@ internal sealed class HelpCommand : Command
         Console.Out.Write(StOff);
     }
 
-    private void DumpLongDescription(string text)
+    private void DumpLongDescriptions(List<KeyValuePair<string, string>> longDescriptions)
     {
-        var lines = text
-            .Replace("\r", "")
-            .Split('\n');
+        foreach (var kvp in longDescriptions)
+            DumpLongDescription(kvp);
+    }
 
-        foreach (var line in lines)
-        {
-            var t = line.Split(':');
-            var desc = StringAt(1, ref t).Trim();
-            var descExists = !string.IsNullOrWhiteSpace(desc);
+    private void DumpLongDescription(KeyValuePair<string, string> longDescription)
+    {
+        var desc = longDescription.Value.Trim();
+        var descExists = !string.IsNullOrWhiteSpace(desc);
 
-            var cmdSyntax = StringAt(0, ref t).Trim();
+        DumpCommandSyntax(longDescription.Key.Trim());
 
-            DumpCommandSyntax(cmdSyntax);
-
-            if (descExists)
-                Console.Out.Write(" : " + desc);
-            Console.Out.WriteLine();
-        }
+        if (descExists)
+            Console.Out.Write(" : " + desc);
+        Console.Out.WriteLine();
     }
 
     private static string StringAt(int i, ref string[] t)
