@@ -179,6 +179,10 @@ example of the global argument **s** :
 by convention (POSIX), single letter arguments are prefixed by `-`, whereas arguments with
 several letters are prefixed by `--`
 
+## 4. Implement a command
+
+
+
 # Version history
 
 1.0.0 init

@@ -50,8 +50,8 @@ public abstract class Command
         IConfiguration config,
         IAnsiVtConsole console,
         Texts texts,
-        int minArgCount,
-        int maxArgCount)
+        int minArgCount = 0,
+        int maxArgCount = 0)
     {
         Config = config;
         Texts = texts;
