@@ -75,6 +75,36 @@ Just execute in your favorite shell the command (available in the folder `bin/Re
 ./CommandLine.NetCore.Example.exe help
 ```
 
+## 3. Settings
+
+The library settings provides the description of the application and of the commands, and also the translation of texts.
+You should override these settings according to your needs.
+
+Every settings are pushed throught `IHostBuilder.ConfigureAppConfiguration`. 
+Settings are looked up by thi way, in the specified order:
+
+provided by the library CommandLine.NetCore:
+
+- `appSettings-lib.json` : this file contains the settings needed by the core functionalities
+of the library: decription of the library, texts and description of the integrated command, in
+the default language (en-us)
+
+- `appSettings-lib.{culture}.json` : same as above, any of these files provides translations for the
+culture specified by the tag `{culture}` according to available cultures specified in `Microsoft.`.
+The settings file that matches the current platform culture is loaded if it exists.
+
+provided by your application;
+
+- `appSettings.json` : dscription of the commands provided by your application, the texts, and any
+settings in the default language (en-us)
+
+- `appSettings.{culture}.json` : same as above for the translations of the culture specified by the tag
+`{culture}`
+
+The settings must conform with the following conventions:
+
+- 
+
 # Version history
 
 1.0.0 init
