@@ -50,12 +50,14 @@ internal static class IServiceCollectionExt
     /// </summary>
     /// <param name="services">service collection</param>
     /// <returns>service collection</returns>
+    /// <param name="assemblySet">assembly set where lookup for commands and arguments</param>
     public static IServiceCollection AddGlobalArguments(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        AssemblySet assemblySet)
     {
         services.AddSingleton<GlobalArgsSet>();
 
-        foreach (var classType in GlobalArgsSet.GetGlobalArgTypes())
+        foreach (var classType in GlobalArgsSet.GetGlobalArgTypes(assemblySet))
             services.AddSingleton(classType);
 
         return services;

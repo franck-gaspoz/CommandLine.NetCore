@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine;
@@ -17,10 +16,12 @@ internal class GlobalArgsSet
     public IReadOnlyDictionary<string, Type> Args
         => _args;
 
-    public GlobalArgsSet(IServiceProvider serviceProvider)
+    public GlobalArgsSet(
+        IServiceProvider serviceProvider,
+        AssemblySet assemblySet)
     {
         _serviceProvider = serviceProvider;
-        foreach (var classType in GetGlobalArgTypes())
+        foreach (var classType in GetGlobalArgTypes(assemblySet))
         {
             var argName = GlobalArg.ClassNameToArgName(
                 classType.Name);
@@ -28,11 +29,19 @@ internal class GlobalArgsSet
         }
     }
 
-    public static IEnumerable<Type> GetGlobalArgTypes()
-        => Assembly
-            .GetExecutingAssembly()
-            .GetTypes()
-            .Where(x => x.InheritsFrom(typeof(GlobalArg)));
+    public static IEnumerable<Type> GetGlobalArgTypes(AssemblySet assemblySet)
+    {
+        var globalArgTypes = new List<Type>();
+        foreach (var assembly in assemblySet.Assemblies)
+        {
+            globalArgTypes
+                .AddRange(
+                    assembly
+                    .GetTypes()
+                    .Where(x => x.InheritsFrom(typeof(GlobalArg))));
+        }
+        return globalArgTypes;
+    }
 
     private void Add(
         string name,

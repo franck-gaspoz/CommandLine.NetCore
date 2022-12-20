@@ -59,7 +59,7 @@ internal sealed class AppHostBuilder
                     .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)
-                    .AddGlobalArguments()
+                    .AddGlobalArguments(assemblySet)
                     .AddSettedGlobalArguments()
                     .ConfigureOutput());
 
