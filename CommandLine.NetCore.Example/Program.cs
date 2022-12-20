@@ -9,5 +9,7 @@ public class Program
     /// <param name="args">arguments</param>
     /// <returns>status code</returns>
     public static int Main(string[] args)
-        => CommandLineInterface.Run(args);
+        => new CommandLineInterfaceBuilder()
+            .Build(args)
+            .Run();
 }

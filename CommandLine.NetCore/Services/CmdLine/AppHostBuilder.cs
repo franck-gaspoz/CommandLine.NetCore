@@ -63,6 +63,6 @@ internal sealed class AppHostBuilder
         buildDelegate?.Invoke(hostBuilder);
 
         AppHost = hostBuilder.Build();
-        AppHost.RunAsync();
+        //AppHost.RunAsync();
     }
 }
