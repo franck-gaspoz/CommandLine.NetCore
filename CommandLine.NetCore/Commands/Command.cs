@@ -88,7 +88,7 @@ public abstract class Command
             text = desc;
             return true;
         }
-        text = /*Console.Out.ColorSettings.Error*/ "(f=red)" + Texts._("CommandShortHelpNotFound", ClassNameToCommandName());
+        text = Console.Colors.Error + Texts._("CommandShortHelpNotFound", ClassNameToCommandName());
         return false;
     }
 
@@ -105,7 +105,7 @@ public abstract class Command
         {
             texts = new List<KeyValuePair<string, string>> {
                 new KeyValuePair<string,string>(
-                    /*Console.Out.ColorSettings.Error*/ "(f=red)" +
+                    Console.Colors.Error +
                     Texts._("CommandLongHelpNotFound", ClassNameToCommandName()),
                     string.Empty)
             };
