@@ -52,41 +52,62 @@ internal sealed class HelpCommand : Command
         if (args.Length == 0)
         {
             OutputSectionTitle(Texts._("Syntax"));
+
             DumpCommandSyntax(Texts._("GlobalSyntax"));
             Console.Out.WriteLine();
             Console.Out.WriteLine();
 
             OutputSectionTitle(Texts._("Commands"));
-            foreach (var kvp in _commandsSet.Commands)
-            {
-                var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
-                command.GetShortDescription(out var shortDesc);
-                Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + shortDesc + StOff);
-            }
+            DumpCommandList();
             Console.Out.WriteLine();
+
             OutputSectionTitle(Texts._("GlobalArgs"));
-            foreach (var kvp in _globalArgsSet.Args)
-            {
-                var globalArg = (GlobalArg)_serviceProvider.GetRequiredService(kvp.Value);
-                var argDesc = globalArg.Description();
-                Console.Out.WriteLine(ArgNameColor + argDesc.Key + $"{StOff} : " + argDesc.Value);
-            }
+            DumpGlobalArgList();
         }
         else
         {
-            var command = _commandsSet.GetCommand(args[0]);
-            if (command.GetLongDescriptions(out var longDescs))
-                DumpLongDescriptions(longDescs);
-            else
-                Console.Out.WriteLine(longDescs[0].Key + StOff);
+            DumpCommandHelp(args);
         }
+
         Console.Out.WriteLine();
-        Console.Out.WriteLine(
-            InformationalDataMessage +
-            Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
+        DumpInformationalData();
         Sep();
 
         return Globals.ExitOk;
+    }
+
+    private void DumpCommandHelp(string[] args)
+    {
+        var command = _commandsSet.GetCommand(args[0]);
+        if (command.GetLongDescriptions(out var longDescs))
+            DumpLongDescriptions(longDescs);
+        else
+            Console.Out.WriteLine(longDescs[0].Key + StOff);
+    }
+
+    private void DumpInformationalData()
+        => Console.Out.WriteLine(
+            InformationalDataMessage +
+            Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
+
+    private void DumpGlobalArgList()
+    {
+        foreach (var kvp in _globalArgsSet.Args)
+        {
+            var globalArg = (GlobalArg)_serviceProvider.GetRequiredService(kvp.Value);
+            var argDesc = globalArg.Description();
+            Console.Out.WriteLine(ArgNameColor + argDesc.Key + $"{StOff} : " + argDesc.Value);
+        }
+    }
+
+    private void DumpCommandList()
+    {
+        foreach (var kvp in _commandsSet.Commands)
+        {
+            var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
+            command.GetShortDescription(out var shortDesc);
+            Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + shortDesc + StOff);
+        }
     }
 
     private void OutputAppTitle()
