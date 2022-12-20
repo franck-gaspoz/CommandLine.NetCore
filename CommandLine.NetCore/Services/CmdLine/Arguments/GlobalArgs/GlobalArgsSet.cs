@@ -5,7 +5,7 @@ using CommandLine.NetCore.Services.CmdLine;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CommandLine.NetCore.Service.CmdLine.GlobalArgs;
+namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 
 internal class GlobalArgsSet
 {

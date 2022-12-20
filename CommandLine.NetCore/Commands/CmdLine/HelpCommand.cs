@@ -2,9 +2,9 @@
 
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.Service.CmdLine.GlobalArgs;
+using CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 using CommandLine.NetCore.Services.CmdLine;
-
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;

@@ -2,7 +2,7 @@
 
 using CommandLine.NetCore.Services.CmdLine;
 
-namespace CommandLine.NetCore.Service.CmdLine.GlobalArgs;
+namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 
 internal sealed class SettedGlobalArgsSet
 {
