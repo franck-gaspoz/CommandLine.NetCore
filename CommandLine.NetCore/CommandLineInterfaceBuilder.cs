@@ -101,7 +101,9 @@ public sealed class CommandLineInterfaceBuilder
                 lineBreak = true;
 
                 var command = commandSet.GetCommand(_argsList![0]);
-                var exitCode = command.Run(_argsList.ToArray()[1..]);
+                var exitCode = command.Run(
+                    new ArgSet(
+                        _argsList.ToArray()[1..]));
 
                 console.Out.WriteLine();
 

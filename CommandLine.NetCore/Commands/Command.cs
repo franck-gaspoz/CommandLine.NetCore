@@ -2,6 +2,7 @@
 using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -65,7 +66,7 @@ public abstract class Command
     /// </summary>
     /// <param name="args">arguments</param>
     /// <returns>return code</returns>
-    public int Run(string[] args) => Execute(args);
+    public int Run(ArgSet args) => Execute(args);
 
     /// <summary>
     /// command run body to be implemented by subclasses
@@ -73,7 +74,7 @@ public abstract class Command
     /// <param name="args">args</param>
     /// <returns>return code</returns>
     /// <exception cref="NotImplementedException">not implemented</exception>
-    protected abstract int Execute(string[] args);
+    protected abstract int Execute(ArgSet args);
 
     /// <summary>
     /// short description of the command

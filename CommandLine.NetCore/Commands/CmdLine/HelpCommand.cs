@@ -45,11 +45,11 @@ internal sealed class HelpCommand : Command
 
     private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
 
-    protected override int Execute(string[] args)
+    protected override int Execute(ArgSet args)
     {
         OutputAppTitle();
 
-        if (args.Length == 0)
+        if (args.Count == 0)
         {
             OutputSectionTitle(Texts._("Syntax"));
 
@@ -76,7 +76,7 @@ internal sealed class HelpCommand : Command
         return Globals.ExitOk;
     }
 
-    private void DumpCommandHelp(string[] args)
+    private void DumpCommandHelp(ArgSet args)
     {
         var command = _commandsSet.GetCommand(args[0]);
         if (command.GetLongDescriptions(out var longDescs))

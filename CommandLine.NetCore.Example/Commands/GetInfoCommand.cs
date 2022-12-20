@@ -2,6 +2,7 @@
 using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Commands;
+using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,6 @@ internal sealed class GetInfoCommand : Command
     {
     }
 
-    protected override int Execute(string[] args)
+    protected override int Execute(ArgSet args)
         => throw new NotImplementedException();
 }
