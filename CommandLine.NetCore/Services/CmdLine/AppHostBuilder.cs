@@ -17,10 +17,12 @@ internal sealed class AppHostBuilder
     /// build the app host and run it async
     /// </summary>
     /// <param name="args">command line args</param>
+    /// <param name="assemblySet">assembly set where lookup for commands and arguments</param>
     /// <param name="configureDelegate">optional configure delegate</param>
     /// <param name="buildDelegate">optional build delegate</param>
     public AppHostBuilder(
         List<string> args,
+        AssemblySet assemblySet,
         Action<IConfigurationBuilder>? configureDelegate = null,
         Action<IHostBuilder>? buildDelegate = null)
     {
@@ -54,8 +56,9 @@ internal sealed class AppHostBuilder
             .ConfigureServices(
                 services => services
                     .AddSingleton<Texts>()
+                    .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
-                    .AddCommands()
+                    .AddCommands(assemblySet)
                     .AddGlobalArguments()
                     .AddSettedGlobalArguments()
                     .ConfigureOutput());

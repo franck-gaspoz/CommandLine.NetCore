@@ -13,14 +13,16 @@ internal static class IServiceCollectionExt
     /// add commands founded in the executing assembly as injectable dependencies
     /// </summary>
     /// <param name="services">service collection</param>
+    /// <param name="assemblySet">assembly set where lookup for commands and arguments</param>
     /// <returns>service collection</returns>
     public static IServiceCollection AddCommands(
-        this IServiceCollection services
+        this IServiceCollection services,
+        AssemblySet assemblySet
         )
     {
         services.AddSingleton<CommandsSet>();
 
-        foreach (var classType in CommandsSet.GetCommandTypes())
+        foreach (var classType in CommandsSet.GetCommandTypes(assemblySet))
             services.AddTransient(classType);
 
         return services;

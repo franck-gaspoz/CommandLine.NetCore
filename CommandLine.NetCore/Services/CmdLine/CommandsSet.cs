@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-
+﻿
 using CommandLine.NetCore.Commands;
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.Text;
@@ -15,12 +14,13 @@ internal sealed class CommandsSet
 
     public CommandsSet(
         Texts texts,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        AssemblySet assemblySet)
     {
         _texts = texts;
         _serviceProvider = serviceProvider;
 
-        foreach (var classType in GetCommandTypes())
+        foreach (var classType in GetCommandTypes(assemblySet))
         {
             Add(
                 Command.ClassNameToCommandName(classType.Name),
@@ -28,11 +28,20 @@ internal sealed class CommandsSet
         }
     }
 
-    public static IEnumerable<Type> GetCommandTypes()
-        => Assembly
-            .GetExecutingAssembly()
-            .GetTypes()
-            .Where(x => x.InheritsFrom(typeof(Command)));
+    public static IEnumerable<Type> GetCommandTypes(AssemblySet assemblySet)
+    {
+        var commandTypes = new List<Type>();
+        foreach (var assembly in assemblySet.Assemblies)
+        {
+            commandTypes
+                .AddRange(
+                    assembly
+                        .GetTypes()
+                        .Where(x => x.InheritsFrom(typeof(Command))));
+        }
+
+        return commandTypes;
+    }
 
     private readonly Dictionary<string, Type> _commands = new();
 

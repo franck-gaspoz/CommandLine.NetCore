@@ -134,6 +134,7 @@ public sealed class CommandLineInterfaceBuilder
         {
             _appHostBuilder = new AppHostBuilder(
                 _argsList.ToList(),
+                _assemblySet,
                 _configureDelegate,
                 _buildDelegate);
         }
