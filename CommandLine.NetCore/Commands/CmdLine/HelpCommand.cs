@@ -39,6 +39,7 @@ internal sealed class HelpCommand : Command
     private const string SectionTitleColor = "(uon,f=yellow,bon)";
     private const string CommandNameColor = "(bon,f=green)";
     private const string ArgNameColor = "(f=darkyellow)";
+    private const string InformationalDataMessage = "(f=darkgreen)";
     private const string ArgValueColor = "(bon,f=cyan)";
     private const string StOff = "(tdoff)";
 
@@ -59,7 +60,8 @@ internal sealed class HelpCommand : Command
             foreach (var kvp in _commandsSet.Commands)
             {
                 var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
-                Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + command.ShortDescription());
+                command.GetShortDescription(out var shortDesc);
+                Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + shortDesc + StOff);
             }
             Console.Out.WriteLine();
             OutputSectionTitle(Texts._("GlobalArgs"));
@@ -73,10 +75,15 @@ internal sealed class HelpCommand : Command
         else
         {
             var command = _commandsSet.GetCommand(args[0]);
-            DumpLongDescriptions(command.LongDescriptions());
+            if (command.GetLongDescriptions(out var longDescs))
+                DumpLongDescriptions(longDescs);
+            else
+                Console.Out.WriteLine(longDescs[0].Key + StOff);
         }
         Console.Out.WriteLine();
-        Console.Out.WriteLine(Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
+        Console.Out.WriteLine(
+            InformationalDataMessage +
+            Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
         Sep();
 
         return Globals.ExitOk;

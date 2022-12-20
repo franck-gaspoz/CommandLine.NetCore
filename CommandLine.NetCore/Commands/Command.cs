@@ -78,37 +78,49 @@ public abstract class Command
     /// <summary>
     /// short description of the command
     /// </summary>
+    /// <param name="text">short description or error text if not found in help settings</param>
     /// <returns>text of the description</returns>
-    public string ShortDescription()
-        => Config.GetValue<string>($"Commands:{ClassNameToCommandName()}:ShortDesc")
-        ?? Texts._("CommandShortHelpNotFound", ClassNameToCommandName())!;
+    public bool GetShortDescription(out string text)
+    {
+        var desc = Config.GetValue<string>($"Commands:{ClassNameToCommandName()}:ShortDesc");
+        if (desc is not null)
+        {
+            text = desc;
+            return true;
+        }
+        text = /*Console.Out.ColorSettings.Error*/ "(f=red)" + Texts._("CommandShortHelpNotFound", ClassNameToCommandName());
+        return false;
+    }
 
     /// <summary>
     /// long descriptions of the command
     /// </summary>
+    /// <param name="texts">command syntaxes descriptions or error text if not found in help settings</param>
     /// <returns>text of the descriptions of each command syntax. key is the syntax, value is the description</returns>
-    public List<KeyValuePair<string, string>> LongDescriptions()
+    public bool GetLongDescriptions(out List<KeyValuePair<string, string>> texts)
     {
         var descs = Config.GetSection($"Commands:{ClassNameToCommandName()}:LongDesc");
 
         if (!descs.Exists() || !descs.GetChildren().Any())
         {
-            return new List<KeyValuePair<string, string>> {
+            texts = new List<KeyValuePair<string, string>> {
                 new KeyValuePair<string,string>(
+                    /*Console.Out.ColorSettings.Error*/ "(f=red)" +
                     Texts._("CommandLongHelpNotFound", ClassNameToCommandName()),
                     string.Empty)
             };
+            return false;
         }
 
-        var r = new List<KeyValuePair<string, string>>();
+        texts = new List<KeyValuePair<string, string>>();
         foreach (var desc in descs.GetChildren())
         {
-            r.Add(
+            texts.Add(
                 new KeyValuePair<string, string>(
                     desc.Key, desc.Value ?? string.Empty));
         }
 
-        return r;
+        return true;
     }
 
     /// <summary>

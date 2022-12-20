@@ -33,8 +33,11 @@ public sealed class CommandLineInterfaceBuilder
     /// <summary>
     /// creates a new instance builder
     /// </summary>
-    public CommandLineInterfaceBuilder() =>
+    public CommandLineInterfaceBuilder()
+    {
         _assemblySet = new AssemblySet(Assembly.GetCallingAssembly());
+        UseAssembly(Assembly.GetExecutingAssembly());
+    }
 
     /// <summary>
     /// add an assembly where to look up for commands and arguments
@@ -83,6 +86,7 @@ public sealed class CommandLineInterfaceBuilder
         try
         {
             var host = _appHostBuilder!.AppHost;
+            host.RunAsync();
 
             var texts = host.Services.GetRequiredService<Texts>();
             var console = host.Services.GetRequiredService<IAnsiVtConsole>();
