@@ -30,7 +30,7 @@ public class ArgSet
     /// array get accessor
     /// </summary>
     /// <param name="index">argument index (from 0)</param>
-    /// <returns>argument value at index 0</returns>
+    /// <returns>argument value at index</returns>
     public string this[int index] => _args[index];
 
     /// <summary>

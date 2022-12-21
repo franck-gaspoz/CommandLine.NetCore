@@ -97,13 +97,5 @@ public class GlobalArgsSet
         }
         return res;
     }
-
-    /*public static bool ExistsInArgList(
-        Type argType,
-        List<string> args) =>
-            argType.InheritsFrom(typeof(GlobalArg))
-            && args.Contains(
-                GlobalArg.GetPrefixFromClassName(argType.Name)
-                + GlobalArg.ClassNameToArgName(argType.Name));*/
 }
 

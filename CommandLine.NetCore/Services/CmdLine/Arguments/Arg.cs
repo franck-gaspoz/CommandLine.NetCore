@@ -8,7 +8,7 @@ using static CommandLine.NetCore.Services.CmdLine.Globals;
 namespace CommandLine.NetCore.Service.CmdLine.Arguments;
 
 /// <summary>
-/// argument abstraction
+/// argument - string values that can be converted
 /// </summary>
 public class Arg
 {
@@ -59,6 +59,37 @@ public class Arg
     }
 
     /// <summary>
+    /// get value at index
+    /// </summary>
+    /// <param name="index">value index (from 0)</param>
+    /// <returns>value at index</returns>
+    /// <exception cref="ArgumentException">l'argument n'a pas de valeur pour l'index demandé</exception>
+    public string this[int index]
+    {
+        get
+        {
+            if (ValuesCount != 0 && index > ValuesCount)
+                throw ValueIndexNotAvailaible(index);
+            return Values[index];
+        }
+    }
+
+    /// <summary>
+    /// get value (index 0)
+    /// </summary>
+    /// <returns>value at index 0</returns>
+    public string GetValue() => Values[0];
+
+    protected ArgumentException ValueIndexNotAvailaible(int index)
+        => new ArgumentException(
+            Texts._("NoArgumentValueAtIndex", index));
+
+    /// <summary>
+    /// name with prefix
+    /// </summary>
+    public string PrefixedName => GetPrefixFromArgName(Name) + Name;
+
+    /// <summary>
     /// get the argument description from help settings
     /// </summary>
     /// <param name="description">description or error message if not found</param>
@@ -85,6 +116,8 @@ public class Arg
         return true;
     }
 
+    #region builders
+
     /// <summary>
     /// extract values form an arguments lists. try to get the expectd values count
     /// </summary>
@@ -108,6 +141,8 @@ public class Arg
         }
         Initialize();
     }
+
+    #endregion
 
     protected virtual void Initialize() { }
 
