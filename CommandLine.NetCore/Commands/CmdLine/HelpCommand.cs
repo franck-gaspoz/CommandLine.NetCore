@@ -28,8 +28,9 @@ internal sealed class HelpCommand : Command
         GlobalArgsSet globalArgsSet,
         IAnsiVtConsole console,
         Texts texts,
+        ArgBuilder argBuilder,
         IServiceProvider serviceProvider) :
-            base(config, console, texts, 0, 1)
+            base(config, console, texts, argBuilder, 0, 1)
     {
         _globalArgsSet = globalArgsSet;
         _serviceProvider = serviceProvider;

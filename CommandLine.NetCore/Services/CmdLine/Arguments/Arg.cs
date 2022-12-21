@@ -46,7 +46,7 @@ public class Arg
     /// <param name="config">app config</param>
     /// <param name="texts">texts</param>
     /// <param name="valuesCount">number of expected values</param>
-    protected Arg(
+    public Arg(
         string name,
         IConfiguration config,
         Texts texts,

@@ -24,8 +24,9 @@ internal sealed class GetInfoCommand : Command
     public GetInfoCommand(
         IConfiguration config,
         IAnsiVtConsole console,
+        ArgBuilder argBuilder,
         Texts texts) :
-            base(config, console, texts)
+            base(config, console, texts, argBuilder)
     {
         // env envVarName
         // Value<string> = env , Value<string> = varName

@@ -202,7 +202,7 @@ public abstract class Command
     }
 
     protected void Arg(string name, int valuesCount = 0)
-        => _argBuilder
+        => _argBuilder.Arg(name, valuesCount);
 
     #endregion
 }
