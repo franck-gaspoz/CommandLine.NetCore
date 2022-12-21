@@ -95,7 +95,7 @@ internal sealed class HelpCommand : Command
         foreach (var kvp in _globalArgsSet.Args)
         {
             var globalArg = (GlobalArg)_serviceProvider.GetRequiredService(kvp.Value);
-            var argDesc = globalArg.Description();
+            globalArg.GetDescription(out var argDesc);
             Console.Out.WriteLine(ArgNameColor + argDesc.Key + $"{StOff} : " + argDesc.Value);
         }
     }

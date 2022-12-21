@@ -82,7 +82,7 @@ internal class GlobalArgsSet
                 out var arg))
             {
                 res.Add(str, arg);
-                arg.ParseParameters(args, index, position);
+                arg.ParseValues(args, index, position);
             }
             else
             {

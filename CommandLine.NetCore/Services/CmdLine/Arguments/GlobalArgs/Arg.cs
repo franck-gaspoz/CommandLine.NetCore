@@ -1,4 +1,6 @@
-﻿using CommandLine.NetCore.Services.Text;
+﻿using AnsiVtConsole.NetCore;
+
+using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
@@ -6,61 +8,110 @@ using static CommandLine.NetCore.Services.CmdLine.Globals;
 
 namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 
-internal abstract class Arg
+/// <summary>
+/// argument abstraction
+/// </summary>
+public abstract class Arg
 {
-    protected readonly IConfiguration _config;
-    protected readonly Texts _texts;
+    /// <summary>
+    /// app config
+    /// </summary>
+    protected readonly IConfiguration Config;
 
+    /// <summary>
+    /// texts
+    /// </summary>
+    protected readonly Texts Texts;
+
+    /// <summary>
+    /// console
+    /// </summary>
+    protected readonly IAnsiVtConsole Console;
+
+    /// <summary>
+    /// argument name
+    /// </summary>
     public string Name { get; private set; }
 
-    public int ParametersCount { get; private set; }
+    /// <summary>
+    /// values count (expected)
+    /// </summary>
+    public int ValuesCount { get; private set; }
 
-    protected readonly List<string> _parameters = new();
-    public IReadOnlyList<string> Parameters => _parameters;
+    protected readonly List<string> ValueList = new();
 
-    public Arg(
+    public IReadOnlyList<string> Values => ValueList;
+
+    /// <summary>
+    /// build a new argument
+    /// <para>corresponds to the syntax:</para>
+    /// <para>-argName | --argName [value1 [.. valuen]]</para>
+    /// </summary>
+    /// <param name="name">argument name</param>
+    /// <param name="config">app config</param>
+    /// <param name="texts">texts</param>
+    /// <param name="console">console</param>
+    /// <param name="valuesCount">number of expected values</param>
+    protected Arg(
         string name,
         IConfiguration config,
         Texts texts,
-        int parametersCount = 0)
+        IAnsiVtConsole console,
+        int valuesCount = 0)
     {
         Name = name;
-        _config = config;
-        _texts = texts;
-        ParametersCount = parametersCount;
+        Config = config;
+        Texts = texts;
+        Console = console;
+        ValuesCount = valuesCount;
     }
 
-    public KeyValuePair<string, string> Description()
+    /// <summary>
+    /// get the argument description from help settings
+    /// </summary>
+    /// <param name="description">description or error message if not found</param>
+    /// <returns>true if description is found, otherwise false</returns>
+    public bool GetDescription(out KeyValuePair<string, string> description)
     {
-        var desc = _config.GetSection("GlobalArgs:" + Name);
+        var desc = Config.GetSection("GlobalArgs:" + Name);
 
         if (!desc.Exists() || !desc.GetChildren().Any())
         {
-            return new KeyValuePair<string, string>(
-                _texts._("GlobalArgHelpNotFound", Name),
+            description = new KeyValuePair<string, string>(
+                Console.Colors.Error +
+                Texts._("GlobalArgHelpNotFound", Name),
                 string.Empty);
+            return false;
         }
 
         var kvp = desc.GetChildren().First();
 
-        return new KeyValuePair<string, string>(
+        description = new KeyValuePair<string, string>(
             kvp.Key,
             kvp.Value ?? string.Empty
             );
+
+        return true;
     }
 
-    public string Prefix => GetPrefixFromArgName(Name);
-
-    public void ParseParameters(List<string> args, int index, int position)
+    /// <summary>
+    /// extract values form an arguments lists. try to get the expectd values count
+    /// </summary>
+    /// <param name="args">arg list</param>
+    /// <param name="index">begin index</param>
+    /// <param name="position">actual begin index in arguments list</param>
+    /// <exception cref="ArgumentException">missing argument value</exception>
+    public void ParseValues(List<string> args, int index, int position)
     {
-        var expectedCount = ParametersCount;
+        var expectedCount = ValuesCount;
         args.RemoveAt(index);
         while (expectedCount > 0)
         {
             position++;
-            if (!args.Any())
-                throw new ArgumentException(_texts._("MissingArgumentValue", position, Name));
-            _parameters.Add(args[index]);
+            if (!args.Any() || !IsArg(args[index]))
+                throw new ArgumentException(Texts._("MissingArgumentValue", position, Name));
+
+            ValueList.Add(args[index]);
             args.RemoveAt(index);
             expectedCount--;
         }
@@ -68,6 +119,14 @@ internal abstract class Arg
     }
 
     protected virtual void Initialize() { }
+
+    #region translaters, helpers
+
+    public string Prefix => GetPrefixFromArgName(Name);
+
+    public static bool IsArg(string text)
+        => text.StartsWith(ShortArgNamePrefix)
+            || text.StartsWith(LongArgNamePrefix);
 
     public static string ClassNameToArgName(string name)
         => name[0..^9]
@@ -85,4 +144,6 @@ internal abstract class Arg
         => name.Length == 1
             ? ShortArgNamePrefix
             : LongArgNamePrefix;
+
+    #endregion
 }
