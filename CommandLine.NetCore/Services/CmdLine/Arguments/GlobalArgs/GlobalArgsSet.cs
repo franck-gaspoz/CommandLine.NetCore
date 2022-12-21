@@ -7,7 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 
-internal class GlobalArgsSet
+/// <summary>
+/// global arguments set
+/// </summary>
+public class GlobalArgsSet
 {
     private readonly IServiceProvider _serviceProvider;
 

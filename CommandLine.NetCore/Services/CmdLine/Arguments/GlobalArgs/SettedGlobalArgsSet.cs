@@ -4,7 +4,10 @@ using CommandLine.NetCore.Services.CmdLine;
 
 namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 
-internal sealed class SettedGlobalArgsSet
+/// <summary>
+/// setted global arguments set
+/// </summary>
+public sealed class SettedGlobalArgsSet
 {
     private readonly Dictionary<string, Arg> _args = new();
 

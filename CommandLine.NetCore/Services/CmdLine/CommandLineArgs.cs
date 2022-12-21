@@ -2,7 +2,10 @@
 
 namespace CommandLine.NetCore.Services.CmdLine;
 
-internal sealed class CommandLineArgs
+/// <summary>
+/// command line arguments
+/// </summary>
+public sealed class CommandLineArgs
 {
     public ReadOnlyCollection<string> Args { get; private set; }
 
