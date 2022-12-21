@@ -1,4 +1,6 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Service.CmdLine.Arguments;
+
+namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
 /// set of arguments of a command invokation
@@ -32,11 +34,12 @@ public class ArgSet
     public string this[int index] => _args[index];
 
     /// <summary>
-    /// check if the arg set match the syntax describe by the parameters from left to right
+    /// check if the arg set match the syntax described by the parameters from left to right
     /// </summary>
-    /// <param name="args"></param>
-    /// <returns></returns>
-    public bool MatchSyntax(params Arg[] args)
+    /// <returns>true if syntax match, false otherwise</returns>
+    public bool MatchSyntax(
+        params Arg[] args
+        )
     {
         foreach (var arg in args)
         {

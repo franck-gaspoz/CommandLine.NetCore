@@ -40,20 +40,30 @@ public abstract class Command
     protected readonly int? MaxArgCount;
 
     /// <summary>
+    /// name of the command
+    /// </summary>
+    public string Name => ClassNameToCommandName();
+
+    private readonly ArgBuilder _argBuilder;
+
+    /// <summary>
     /// construit une instance de commande
     /// </summary>
     /// <param name="config">app config</param>
     /// <param name="console">console service</param>
     /// <param name="texts">texts service</param>
+    /// <param name="argBuilder">args builder</param>
     /// <param name="minArgCount">command minimum args count</param>
     /// <param name="maxArgCount">command maximum args count</param>
     public Command(
         IConfiguration config,
         IAnsiVtConsole console,
         Texts texts,
+        ArgBuilder argBuilder,
         int minArgCount = 0,
         int maxArgCount = 0)
     {
+        _argBuilder = argBuilder;
         Config = config;
         Texts = texts;
         Console = console;
@@ -81,9 +91,9 @@ public abstract class Command
     /// </summary>
     /// <param name="text">short description or error text if not found in help settings</param>
     /// <returns>text of the description</returns>
-    public bool GetShortDescription(out string text)
+    public bool GetDescription(out string text)
     {
-        var desc = Config.GetValue<string>($"Commands:{ClassNameToCommandName()}:ShortDesc");
+        var desc = Config.GetValue<string>($"Commands:{ClassNameToCommandName()}:Description");
         if (desc is not null)
         {
             text = desc;
@@ -100,7 +110,7 @@ public abstract class Command
     /// <returns>text of the descriptions of each command syntax. key is the syntax, value is the description</returns>
     public bool GetLongDescriptions(out List<KeyValuePair<string, string>> texts)
     {
-        var descs = Config.GetSection($"Commands:{ClassNameToCommandName()}:LongDesc");
+        var descs = Config.GetSection($"Commands:{ClassNameToCommandName()}:Syntax");
 
         if (!descs.Exists() || !descs.GetChildren().Any())
         {
@@ -124,6 +134,8 @@ public abstract class Command
         return true;
     }
 
+    #region translaters, helpers
+
     /// <summary>
     /// returns the command name from this class type
     /// </summary>
@@ -146,6 +158,10 @@ public abstract class Command
     /// <returns>name of command type</returns>
     public static string CommandNameToClassType(string name)
         => name.ToFirstUpper() + typeof(Command).Name;
+
+    #endregion
+
+    #region args helpers
 
     /// <summary>
     /// check args count doesn't exceed max arg count allowed
@@ -184,5 +200,10 @@ public abstract class Command
         CheckMaxArgs(args);
         CheckMinArgs(args);
     }
+
+    protected void Arg(string name, int valuesCount = 0)
+        => _argBuilder
+
+    #endregion
 }
 

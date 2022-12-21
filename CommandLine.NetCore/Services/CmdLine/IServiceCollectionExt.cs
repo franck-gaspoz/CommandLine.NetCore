@@ -1,4 +1,5 @@
 ﻿
+using CommandLine.NetCore.GlobalArgs;
 using CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 
 using Microsoft.Extensions.DependencyInjection;

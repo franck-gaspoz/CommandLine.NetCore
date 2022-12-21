@@ -26,7 +26,7 @@ public class GlobalArgsSet
         _serviceProvider = serviceProvider;
         foreach (var classType in GetGlobalArgTypes(assemblySet))
         {
-            var argName = GlobalArg.ClassNameToArgName(
+            var argName = Arg.ClassNameToArgName(
                 classType.Name);
             Add(argName, classType);
         }
@@ -41,7 +41,9 @@ public class GlobalArgsSet
                 .AddRange(
                     assembly
                     .GetTypes()
-                    .Where(x => x.InheritsFrom(typeof(GlobalArg))));
+                    .Where(x => x.InheritsFrom(typeof(Arg))
+                        && x.Name.EndsWith(Globals.GlobalArgPostFix)
+                    ));
         }
         return globalArgTypes;
     }
@@ -96,12 +98,12 @@ public class GlobalArgsSet
         return res;
     }
 
-    public static bool ExistsInArgList(
+    /*public static bool ExistsInArgList(
         Type argType,
         List<string> args) =>
             argType.InheritsFrom(typeof(GlobalArg))
             && args.Contains(
                 GlobalArg.GetPrefixFromClassName(argType.Name)
-                + GlobalArg.ClassNameToArgName(argType.Name));
+                + GlobalArg.ClassNameToArgName(argType.Name));*/
 }
 

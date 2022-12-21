@@ -3,7 +3,7 @@
 /// <summary>
 /// String extensions
 /// </summary>
-public static class StringExt
+internal static class StringExt
 {
     /// <summary>
     /// returns a string with first letter upper case

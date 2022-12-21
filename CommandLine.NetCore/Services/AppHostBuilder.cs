@@ -1,4 +1,6 @@
 ﻿
+using CommandLine.NetCore.Services.CmdLine;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -7,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 
 using static CommandLine.NetCore.Services.CmdLine.Globals;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services;
 
 internal sealed class AppHostBuilder
 {
@@ -56,6 +58,7 @@ internal sealed class AppHostBuilder
             .ConfigureServices(
                 services => services
                     .AddSingleton<Texts>()
+                    .AddSingleton<ArgBuilder>()
                     .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)

@@ -2,6 +2,7 @@
 
 using AnsiVtConsole.NetCore;
 
+using CommandLine.NetCore.Service.CmdLine.Arguments;
 using CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
@@ -80,9 +81,9 @@ internal sealed class HelpCommand : Command
     {
         var command = _commandsSet.GetCommand(args[0]);
         if (command.GetLongDescriptions(out var longDescs))
-            DumpLongDescriptions(longDescs);
+            DumpSyntaxes(command, longDescs);
         else
-            Console.Out.WriteLine(longDescs[0].Key + StOff);
+            Console.Out.WriteLine(command.Name + StOff);
     }
 
     private void DumpInformationalData()
@@ -94,9 +95,12 @@ internal sealed class HelpCommand : Command
     {
         foreach (var kvp in _globalArgsSet.Args)
         {
-            var globalArg = (GlobalArg)_serviceProvider.GetRequiredService(kvp.Value);
-            globalArg.GetDescription(out var argDesc);
-            Console.Out.WriteLine(ArgNameColor + argDesc.Key + $"{StOff} : " + argDesc.Value);
+            var globalArg = (Arg)_serviceProvider.GetRequiredService(kvp.Value);
+            var isError = !globalArg.GetDescription(out var argDesc)
+                ? Console.Colors.Error.ToString() : "";
+            Console.Out.WriteLine(
+                ArgNameColor + argDesc.Key + $"{StOff} : "
+                + isError + argDesc.Value + StOff);
         }
     }
 
@@ -105,8 +109,8 @@ internal sealed class HelpCommand : Command
         foreach (var kvp in _commandsSet.Commands)
         {
             var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
-            command.GetShortDescription(out var shortDesc);
-            Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + shortDesc + StOff);
+            command.GetDescription(out var description);
+            Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + description + StOff);
         }
     }
 
@@ -147,18 +151,25 @@ internal sealed class HelpCommand : Command
         Console.Out.Write(StOff);
     }
 
-    private void DumpLongDescriptions(List<KeyValuePair<string, string>> longDescriptions)
+    private void DumpSyntaxes(
+        Command command,
+        List<KeyValuePair<string, string>> longDescriptions)
     {
         foreach (var kvp in longDescriptions)
-            DumpLongDescription(kvp);
+            DumpSyntax(command, kvp);
     }
 
-    private void DumpLongDescription(KeyValuePair<string, string> longDescription)
+    private void DumpSyntax(
+        Command command,
+        KeyValuePair<string, string> longDescription)
     {
         var desc = longDescription.Value.Trim();
         var descExists = !string.IsNullOrWhiteSpace(desc);
 
-        DumpCommandSyntax(longDescription.Key.Trim());
+        DumpCommandSyntax(
+            (command.Name + " " +
+            longDescription.Key.Trim())
+                .Trim());
 
         if (descExists)
             Console.Out.Write(" : " + desc);

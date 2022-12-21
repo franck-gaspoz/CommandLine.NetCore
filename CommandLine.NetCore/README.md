@@ -132,8 +132,8 @@ The settings must conform with the following conventions:
 ``` json
 "Commands": {
     "{CommandName}": {
-        "ShortDesc": "short description of the command",
-        "LongDesc": {
+        "Description": "short description of the command",
+        "Syntax": {
             "{Syntax 1}" : "Description of the functionality provided by the syntax 1",
             ...
             "{Syntax n}" : "Description of the functionality provided by the syntax n",
@@ -147,8 +147,8 @@ example of the command **`help`** :
 ``` json
 "Commands": {
     "Help": {
-        "ShortDesc": "output a of list of all commands and global arguments or output help about a command",
-        "LongDesc": {
+        "Description": "output a of list of all commands and global arguments or output help about a command",
+        "Syntax": {
             "help" : "output a of list of all commands and global arguments",
             "help commandName" : "output help for the command with the name 'commandName'"
         }
