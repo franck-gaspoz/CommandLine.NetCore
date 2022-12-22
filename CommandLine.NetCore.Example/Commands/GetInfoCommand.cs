@@ -7,6 +7,8 @@ using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
+using static CommandLine.NetCore.Services.CmdLine.Globals;
+
 namespace CommandLine.NetCore.Example.Commands;
 
 internal sealed class GetInfoCommand : Command
@@ -36,5 +38,17 @@ internal sealed class GetInfoCommand : Command
     }
 
     protected override int Execute(ArgSet args)
-        => throw new NotImplementedException();
+    {
+        args.MatchSyntax(
+            Param<string>("env"),
+            Param<string>()
+            );
+
+        args.MatchSyntax(
+            Param<string>("env"),
+            Opt("l")
+            );
+
+        return ExitOk;
+    }
 }

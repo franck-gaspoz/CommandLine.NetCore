@@ -24,9 +24,15 @@ public sealed class ArgBuilder
         _texts = texts;
     }
 
-    public Opt Arg(
+    public Opt Opt(
         string name,
         int valueCount = 0
         )
         => new Opt(name, _config, _texts, _valueConverter, valueCount);
+
+    public Opt<T> Opt<T>(string name)
+        => new Opt<T>(name, _config, _texts, _valueConverter, 1);
+
+    public Param<T> Param<T>(string? value = null)
+        => new Param<T>(_config, _texts, _valueConverter, value);
 }

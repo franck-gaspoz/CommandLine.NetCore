@@ -1,6 +1,9 @@
 ﻿namespace CommandLine.NetCore.Services.CmdLine;
 
-internal static class Globals
+/// <summary>
+/// command line core globals
+/// </summary>
+public static class Globals
 {
     public const int ExitOk = 0;
     public const int ExitFail = -1;

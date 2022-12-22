@@ -2,6 +2,7 @@
 using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Service.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
@@ -201,8 +202,18 @@ public abstract class Command
         CheckMinArgs(args);
     }
 
-    protected void Arg(string name, int valuesCount = 0)
-        => _argBuilder.Arg(name, valuesCount);
+    #endregion
+
+    #region args build helpers
+
+    protected Opt Opt(string name, int valuesCount = 0)
+        => _argBuilder.Opt(name, valuesCount);
+
+    protected Opt<T> Opt<T>(string name)
+        => _argBuilder.Opt<T>(name);
+
+    protected Param<T> Param<T>(string? value = null)
+        => _argBuilder.Param<T>(value);
 
     #endregion
 }

@@ -25,7 +25,7 @@ public class Param<T> : Arg
         IConfiguration config,
         Texts texts,
         ValueConverter valueConverter,
-        string value)
+        string? value)
         : base(config, texts, valueConverter)
             => Value = ConvertValue<T>(value);
 }
