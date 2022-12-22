@@ -77,7 +77,11 @@ public abstract class Command
     /// </summary>
     /// <param name="args">arguments</param>
     /// <returns>return code</returns>
-    public int Run(ArgSet args) => Execute(args);
+    public int Run(ArgSet args)
+    {
+        CheckMinMaxArgs(args.Args.ToArray());
+        return Execute(args);
+    }
 
     /// <summary>
     /// command run body to be implemented by subclasses
@@ -186,7 +190,7 @@ public abstract class Command
     {
         if (MinArgCount is null)
             return;
-        if (args.Length > MinArgCount)
+        if (args.Length < MinArgCount)
             throw new ArgumentException(Texts._("NotEnoughArguments", MinArgCount));
     }
 
