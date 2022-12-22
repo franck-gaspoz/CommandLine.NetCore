@@ -2,6 +2,7 @@
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine;
+using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,19 +11,21 @@ namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 /// <summary>
 /// global arguments set
 /// </summary>
-public class GlobalOptsSet
+public sealed class GlobalOptsSet
 {
     private readonly IServiceProvider _serviceProvider;
-
-    protected readonly Dictionary<string, Type> _opts = new();
+    private readonly Dictionary<string, Type> _opts = new();
+    private readonly Texts _texts;
 
     public IReadOnlyDictionary<string, Type> Opts
         => _opts;
 
     public GlobalOptsSet(
         IServiceProvider serviceProvider,
-        AssemblySet assemblySet)
+        AssemblySet assemblySet,
+        Texts texts)
     {
+        _texts = texts;
         _serviceProvider = serviceProvider;
         foreach (var classType in GetGlobalOptTypes(assemblySet))
         {
@@ -86,6 +89,9 @@ public class GlobalOptsSet
                 str,
                 out var opt))
             {
+                if (res.ContainsKey(str))
+                    throw new ArgumentException(_texts._("DuplicatedOption", str));
+
                 res.Add(str, opt);
                 opt.ParseValues(args, index, position);
             }
@@ -95,6 +101,11 @@ public class GlobalOptsSet
             }
             position++;
         }
+
+        if (position != commandLineArgs.Count)
+            throw new ArgumentException(_texts._("GlobalOptionsMustBeAtEndOfTheCommandLine"));
+
+        commandLineArgs.Replace(args);
         return res;
     }
 }

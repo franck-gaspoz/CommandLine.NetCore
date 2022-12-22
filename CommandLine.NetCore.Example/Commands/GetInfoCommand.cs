@@ -41,12 +41,12 @@ internal sealed class GetInfoCommand : Command
     {
         args.MatchSyntax(
             Param("env"),
-            Param()
+            Opt("l")
             );
 
         args.MatchSyntax(
             Param("env"),
-            Opt("l")
+            Param()
             );
 
         return ExitOk;
