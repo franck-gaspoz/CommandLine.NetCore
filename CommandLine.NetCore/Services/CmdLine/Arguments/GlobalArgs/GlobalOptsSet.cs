@@ -98,7 +98,7 @@ public sealed class GlobalOptsSet
             else
             {
                 if (res.Any())
-                    throw new ArgumentException(_texts._("GlobalOptionsMustBeAtEndOfTheCommandLine"));
+                    throw new ArgumentException(_texts._("GlobalOptionsMustBeAtEndOfTheCommandLine", res.First().Key));
 
                 index++;
             }

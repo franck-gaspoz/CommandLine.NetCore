@@ -15,6 +15,12 @@ public sealed class CommandLineArgs
     /// </summary>
     public int Count => _args.Count;
 
+    /// <summary>
+    /// any ?
+    /// </summary>
+    /// <returns>true if count > 0</returns>
+    public bool Any() => Count > 0;
+
     private readonly List<string> _args;
 
     /// <summary>

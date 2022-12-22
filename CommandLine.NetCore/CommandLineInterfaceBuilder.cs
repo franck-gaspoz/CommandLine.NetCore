@@ -30,8 +30,6 @@ public sealed class CommandLineInterfaceBuilder
 
     private AppHostBuilder? _appHostBuilder;
 
-    private IReadOnlyList<string>? _argsList;
-
     /// <summary>
     /// creates a new instance builder
     /// </summary>
@@ -93,19 +91,21 @@ public sealed class CommandLineInterfaceBuilder
             var texts = host.Services.GetRequiredService<Texts>();
             var console = host.Services.GetRequiredService<IAnsiVtConsole>();
             var commandSet = host.Services.GetRequiredService<CommandsSet>();
+            var args = host.Services.GetRequiredService<CommandLineArgs>();
             var lineBreak = false;
+
             try
             {
-                if (!_argsList!.Any())
+                if (!args.Any())
                     throw new ArgumentException(texts._("MissingArguments"));
 
                 console.Out.WriteLine();
                 lineBreak = true;
 
-                var command = commandSet.GetCommand(_argsList![0]);
+                var command = commandSet.GetCommand(args.Args.ToArray()[0]);
                 var exitCode = command.Run(
                     new ArgSet(
-                        _argsList.ToArray()[1..]));
+                        args.Args.ToArray()[1..]));
 
                 console.Out.WriteLine();
 
@@ -136,12 +136,10 @@ public sealed class CommandLineInterfaceBuilder
     /// <returns>this</returns>
     public CommandLineInterfaceBuilder Build(string[] args)
     {
-        _argsList = args.ToList();
-
         try
         {
             _appHostBuilder = new AppHostBuilder(
-                _argsList.ToList(),
+                args.ToList(),
                 _assemblySet,
                 _configureDelegate,
                 _buildDelegate);

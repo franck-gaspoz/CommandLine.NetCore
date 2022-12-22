@@ -2,7 +2,7 @@
   "profiles": {
     "CommandLine.NetCore.Example": {
       "commandName": "Project",
-      "commandLineArgs": "getinfo x -o -s -t -k"
+      "commandLineArgs": "getinfo x -o -t -k -s"
     }
   }
 }
