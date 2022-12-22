@@ -1,4 +1,6 @@
-﻿using CommandLine.NetCore.Services.Text;
+﻿using System.Diagnostics;
+
+using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
@@ -10,8 +12,12 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// a command line option : -name [value1 [.. value n], --name [value1 [.. value n] of values of generic type T
 /// </summary>
 /// <typeparam name="T">option type of values</typeparam>
+[DebuggerDisplay("{DebuggerDisplay}")]
 public class Opt<T> : Arg
 {
+    private string DebuggerDisplay
+        => $"Opt<{typeof(T).Name}> PrefixedName = {string.Join(',', Values)}";
+
     /// <summary>
     /// values count (expected)
     /// </summary>

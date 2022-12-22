@@ -1,4 +1,6 @@
-﻿using CommandLine.NetCore.Services.Text;
+﻿using System.Diagnostics;
+
+using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
@@ -7,8 +9,12 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// <summary>
 /// a single value parameter argument : value
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay}")]
 public class Param<T> : Arg
 {
+    private string DebuggerDisplay
+        => $"Param<{typeof(T).Name}> = {Value}";
+
     /// <summary>
     /// value
     /// </summary>
