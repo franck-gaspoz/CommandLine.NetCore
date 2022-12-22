@@ -9,9 +9,9 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// <summary>
 /// arg with one value of type T
 /// </summary>
-public class Arg<T> : Opt
+public class Opt<T> : Opt
 {
-    public Arg(string name,
+    public Opt(string name,
         IConfiguration config,
         Texts texts,
         ValueConverter valueConverter,

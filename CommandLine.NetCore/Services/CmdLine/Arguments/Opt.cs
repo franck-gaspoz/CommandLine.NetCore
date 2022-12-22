@@ -1,6 +1,4 @@
-﻿
-using CommandLine.NetCore.Extensions;
-using CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -12,23 +10,8 @@ namespace CommandLine.NetCore.Service.CmdLine.Arguments;
 /// <summary>
 /// a command line option : -name [value1 [.. value n], --name [value1 [.. value n]
 /// </summary>
-public class Opt
+public class Opt : Arg
 {
-    /// <summary>
-    /// app config
-    /// </summary>
-    protected readonly IConfiguration Config;
-
-    /// <summary>
-    /// texts
-    /// </summary>
-    protected readonly Texts Texts;
-
-    /// <summary>
-    /// argument name
-    /// </summary>
-    public string Name { get; private set; }
-
     /// <summary>
     /// values count (expected)
     /// </summary>
@@ -39,7 +22,10 @@ public class Opt
     /// </summary>
     protected readonly List<string> Values = new();
 
-    protected readonly ValueConverter ValueConverter;
+    /// <summary>
+    /// argument name
+    /// </summary>
+    public string Name { get; private set; }
 
     /// <summary>
     /// build a new argument
@@ -57,12 +43,10 @@ public class Opt
         Texts texts,
         ValueConverter valueConverter,
         int valuesCount = 0)
+        : base(config, texts, valueConverter)
     {
         Name = name;
-        Config = config;
-        Texts = texts;
         ValuesCount = valuesCount;
-        ValueConverter = valueConverter;
     }
 
     /// <summary>
@@ -121,44 +105,6 @@ public class Opt
             );
 
         return true;
-    }
-
-    /// <summary>
-    /// convert the value with string representation to a value of the expected type
-    /// </summary>
-    /// <typeparam name="T">expected type</typeparam>
-    /// <param name="value">text representation of the value</param>
-    /// <returns>a value of type T or null</returns>
-    public T? ConvertValue<T>(string? value)
-    {
-        if (value == null)
-            return default;
-
-        var convertOk = ValueConverter.ToTypedValue(
-            value,
-            typeof(T),
-            default(T),
-            out var convertedValue,
-            out var possibleValues,
-            null,
-            true,
-            true
-            );
-
-        if (!convertOk)
-        {
-            var values = possibleValues == null ? string.Empty :
-                Texts._("PossibleValues")
-                    + string.Join(',', possibleValues);
-            throw new ArgumentException(
-                Texts._("UnableToConvertValue", value, typeof(T).UnmangledName())
-                + values);
-        }
-
-        if (convertedValue is null)
-            return default;
-
-        return (T)convertedValue;
     }
 
     #region builders

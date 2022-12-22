@@ -1,6 +1,4 @@
-﻿using CommandLine.NetCore.Service.CmdLine.Arguments;
-
-namespace CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
 /// set of arguments of a command invokation
@@ -38,7 +36,7 @@ public class ArgSet
     /// </summary>
     /// <returns>true if syntax match, false otherwise</returns>
     public bool MatchSyntax(
-        params Opt[] args
+        params Arg[] args
         )
     {
         foreach (var arg in args)
