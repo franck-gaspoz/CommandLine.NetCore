@@ -56,9 +56,9 @@ internal static class IServiceCollectionExt
         this IServiceCollection services,
         AssemblySet assemblySet)
     {
-        services.AddSingleton<GlobalArgsSet>();
+        services.AddSingleton<GlobalOptsSet>();
 
-        foreach (var classType in GlobalArgsSet.GetGlobalArgTypes(assemblySet))
+        foreach (var classType in GlobalOptsSet.GetGlobalOptTypes(assemblySet))
             services.AddSingleton(classType);
 
         return services;
@@ -69,7 +69,7 @@ internal static class IServiceCollectionExt
         services.AddSingleton<cons.IAnsiVtConsole>(
             serviceProvider =>
             {
-                var settedGlobalArgs = serviceProvider.GetRequiredService<SettedGlobalArgsSet>();
+                var settedGlobalArgs = serviceProvider.GetRequiredService<SettedGlobalOptsSet>();
                 var console = new cons.AnsiVtConsole();
                 console.Out.IsMute = settedGlobalArgs.Contains<SGlobalArg>();
                 return console;
@@ -85,7 +85,7 @@ internal static class IServiceCollectionExt
     public static IServiceCollection AddSettedGlobalArguments(
         this IServiceCollection services)
     {
-        services.AddSingleton<SettedGlobalArgsSet>();
+        services.AddSingleton<SettedGlobalOptsSet>();
 
         return services;
     }

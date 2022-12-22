@@ -1,4 +1,6 @@
 ﻿
+using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -8,9 +10,9 @@ using static CommandLine.NetCore.Services.CmdLine.Globals;
 namespace CommandLine.NetCore.Service.CmdLine.Arguments;
 
 /// <summary>
-/// argument - string values that can be converted
+/// a command line option : -name [value1 [.. value n], --name [value1 [.. value n]
 /// </summary>
-public class Arg
+public class Opt
 {
     /// <summary>
     /// app config
@@ -37,6 +39,8 @@ public class Arg
     /// </summary>
     protected readonly List<string> Values = new();
 
+    protected readonly ValueConverter ValueConverter;
+
     /// <summary>
     /// build a new argument
     /// <para>corresponds to the syntax:</para>
@@ -45,17 +49,20 @@ public class Arg
     /// <param name="name">argument name</param>
     /// <param name="config">app config</param>
     /// <param name="texts">texts</param>
+    /// <param name="valueConverter">value converter</param>
     /// <param name="valuesCount">number of expected values</param>
-    public Arg(
+    public Opt(
         string name,
         IConfiguration config,
         Texts texts,
+        ValueConverter valueConverter,
         int valuesCount = 0)
     {
         Name = name;
         Config = config;
         Texts = texts;
         ValuesCount = valuesCount;
+        ValueConverter = valueConverter;
     }
 
     /// <summary>
@@ -116,6 +123,44 @@ public class Arg
         return true;
     }
 
+    /// <summary>
+    /// convert the value with string representation to a value of the expected type
+    /// </summary>
+    /// <typeparam name="T">expected type</typeparam>
+    /// <param name="value">text representation of the value</param>
+    /// <returns>a value of type T or null</returns>
+    public T? ConvertValue<T>(string? value)
+    {
+        if (value == null)
+            return default;
+
+        var convertOk = ValueConverter.ToTypedValue(
+            value,
+            typeof(T),
+            default(T),
+            out var convertedValue,
+            out var possibleValues,
+            null,
+            true,
+            true
+            );
+
+        if (!convertOk)
+        {
+            var values = possibleValues == null ? string.Empty :
+                Texts._("PossibleValues")
+                    + string.Join(',', possibleValues);
+            throw new ArgumentException(
+                Texts._("UnableToConvertValue", value, typeof(T).UnmangledName())
+                + values);
+        }
+
+        if (convertedValue is null)
+            return default;
+
+        return (T)convertedValue;
+    }
+
     #region builders
 
     /// <summary>
@@ -139,12 +184,9 @@ public class Arg
             args.RemoveAt(index);
             expectedCount--;
         }
-        Initialize();
     }
 
     #endregion
-
-    protected virtual void Initialize() { }
 
     #region translaters, helpers
 
@@ -154,13 +196,13 @@ public class Arg
         => text.StartsWith(ShortArgNamePrefix)
             || text.StartsWith(LongArgNamePrefix);
 
-    public static string ClassNameToArgName(string name)
+    public static string ClassNameToOptName(string name)
         => name[0..^9]
             .ToLower();
 
     public static string GetPrefixFromClassName(string name)
     {
-        var argName = ClassNameToArgName(name);
+        var argName = ClassNameToOptName(name);
         return argName.Length == 1
             ? ShortArgNamePrefix
             : LongArgNamePrefix;

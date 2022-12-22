@@ -59,6 +59,7 @@ internal sealed class AppHostBuilder
                 services => services
                     .AddSingleton<Texts>()
                     .AddSingleton<ArgBuilder>()
+                    .AddSingleton<ValueConverter>()
                     .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)

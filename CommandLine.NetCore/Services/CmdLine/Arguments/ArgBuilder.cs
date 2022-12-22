@@ -12,18 +12,21 @@ public sealed class ArgBuilder
 {
     private readonly IConfiguration _config;
     private readonly Texts _texts;
+    private readonly ValueConverter _valueConverter;
 
     public ArgBuilder(
         IConfiguration config,
-        Texts texts)
+        Texts texts,
+        ValueConverter valueConverter)
     {
+        _valueConverter = valueConverter;
         _config = config;
         _texts = texts;
     }
 
-    public Arg Arg(
+    public Opt Arg(
         string name,
         int valueCount = 0
         )
-        => new Arg(name, _config, _texts, valueCount);
+        => new Opt(name, _config, _texts, _valueConverter, valueCount);
 }

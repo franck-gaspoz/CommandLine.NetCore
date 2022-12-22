@@ -38,7 +38,7 @@ public class ArgSet
     /// </summary>
     /// <returns>true if syntax match, false otherwise</returns>
     public bool MatchSyntax(
-        params Arg[] args
+        params Opt[] args
         )
     {
         foreach (var arg in args)

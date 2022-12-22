@@ -15,5 +15,27 @@ internal static class Globals
     public const string SettingsDateFormat = "dd/MM/yyyy";
 
     public const string GlobalArgPostFix = "GlobalArg";
+
+    /// <summary>
+    /// values separarator in parameter of type list/collection
+    /// </summary>
+    public const char ParameterTypeListValuesSeparator = ',';
+
+    /// <summary>
+    /// add a flag value (value prefix) in parameter of type enum flag
+    /// </summary>
+    public const char ParameterTypeFlagEnumValuePrefixEnabled = '+';
+
+    /// <summary>
+    /// remove a flag value (value prefix) in parameter of type enum flag
+    /// </summary>
+    public const char ParameterTypeFlagEnumValuePrefixDisabled = '-';
+
+    /// <summary>
+    /// any prefix for flag value (value prefix) in parameter of type enum flag
+    /// </summary>
+    public static readonly List<char> ParameterTypeFlagEnumValuePrefixs = new()
+    { ParameterTypeFlagEnumValuePrefixEnabled, ParameterTypeFlagEnumValuePrefixDisabled };
+
 }
 

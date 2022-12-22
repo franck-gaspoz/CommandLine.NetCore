@@ -19,13 +19,13 @@ namespace CommandLine.NetCore.Commands.CmdLine;
 internal sealed class HelpCommand : Command
 {
     private readonly CommandsSet _commandsSet;
-    private readonly GlobalArgsSet _globalArgsSet;
+    private readonly GlobalOptsSet _globalArgsSet;
     private readonly IServiceProvider _serviceProvider;
 
     public HelpCommand(
         IConfiguration config,
         CommandsSet commands,
-        GlobalArgsSet globalArgsSet,
+        GlobalOptsSet globalArgsSet,
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
@@ -94,9 +94,9 @@ internal sealed class HelpCommand : Command
 
     private void DumpGlobalArgList()
     {
-        foreach (var kvp in _globalArgsSet.Args)
+        foreach (var kvp in _globalArgsSet.Opts)
         {
-            var globalArg = (Arg)_serviceProvider.GetRequiredService(kvp.Value);
+            var globalArg = (Opt)_serviceProvider.GetRequiredService(kvp.Value);
             var isError = !globalArg.GetDescription(out var argDesc)
                 ? Console.Colors.Error.ToString() : "";
             Console.Out.WriteLine(

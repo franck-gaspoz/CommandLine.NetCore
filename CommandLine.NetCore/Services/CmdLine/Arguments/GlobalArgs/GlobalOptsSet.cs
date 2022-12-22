@@ -10,71 +10,71 @@ namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 /// <summary>
 /// global arguments set
 /// </summary>
-public class GlobalArgsSet
+public class GlobalOptsSet
 {
     private readonly IServiceProvider _serviceProvider;
 
-    protected readonly Dictionary<string, Type> _args = new();
+    protected readonly Dictionary<string, Type> _opts = new();
 
-    public IReadOnlyDictionary<string, Type> Args
-        => _args;
+    public IReadOnlyDictionary<string, Type> Opts
+        => _opts;
 
-    public GlobalArgsSet(
+    public GlobalOptsSet(
         IServiceProvider serviceProvider,
         AssemblySet assemblySet)
     {
         _serviceProvider = serviceProvider;
-        foreach (var classType in GetGlobalArgTypes(assemblySet))
+        foreach (var classType in GetGlobalOptTypes(assemblySet))
         {
-            var argName = Arg.ClassNameToArgName(
+            var orgName = Opt.ClassNameToOptName(
                 classType.Name);
-            Add(argName, classType);
+            Add(orgName, classType);
         }
     }
 
-    public static IEnumerable<Type> GetGlobalArgTypes(AssemblySet assemblySet)
+    public static IEnumerable<Type> GetGlobalOptTypes(AssemblySet assemblySet)
     {
-        var globalArgTypes = new List<Type>();
+        var globalOptTypes = new List<Type>();
         foreach (var assembly in assemblySet.Assemblies)
         {
-            globalArgTypes
+            globalOptTypes
                 .AddRange(
                     assembly
                     .GetTypes()
-                    .Where(x => x.InheritsFrom(typeof(Arg))
+                    .Where(x => x.InheritsFrom(typeof(Opt))
                         && x.Name.EndsWith(Globals.GlobalArgPostFix)
                     ));
         }
-        return globalArgTypes;
+        return globalOptTypes;
     }
 
     private void Add(
         string name,
-        Type argType)
-        => _args.Add(name, argType);
+        Type optType)
+        => _opts.Add(name, optType);
 
     private bool TryBuild(
         IServiceProvider serviceProvider,
         string str,
         [NotNullWhen(true)]
-        out Arg? arg)
+        out Opt? opt)
     {
-        arg = null;
-        var argName = str;
-        while (argName.StartsWith('-'))
-            argName = argName[1..];
-        if (_args.TryGetValue(argName, out var classType))
+        opt = null;
+        var optName = str;
+        while (optName.StartsWith('-'))
+            optName = optName[1..];
+        if (_opts.TryGetValue(optName, out var classType))
         {
-            arg = (Arg)serviceProvider.GetRequiredService(classType);
+            opt = (Opt)serviceProvider.GetRequiredService(classType);
             return true;
         }
         return false;
     }
 
-    public Dictionary<string, Arg> Parse(
+    public Dictionary<string, Opt> Parse(
         CommandLineArgs commandLineArgs)
     {
-        Dictionary<string, Arg> res = new();
+        Dictionary<string, Opt> res = new();
         var index = 0;
         var position = 0;
         var args = commandLineArgs.Args.ToList();
@@ -84,10 +84,10 @@ public class GlobalArgsSet
             if (TryBuild(
                 _serviceProvider,
                 str,
-                out var arg))
+                out var opt))
             {
-                res.Add(str, arg);
-                arg.ParseValues(args, index, position);
+                res.Add(str, opt);
+                opt.ParseValues(args, index, position);
             }
             else
             {
