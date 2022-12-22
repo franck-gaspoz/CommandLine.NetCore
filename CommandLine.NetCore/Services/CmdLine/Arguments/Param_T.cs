@@ -7,7 +7,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// <summary>
 /// a single value parameter argument : value
 /// </summary>
-public class Parameter<T> : Arg
+public class Param<T> : Arg
 {
     /// <summary>
     /// value
@@ -21,7 +21,7 @@ public class Parameter<T> : Arg
     /// <param name="texts">texts</param>
     /// <param name="valueConverter">value converter</param>
     /// <param name="value">value from command line</param>
-    public Parameter(
+    public Param(
         IConfiguration config,
         Texts texts,
         ValueConverter valueConverter,
