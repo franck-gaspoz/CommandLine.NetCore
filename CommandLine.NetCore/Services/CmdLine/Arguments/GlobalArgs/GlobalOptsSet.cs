@@ -97,13 +97,13 @@ public sealed class GlobalOptsSet
             }
             else
             {
+                if (res.Any())
+                    throw new ArgumentException(_texts._("GlobalOptionsMustBeAtEndOfTheCommandLine"));
+
                 index++;
             }
             position++;
         }
-
-        if (position != commandLineArgs.Count)
-            throw new ArgumentException(_texts._("GlobalOptionsMustBeAtEndOfTheCommandLine"));
 
         commandLineArgs.Replace(args);
         return res;
