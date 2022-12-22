@@ -35,4 +35,7 @@ public sealed class ArgBuilder
 
     public Param<T> Param<T>(string? value = null)
         => new Param<T>(_config, _texts, _valueConverter, value);
+
+    public Param Param(string? value = null)
+        => new Param(_config, _texts, _valueConverter, value);
 }

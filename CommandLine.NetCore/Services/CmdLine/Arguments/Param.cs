@@ -1,21 +1,17 @@
-﻿using CommandLine.NetCore.Services.Text;
+﻿
+using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
-/// a single value parameter argument : value
+/// param of type string
 /// </summary>
-public class Param<T> : Arg
+public class Param : Param<string>
 {
     /// <summary>
-    /// value
-    /// </summary>
-    public T? Value { get; set; }
-
-    /// <summary>
-    /// generic type parameter
+    /// string parameter
     /// </summary>
     /// <param name="config">app config</param>
     /// <param name="texts">texts</param>
@@ -26,6 +22,6 @@ public class Param<T> : Arg
         Texts texts,
         ValueConverter valueConverter,
         string? value)
-        : base(config, texts, valueConverter)
-            => Value = ConvertValue<T>(value);
+        : base(config, texts, valueConverter, value)
+            => Value = ConvertValue<string>(value);
 }

@@ -219,6 +219,9 @@ public abstract class Command
     protected Param<T> Param<T>(string? value = null)
         => _argBuilder.Param<T>(value);
 
+    protected Param Param(string? value = null)
+        => _argBuilder.Param(value);
+
     #endregion
 }
 

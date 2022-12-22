@@ -40,12 +40,12 @@ internal sealed class GetInfoCommand : Command
     protected override int Execute(ArgSet args)
     {
         args.MatchSyntax(
-            Param<string>("env"),
-            Param<string>()
+            Param("env"),
+            Param()
             );
 
         args.MatchSyntax(
-            Param<string>("env"),
+            Param("env"),
             Opt("l")
             );
 
