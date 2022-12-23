@@ -60,6 +60,7 @@ internal sealed class AppHostBuilder
                     .AddSingleton<Texts>()
                     .AddSingleton<ArgBuilder>()
                     .AddSingleton<ValueConverter>()
+                    .AddSingleton<Parser>()
                     .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)

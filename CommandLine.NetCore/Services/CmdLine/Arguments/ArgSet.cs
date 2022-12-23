@@ -36,13 +36,40 @@ public class ArgSet
     /// </summary>
     /// <returns>true if syntax match, false otherwise</returns>
     public bool MatchSyntax(
-        params Arg[] args
+        params Arg[] syntax
         )
     {
-        foreach (var arg in args)
-        {
+        var parse_index = 0;
+        var syntax_index = 0;
 
+        var args = _args.ToList();
+        var error = string.Empty;
+
+        while (parse_index < args.Count && syntax_index < syntax.Length)
+        {
+            Arg currentSyntax() => syntax[syntax_index];
+            string currentArg() => args[parse_index];
+
+            var str = currentArg();
+            if (Parser.IsOpt(str))
+            {
+                // option
+            }
+            else
+            {
+                // parameter
+                if (currentSyntax() is not IParam param)
+                {
+                    // type mismatch
+                    error = "Expected: "
+                }
+                else
+                {
+
+                }
+            }
         }
+
         return false;
     }
 }

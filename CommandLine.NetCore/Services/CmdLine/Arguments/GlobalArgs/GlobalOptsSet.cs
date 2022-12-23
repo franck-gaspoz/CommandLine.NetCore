@@ -2,6 +2,7 @@
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ public sealed class GlobalOptsSet
     private readonly IServiceProvider _serviceProvider;
     private readonly Dictionary<string, Type> _opts = new();
     private readonly Texts _texts;
+    private readonly Parser _parser;
 
     public IReadOnlyDictionary<string, Type> Opts
         => _opts;
@@ -23,13 +25,15 @@ public sealed class GlobalOptsSet
     public GlobalOptsSet(
         IServiceProvider serviceProvider,
         AssemblySet assemblySet,
-        Texts texts)
+        Texts texts,
+        Parser parser)
     {
+        _parser = parser;
         _texts = texts;
         _serviceProvider = serviceProvider;
         foreach (var classType in GetGlobalOptTypes(assemblySet))
         {
-            var orgName = Opt.ClassNameToOptName(
+            var orgName = Parser.ClassNameToOptName(
                 classType.Name);
             Add(orgName, classType);
         }
@@ -93,7 +97,12 @@ public sealed class GlobalOptsSet
                     throw new ArgumentException(_texts._("DuplicatedOption", str));
 
                 res.Add(str, opt);
-                opt.ParseValues(args, index, position);
+                _parser.ParseOptValues(
+                    opt,
+                    args,
+                    index,
+                    position
+                    );
             }
             else
             {

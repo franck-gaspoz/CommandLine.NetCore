@@ -35,7 +35,7 @@ public class Opt : Opt<string>
     {
         get
         {
-            if (ValuesCount != 0 && index > ValuesCount)
+            if (ExpectedValuesCount != 0 && index > ExpectedValuesCount)
                 throw ValueIndexNotAvailaible(index);
             return
                 Values[index];

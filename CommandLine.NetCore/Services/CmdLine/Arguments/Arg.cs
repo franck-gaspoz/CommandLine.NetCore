@@ -43,6 +43,12 @@ public abstract class Arg
     }
 
     /// <summary>
+    /// returns a grammar representation of this param
+    /// </summary>
+    /// <returns></returns>
+    public abstract string ToGrammar();
+
+    /// <summary>
     /// convert the value with string representation to a value of the expected type
     /// </summary>
     /// <typeparam name="T">expected type</typeparam>

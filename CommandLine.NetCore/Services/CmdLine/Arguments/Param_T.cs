@@ -10,10 +10,16 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// a single value parameter argument : value
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay}")]
-public class Param<T> : Arg
+public class Param<T> : Arg, IParam
 {
-    private string DebuggerDisplay
-        => $"Param<{typeof(T).Name}> = {Value}";
+    private string DebuggerDisplay => ToGrammar();
+
+    /// <inheritdoc/>
+    public override string ToGrammar()
+    {
+        var val = Value is null ? "?" : Value?.ToString();
+        return $"Param<{typeof(T).Name}> = {val}";
+    }
 
     /// <summary>
     /// value

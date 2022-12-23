@@ -4,8 +4,6 @@ using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
-using static CommandLine.NetCore.Services.CmdLine.Globals;
-
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
@@ -13,15 +11,23 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// </summary>
 /// <typeparam name="T">option type of values</typeparam>
 [DebuggerDisplay("{DebuggerDisplay}")]
-public class Opt<T> : Arg
+public class Opt<T> : Arg, IOpt
 {
-    private string DebuggerDisplay
-        => $"Opt<{typeof(T).Name}> PrefixedName = {string.Join(',', Values)}";
+    private string DebuggerDisplay => ToGrammar();
+
+    /// <inheritdoc/>
+    public override string ToGrammar()
+    {
+        var values = string.Empty;
+        if (ExpectedValuesCount > 0)
+            values = $" = {string.Join(',', Values)}";
+        return $"Opt<{typeof(T).Name}> {PrefixedName}{values}";
+    }
 
     /// <summary>
     /// values count (expected)
     /// </summary>
-    public int ValuesCount { get; private set; }
+    public int ExpectedValuesCount { get; private set; }
 
     /// <summary>
     /// unparsed values
@@ -52,7 +58,7 @@ public class Opt<T> : Arg
         : base(config, texts, valueConverter)
     {
         Name = name;
-        ValuesCount = valuesCount;
+        ExpectedValuesCount = valuesCount;
     }
 
     /// <summary>
@@ -65,12 +71,19 @@ public class Opt<T> : Arg
     {
         get
         {
-            if (ValuesCount != 0 && index > ValuesCount)
+            if (ExpectedValuesCount != 0 && index > ExpectedValuesCount)
                 throw ValueIndexNotAvailaible(index);
             return
                 ConvertValue<T>(Values[index]);
         }
     }
+
+    /// <summary>
+    /// add a value to the option
+    /// </summary>
+    /// <param name="value">string representation of the value</param>
+    public void AddValue(string value)
+        => Values.Add(value);
 
     protected ArgumentException ValueIndexNotAvailaible(int index)
         => new ArgumentException(
@@ -85,8 +98,7 @@ public class Opt<T> : Arg
     /// <summary>
     /// name with prefix
     /// </summary>
-    public string PrefixedName => GetPrefixFromArgName(Name) + Name;
-
+    public string PrefixedName => Prefix + Name;
 
     /// <summary>
     /// get the argument description from help settings
@@ -115,57 +127,8 @@ public class Opt<T> : Arg
         return true;
     }
 
-    #region builders
-
     /// <summary>
-    /// extract values form an arguments lists. try to get the expectd values count
+    /// returns the prefix allowed for this option
     /// </summary>
-    /// <param name="args">arg list</param>
-    /// <param name="index">begin index</param>
-    /// <param name="position">actual begin index in arguments list</param>
-    /// <exception cref="ArgumentException">missing argument value</exception>
-    public void ParseValues(List<string> args, int index, int position)
-    {
-        var expectedCount = ValuesCount;
-        args.RemoveAt(index);
-        while (expectedCount > 0)
-        {
-            position++;
-            if (!args.Any() || !IsArg(args[index]))
-                throw new ArgumentException(Texts._("MissingArgumentValue", position, Name));
-
-            Values.Add(args[index]);
-            args.RemoveAt(index);
-            expectedCount--;
-        }
-    }
-
-    #endregion
-
-    #region translaters, helpers
-
-    public string Prefix => GetPrefixFromArgName(Name);
-
-    public static bool IsArg(string text)
-        => text.StartsWith(ShortArgNamePrefix)
-            || text.StartsWith(LongArgNamePrefix);
-
-    public static string ClassNameToOptName(string name)
-        => name[0..^9]
-            .ToLower();
-
-    public static string GetPrefixFromClassName(string name)
-    {
-        var argName = ClassNameToOptName(name);
-        return argName.Length == 1
-            ? ShortArgNamePrefix
-            : LongArgNamePrefix;
-    }
-
-    public static string GetPrefixFromArgName(string name)
-        => name.Length == 1
-            ? ShortArgNamePrefix
-            : LongArgNamePrefix;
-
-    #endregion
+    public string Prefix => Parser.GetPrefixFromArgName(Name);
 }
