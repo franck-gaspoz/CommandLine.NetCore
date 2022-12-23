@@ -61,7 +61,7 @@ public class ArgSet
                 if (currentSyntax() is not IParam param)
                 {
                     // type mismatch
-                    error = "Expected: "
+                    error = "Expected: ";
                 }
                 else
                 {
