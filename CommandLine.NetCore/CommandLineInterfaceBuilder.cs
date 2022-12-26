@@ -107,7 +107,9 @@ public sealed class CommandLineInterfaceBuilder
                 var exitCode = command.Run(
                     new ArgSet(
                         args.Args.ToArray()[1..],
-                        parser));
+                        parser,
+                        console,
+                        texts));
 
                 console.Out.WriteLine();
 
