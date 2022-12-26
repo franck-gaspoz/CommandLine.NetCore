@@ -84,12 +84,21 @@ public sealed class Parser
                     _texts._("ExpectedParameterValue",
                         param.StringValue, position, arg));
             }
-            args.RemoveAt(index);
         }
         else
         {
-            // assign value
-
+            try
+            {
+                // assign value
+                param.SetValue(arg);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(
+                    ex.Message
+                    + _texts._("ParameterValueConvertError", position);
+            }
         }
+        args.RemoveAt(index);
     }
 }
