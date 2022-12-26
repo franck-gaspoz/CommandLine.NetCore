@@ -17,8 +17,8 @@ public class Param<T> : Arg, IParam
     /// <inheritdoc/>
     public override string ToGrammar()
     {
-        var val = Value is null ? "?" : Value?.ToString();
-        return $"Param<{typeof(T).Name}> = {val}";
+        var val = Value is null ? "?" : "'" + Value?.ToString() + "'";
+        return $"Param<{typeof(T).Name}>{val}";
     }
 
     private T? _value;

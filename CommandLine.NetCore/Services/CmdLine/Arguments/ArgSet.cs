@@ -58,27 +58,35 @@ public sealed class ArgSet
     /// </summary>
     /// <returns>true if syntax match, false otherwise</returns>
     public bool MatchSyntax(
-        params Arg[] syntax
+        params Arg[] grammar
         )
     {
-        var syntax_index = 0;
+        var grammar_index = 0;
         var position = 0;
-
         var args = _args.ToList();
         string? error = null;
+        var grammarText = string.Join(' ',
+            grammar.Select(
+                x => x.ToGrammar()));
 
         string TooManyArguments(List<string> args, int atIndex)
             => $"to many arguments: '{string.Join(' ', args)}' from position {atIndex}";
+
         string MissingArguments(Arg[] args, int atIndex)
             => $"missing arguments, expeceted '{string.Join(' ', args.Select(x => x.ToGrammar()))}' from position {atIndex}";
+
         string SyntaxMismatchError(IArg ewpectedGrammar, int atIndex, string foundSyntax)
             => $"expected '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
+
         string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
+
         string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
 
-        while (args.Count > 0 && syntax_index < syntax.Length)
+        string GetError(string error) => error + Environment.NewLine + "for grammar: " + grammarText;
+
+        while (args.Count > 0 && grammar_index < grammar.Length)
         {
-            Arg currentSyntax() => syntax[syntax_index];
+            Arg currentSyntax() => grammar[grammar_index];
             string currentArg() => args[0];
 
             var arg = currentArg();
@@ -96,7 +104,7 @@ public sealed class ArgSet
                 }
 
                 position += 1 + opt.ExpectedValuesCount;
-                syntax_index++;
+                grammar_index++;
             }
             else
             {
@@ -113,22 +121,26 @@ public sealed class ArgSet
                     }
 
                     position++;
-                    syntax_index++;
+                    grammar_index++;
                 }
                 else
                 {
                     // type mismatch
-                    error = UnknownGrammar(gram, syntax_index);
+                    error = UnknownGrammar(gram, grammar_index);
                 }
             }
         }
 
-        if (syntax_index < syntax.Length)
-            error = MissingArguments(syntax[syntax_index..], position);
-        if (args.Count > 0)
-            error = TooManyArguments(args, position);
+        if (error is null)
+        {
+            if (grammar_index < grammar.Length)
+                error = MissingArguments(grammar[grammar_index..], position);
 
-        if (error is not null) _console.Logger.LogError(error);
+            if (args.Count > 0)
+                error = TooManyArguments(args, position);
+        }
+
+        if (error is not null) _console.Logger.LogError(GetError(error));
 
         return false;
     }
