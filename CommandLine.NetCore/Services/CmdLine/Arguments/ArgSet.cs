@@ -48,9 +48,10 @@ public sealed class ArgSet
         var args = _args.ToList();
         var error = string.Empty;
 
-        string SyntaxMismatchError(Arg ewpectedGrammar, int atIndex, string foundSyntax)
+        string SyntaxMismatchError(IArg ewpectedGrammar, int atIndex, string foundSyntax)
             => $"Expected '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
         string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
+        string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
 
         while (args.Count > 0 && syntax_index < syntax.Length)
         {
@@ -64,7 +65,8 @@ public sealed class ArgSet
                 // option
                 if (!TryElse(
                     () => _parser.ParseOptValues(opt, args, 0, position),
-                    (ex) => error = ex.Message
+                    (ex) => error = BuildError(
+                        ex, SyntaxMismatchError(opt, position, arg))
                     ))
                 {
                     break;
@@ -78,7 +80,17 @@ public sealed class ArgSet
                 // parameter
                 if (gram is IParam param)
                 {
+                    if (!TryElse(
+                        () => _parser.ParseParamValue(param, args, 0, position),
+                        (ex) => error = BuildError(
+                            ex, SyntaxMismatchError(param, position, arg))
+                        ))
+                    {
+                        break;
+                    }
 
+                    position++;
+                    syntax_index++;
                 }
                 else
                 {

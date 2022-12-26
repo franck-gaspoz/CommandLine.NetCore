@@ -66,4 +66,30 @@ public sealed class Parser
             expectedCount--;
         }
     }
+
+    public void ParseParamValue(
+        IParam param,
+        List<string> args,
+        int index,
+        int position
+        )
+    {
+        var arg = args[index];
+        if (param.StringValue != null)
+        {
+            // expect value
+            if (arg != param.StringValue)
+            {
+                throw new ArgumentException(
+                    _texts._("ExpectedParameterValue",
+                        param.StringValue, position, arg));
+            }
+            args.RemoveAt(index);
+        }
+        else
+        {
+            // assign value
+
+        }
+    }
 }

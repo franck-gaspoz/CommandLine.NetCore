@@ -21,10 +21,26 @@ public class Param<T> : Arg, IParam
         return $"Param<{typeof(T).Name}> = {val}";
     }
 
+    private T? _value;
+
     /// <summary>
     /// value
     /// </summary>
-    public T? Value { get; set; }
+    public T? Value
+    {
+        get => _value;
+        set
+        {
+            _value = value;
+            StringValue = _value?.ToString();
+        }
+    }
+
+    /// <inheritdoc/>
+    public string? StringValue { get; private set; }
+
+    /// <inheritdoc/>
+    public void SetValue(string value) => Value = ConvertValue<T>(value);
 
     /// <summary>
     /// generic type parameter
@@ -39,5 +55,8 @@ public class Param<T> : Arg, IParam
         ValueConverter valueConverter,
         string? value)
         : base(config, texts, valueConverter)
-            => Value = ConvertValue<T>(value);
+    {
+        StringValue = value;
+        Value = ConvertValue<T>(value);
+    }
 }

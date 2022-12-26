@@ -9,5 +9,5 @@ public interface IArg
     /// returns a grammar representation of this param
     /// </summary>
     /// <returns></returns>
-    public string ToGrammar();
+    string ToGrammar();
 }
