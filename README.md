@@ -159,7 +159,7 @@ example of the command **`help`** :
 **Description of the global arguments**
 
 ``` json
-"GlobalArgs": {
+"GlobalOptions": {
     "{ArgumentName}": {
         "{Syntax}" : "Description of the functionality provided by the argument syntax"
     }
@@ -169,7 +169,7 @@ example of the command **`help`** :
 example of the global argument **s** :
 
 ``` json
-"GlobalArgs": {
+"GlobalOptions": {
     "s": {
         "-s" : "turn off any output (silent mode)"
     }

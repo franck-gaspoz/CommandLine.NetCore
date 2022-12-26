@@ -63,7 +63,7 @@ internal sealed class HelpCommand : Command
             DumpCommandList();
             Console.Out.WriteLine();
 
-            OutputSectionTitle(Texts._("GlobalArgs"));
+            OutputSectionTitle(Texts._("GlobalOptions"));
             DumpGlobalArgList();
         }
         else
