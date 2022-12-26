@@ -22,7 +22,7 @@ public sealed class Parser
             : LongArgNamePrefix;
     }
 
-    public static string GetPrefixFromArgName(string name)
+    public static string GetPrefixFromOptName(string name)
         => name.Length == 1
             ? ShortArgNamePrefix
             : LongArgNamePrefix;
@@ -55,7 +55,7 @@ public sealed class Parser
         while (expectedCount > 0)
         {
             position++;
-            if (!args.Any() || !Parser.IsOpt(args[index]))
+            if (!args.Any() || !IsOpt(args[index]))
             {
                 throw new ArgumentException(
                     _texts._("MissingArgumentValue", position, opt.Name));

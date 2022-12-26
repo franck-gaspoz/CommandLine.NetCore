@@ -130,5 +130,5 @@ public class Opt<T> : Arg, IOpt
     /// <summary>
     /// returns the prefix allowed for this option
     /// </summary>
-    public string Prefix => Parser.GetPrefixFromArgName(Name);
+    public string Prefix => Parser.GetPrefixFromOptName(Name);
 }

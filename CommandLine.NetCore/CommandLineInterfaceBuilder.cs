@@ -92,6 +92,7 @@ public sealed class CommandLineInterfaceBuilder
             var console = host.Services.GetRequiredService<IAnsiVtConsole>();
             var commandSet = host.Services.GetRequiredService<CommandsSet>();
             var args = host.Services.GetRequiredService<CommandLineArgs>();
+            var parser = host.Services.GetRequiredService<Parser>();
             var lineBreak = false;
 
             try
@@ -105,7 +106,8 @@ public sealed class CommandLineInterfaceBuilder
                 var command = commandSet.GetCommand(args.Args.ToArray()[0]);
                 var exitCode = command.Run(
                     new ArgSet(
-                        args.Args.ToArray()[1..]));
+                        args.Args.ToArray()[1..],
+                        parser));
 
                 console.Out.WriteLine();
 

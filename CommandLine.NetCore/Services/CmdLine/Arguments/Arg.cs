@@ -9,7 +9,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// a command line argument : value | -name [value1 [.. value n], --name [value1 [.. value n]
 /// <para>is an option or a parameter</para>
 /// </summary>
-public abstract class Arg
+public abstract class Arg : IArg
 {
     /// <summary>
     /// app config

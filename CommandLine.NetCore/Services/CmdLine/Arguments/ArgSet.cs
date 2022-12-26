@@ -3,7 +3,7 @@
 /// <summary>
 /// set of arguments of a command invokation
 /// </summary>
-public class ArgSet
+public sealed class ArgSet
 {
     /// <summary>
     /// arguments
@@ -12,12 +12,15 @@ public class ArgSet
 
     private readonly List<string> _args;
 
+    private readonly Parser _parser;
+
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="args">arguments</param>
-    public ArgSet(IEnumerable<string> args)
-        => _args = new List<string>(args);
+    /// <param name="parser">syntax parser</param>
+    public ArgSet(IEnumerable<string> args, Parser parser)
+        => (_args, _parser) = (new List<string>(args), parser);
 
     /// <summary>
     /// args count
@@ -39,40 +42,66 @@ public class ArgSet
         params Arg[] syntax
         )
     {
-        var parse_index = 0;
         var syntax_index = 0;
+        var position = 0;
 
         var args = _args.ToList();
         var error = string.Empty;
+
         string SyntaxMismatchError(Arg ewpectedGrammar, int atIndex, string foundSyntax)
             => $"Expected '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
+        string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
 
-        while (parse_index < args.Count && syntax_index < syntax.Length)
+        while (args.Count > 0 && syntax_index < syntax.Length)
         {
             Arg currentSyntax() => syntax[syntax_index];
-            string currentArg() => args[parse_index];
+            string currentArg() => args[0];
 
             var arg = currentArg();
             var gram = currentSyntax();
-            if (Parser.IsOpt(arg))
+            if (gram is IOpt opt)
             {
                 // option
+                if (!TryElse(
+                    () => _parser.ParseOptValues(opt, args, 0, position),
+                    (ex) => error = ex.Message
+                    ))
+                {
+                    break;
+                }
+
+                position += 1 + opt.ExpectedValuesCount;
+                syntax_index++;
             }
             else
             {
                 // parameter
-                if (currentSyntax() is IParam param)
+                if (gram is IParam param)
                 {
 
                 }
                 else
                 {
                     // type mismatch
-                    error = SyntaxMismatchError(gram, parse_index, arg);
+                    error = UnknownGrammar(gram, syntax_index);
                 }
             }
         }
 
         return false;
+    }
+
+    private static bool TryElse(Action tryDelegate, Action<Exception> elseDelegate)
+    {
+        try
+        {
+            tryDelegate();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            elseDelegate(ex);
+            return false;
+        }
     }
 }
