@@ -21,7 +21,7 @@ public class Opt<T> : Arg, IOpt
         var values = string.Empty;
         if (ExpectedValuesCount > 0)
             values = $" = {string.Join(',', Values)}";
-        return $"Opt<{typeof(T).Name}> {PrefixedName}{values}";
+        return $"Opt<{typeof(T).Name}>{PrefixedName}{values}";
     }
 
     /// <summary>

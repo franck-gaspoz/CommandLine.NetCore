@@ -76,7 +76,10 @@ public sealed class ArgSet
             => $"missing arguments, expeceted '{string.Join(' ', args.Select(x => x.ToGrammar()))}' from position {atIndex}";
 
         string SyntaxMismatchError(IArg ewpectedGrammar, int atIndex, string foundSyntax)
-            => $"expected '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
+            => $"in grammar '{ewpectedGrammar.ToGrammar()}'";
+
+        string ParamValueError(IArg ewpectedGrammar, int atIndex, string foundSyntax)
+            => $"in grammar '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
 
         string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
 
@@ -94,7 +97,7 @@ public sealed class ArgSet
             if (gram is IOpt opt)
             {
                 // option
-                if (!TryElse(
+                if (!TryCatch(
                     () => _parser.ParseOptValues(opt, args, 0, position),
                     (ex) => error = BuildError(
                         ex, SyntaxMismatchError(opt, position, arg))
@@ -111,11 +114,15 @@ public sealed class ArgSet
                 // parameter
                 if (gram is IParam param)
                 {
-                    if (!TryElse(
+                    if (!TryCatch(
                         () => _parser.ParseParamValue(param, args, 0, position),
-                        (ex) => error = BuildError(
-                            ex, SyntaxMismatchError(param, position, arg))
-                        ))
+                        (ex) => error =
+                            param.StringValue is not null ?
+                                BuildError(
+                                    ex, SyntaxMismatchError(param, position, arg))
+                                : BuildError(
+                                    ex, ParamValueError(param, position, arg)
+                        )))
                     {
                         break;
                     }
@@ -140,12 +147,12 @@ public sealed class ArgSet
                 error = TooManyArguments(args, position);
         }
 
-        if (error is not null) _console.Logger.LogError(GetError(error));
+        if (error is not null) _console.Logger.LogError(GetError(error) + "(br)");
 
         return false;
     }
 
-    private static bool TryElse(Action tryDelegate, Action<Exception> elseDelegate)
+    private static bool TryCatch(Action tryDelegate, Action<Exception> elseDelegate)
     {
         try
         {

@@ -75,7 +75,7 @@ public sealed class Parser
         )
     {
         var arg = args[index];
-        if (param.StringValue != null)
+        if (param.StringValue is not null)
         {
             // expect value
             if (arg != param.StringValue)
