@@ -44,28 +44,31 @@ public class ArgSet
 
         var args = _args.ToList();
         var error = string.Empty;
+        string SyntaxMismatchError(Arg ewpectedGrammar, int atIndex, string foundSyntax)
+            => $"Expected '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
 
         while (parse_index < args.Count && syntax_index < syntax.Length)
         {
             Arg currentSyntax() => syntax[syntax_index];
             string currentArg() => args[parse_index];
 
-            var str = currentArg();
-            if (Parser.IsOpt(str))
+            var arg = currentArg();
+            var gram = currentSyntax();
+            if (Parser.IsOpt(arg))
             {
                 // option
             }
             else
             {
                 // parameter
-                if (currentSyntax() is not IParam param)
+                if (currentSyntax() is IParam param)
                 {
-                    // type mismatch
-                    error = "Expected: ";
+
                 }
                 else
                 {
-
+                    // type mismatch
+                    error = SyntaxMismatchError(gram, parse_index, arg);
                 }
             }
         }

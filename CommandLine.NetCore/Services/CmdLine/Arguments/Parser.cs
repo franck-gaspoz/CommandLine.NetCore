@@ -36,9 +36,8 @@ public sealed class Parser
         => text.StartsWith(ShortArgNamePrefix)
             || text.StartsWith(LongArgNamePrefix);
 
-
     /// <summary>
-    /// extract values form an arguments lists. try to get the expectd values count
+    /// extract values from an arguments lists. try to get the expectd values count
     /// </summary>
     /// <param name="opt">parsed option</param>
     /// <param name="args">arg list. the list is consumed (elements are removed)</param>
