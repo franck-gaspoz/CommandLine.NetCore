@@ -58,7 +58,7 @@ public sealed class Parser
             if (!args.Any() || !IsOpt(args[index]))
             {
                 throw new ArgumentException(
-                    _texts._("MissingArgumentValue", position, opt.Name));
+                    _texts._("MissingOptionValue", position, opt.Name));
             }
 
             opt.AddValue(args[index]);
