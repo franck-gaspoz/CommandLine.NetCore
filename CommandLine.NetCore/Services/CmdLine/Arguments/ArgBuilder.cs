@@ -26,12 +26,13 @@ public sealed class ArgBuilder
 
     public Opt Opt(
         string name,
+        bool isOptional,
         int valueCount = 0
         )
-        => new Opt(name, _config, _texts, _valueConverter, valueCount);
+        => new Opt(name, _config, _texts, _valueConverter, isOptional, valueCount);
 
-    public Opt<T> Opt<T>(string name)
-        => new Opt<T>(name, _config, _texts, _valueConverter, 1);
+    public Opt<T> Opt<T>(string name, bool isOptional)
+        => new Opt<T>(name, _config, _texts, _valueConverter, isOptional, 1);
 
     public Param<T> Param<T>(string? value = null)
         => new Param<T>(_config, _texts, _valueConverter, value);

@@ -19,14 +19,16 @@ public class Opt : Opt<string>
     /// <param name="config">app config</param>
     /// <param name="texts">texts</param>
     /// <param name="valueConverter">value converter</param>
+    /// <param name="isOptional">true if optional</param>
     /// <param name="valuesCount">number of expected values</param>
     public Opt(
         string name,
         IConfiguration config,
         Texts texts,
         ValueConverter valueConverter,
+        bool isOptional,
         int valuesCount = 0)
-        : base(name, config, texts, valueConverter, valuesCount)
+        : base(name, config, texts, valueConverter, isOptional, valuesCount)
     {
     }
 

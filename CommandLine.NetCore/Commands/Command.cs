@@ -210,11 +210,11 @@ public abstract class Command
 
     #region args build helpers
 
-    protected Opt Opt(string name, int valuesCount = 0)
-        => _argBuilder.Opt(name, valuesCount);
+    protected Opt Opt(string name, bool isOptional = false, int valuesCount = 0)
+        => _argBuilder.Opt(name, isOptional, valuesCount);
 
-    protected Opt<T> Opt<T>(string name)
-        => _argBuilder.Opt<T>(name);
+    protected Opt<T> Opt<T>(string name, bool isOptional = false)
+        => _argBuilder.Opt<T>(name, isOptional);
 
     protected Param<T> Param<T>(string? value = null)
         => _argBuilder.Param<T>(value);

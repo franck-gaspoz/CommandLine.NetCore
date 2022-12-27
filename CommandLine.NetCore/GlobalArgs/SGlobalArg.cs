@@ -14,8 +14,9 @@ public class SGlobalArg : Opt
     public SGlobalArg(
         IConfiguration config,
         Texts texts,
-        ValueConverter valueConverter)
-            : base("s", config, texts, valueConverter)
+        ValueConverter valueConverter,
+        bool isOptional = false)
+            : base("s", config, texts, valueConverter, isOptional)
     {
     }
 }

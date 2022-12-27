@@ -15,6 +15,11 @@ public class Opt<T> : Arg, IOpt
 {
     private string DebuggerDisplay => ToGrammar();
 
+    /// <summary>
+    /// true if optinal
+    /// </summary>
+    public bool IsOptional { get; private set; }
+
     /// <inheritdoc/>
     public override string ToGrammar()
     {
@@ -48,16 +53,20 @@ public class Opt<T> : Arg, IOpt
     /// <param name="config">app config</param>
     /// <param name="texts">texts</param>
     /// <param name="valueConverter">value converter</param>
+    /// <param name="isOptional"><see langword="true"/>if is optional</param>
     /// <param name="valuesCount">values count</param>
     public Opt(
         string name,
         IConfiguration config,
         Texts texts,
         ValueConverter valueConverter,
-        int valuesCount = 0)
+        bool isOptional = false,
+        int valuesCount = 0
+        )
         : base(config, texts, valueConverter)
     {
         Name = name;
+        IsOptional = isOptional;
         ExpectedValuesCount = valuesCount;
     }
 
