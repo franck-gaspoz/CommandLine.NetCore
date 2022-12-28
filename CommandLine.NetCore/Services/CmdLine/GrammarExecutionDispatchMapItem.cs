@@ -39,7 +39,7 @@ public sealed class GrammarExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate"></param>
     /// <returns></returns>
-    public GrammarMatcherDispatcher Then(Func<Grammar, OperationResult> @delegate)
+    public GrammarMatcherDispatcher Do(Func<Grammar, OperationResult> @delegate)
     {
         Delegate = @delegate;
         return GrammarMatcherDispatcher;

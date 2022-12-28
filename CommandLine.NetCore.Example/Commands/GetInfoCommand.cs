@@ -39,14 +39,14 @@ internal sealed class GetInfoCommand : Command
             Param("env"),
             Opt("l")
             )
-                .Then(DumpAllVars)
+                .Do(DumpAllVars)
 
         // env varName
 
         .For(
             Param("env"),
             Param())
-                .Then(DumpEnvVar)
+                .Do(DumpEnvVar)
 
         .Run(args);
 
