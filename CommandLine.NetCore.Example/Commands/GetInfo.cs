@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CommandLine.NetCore.Example.Commands;
 
-internal sealed class GetInfoCommand : Command
+internal sealed class GetInfo : Command
 {
     //private readonly Arg _env;
     /*
@@ -21,7 +21,7 @@ internal sealed class GetInfoCommand : Command
      * getinfo --all            : list all infos
      */
 
-    public GetInfoCommand(
+    public GetInfo(
         IConfiguration config,
         IAnsiVtConsole console,
         ArgBuilder argBuilder,

@@ -15,13 +15,13 @@ namespace CommandLine.NetCore.Commands.CmdLine;
 /// <summary>
 /// command line help
 /// </summary>
-internal sealed class HelpCommand : Command
+internal sealed class Help : Command
 {
     private readonly CommandsSet _commandsSet;
     private readonly GlobalOptsSet _globalOptsSet;
     private readonly IServiceProvider _serviceProvider;
 
-    public HelpCommand(
+    public Help(
         IConfiguration config,
         CommandsSet commands,
         GlobalOptsSet globalOptsSet,

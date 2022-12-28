@@ -161,7 +161,7 @@ public abstract class Command
     /// <param name="className">command type name</param>
     /// <returns>command name</returns>
     public static string ClassNameToCommandName(string className)
-        => className[0..^7].ToLower();
+        => className.ToKebabCase()!;
 
     /// <summary>
     /// transforms a commande name to a class type name
