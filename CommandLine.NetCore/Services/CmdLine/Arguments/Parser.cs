@@ -279,7 +279,7 @@ public sealed class Parser
             if (args.Count > 0)
             {
                 errors.Add(
-                    TooManyArguments(args, position));
+                    UnexpectedArguments(args, position));
             }
         }
 
@@ -311,8 +311,11 @@ public sealed class Parser
 
     #region errors texts
 
-    private string TooManyArguments(List<string> args, int atIndex)
-        => _texts._("TooManyArgumentsFromPosition",
+    private string UnexpectedArguments(List<string> args, int atIndex)
+        => _texts._(
+                args.Count == 1 ?
+                    "UnexpectedArgument"
+                    : "UnexpectedArguments",
             string.Join(' ', args),
             atIndex);
 
