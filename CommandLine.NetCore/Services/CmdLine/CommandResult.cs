@@ -28,4 +28,16 @@ public class CommandResult : OperationResult
     /// <param name="exitCode">exit code</param>
     public CommandResult(int exitCode)
         : base(exitCode) => ParseErrors = new List<string>();
+
+    /// <summary>
+    /// build a new instance
+    /// </summary>
+    /// <param name="exitCode">exit code</param>
+    /// <param name="result">result</param>
+    public CommandResult(int exitCode, object? result = null)
+        : base(exitCode)
+    {
+        ParseErrors = new List<string>();
+        Result = result;
+    }
 }

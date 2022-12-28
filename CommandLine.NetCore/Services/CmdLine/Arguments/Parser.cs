@@ -203,17 +203,15 @@ public sealed class Parser
         return parseBreaked;
     }
 
-    public (bool, List<string> errors) MatchSyntax(
+    internal (bool, List<string> errors) MatchSyntax(
         ArgSet arguments,
-        params Arg[] grammar
+        Grammar grammar
         )
     {
         var grammar_index = 0;
         var position = 0;
         var args = arguments.Args.ToList();
-        var grammarText = string.Join(' ',
-            grammar.Select(
-                x => x.ToGrammar()));
+        var grammarText = grammar.ToGrammar();
         var optionals = new List<IOpt>();
         var parseBreaked = false;
         var errors = new List<string>();
@@ -221,7 +219,7 @@ public sealed class Parser
         var grammars = new List<(bool isRemainingOptional, IArg arg)>();
 
         while (args.Count > 0
-            && (grammar_index < grammar.Length || isParsingRemainingOptions)
+            && (grammar_index < grammar.Count || isParsingRemainingOptions)
             && !parseBreaked)
         {
             Arg currentSyntax() => grammar[grammar_index];
@@ -248,7 +246,7 @@ public sealed class Parser
                     errors);
             }
 
-            isParsingRemainingOptions = grammar_index == grammar.Length
+            isParsingRemainingOptions = grammar_index == grammar.Count
                 && optionals.Any();
 
             parseBreaked = hasError;
@@ -257,7 +255,7 @@ public sealed class Parser
         bool RemainingGrammarIsOnlyOptional()
         {
             var remainingGrammarIsOnlyOptional = true;
-            for (var i = grammar_index; i < grammar.Length; i++)
+            for (var i = grammar_index; i < grammar.Count; i++)
             {
                 remainingGrammarIsOnlyOptional &=
                     grammar[grammar_index] is IOpt opt
@@ -269,11 +267,15 @@ public sealed class Parser
 
         if (!errors.Any())
         {
-            if (grammar_index < grammar.Length
+            if (grammar_index < grammar.Count
                 && !RemainingGrammarIsOnlyOptional())
             {
                 errors.Add(
-                    MissingArguments(grammar[grammar_index..], position));
+                    MissingArguments(
+                        grammar
+                            .Args
+                            .ToArray()[grammar_index..],
+                        position));
             }
 
             if (args.Count > 0)

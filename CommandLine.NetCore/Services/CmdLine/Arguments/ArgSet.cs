@@ -38,4 +38,10 @@ public sealed class ArgSet
     /// <param name="index">argument index (from 0)</param>
     /// <returns>argument value at index</returns>
     public string this[int index] => _args[index];
+
+    /// <summary>
+    /// text representaion of the argument set
+    /// </summary>
+    /// <returns>text representation of the argument set</returns>
+    public string ToText() => string.Join(' ', _args);
 }

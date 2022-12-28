@@ -108,7 +108,9 @@ public abstract class Command
             text = desc;
             return true;
         }
-        text = Console.Colors.Error + Texts._("CommandShortHelpNotFound", ClassNameToCommandName());
+        text = Console.Colors.Error + Texts._(
+            "CommandShortHelpNotFound",
+            ClassNameToCommandName());
         return false;
     }
 
@@ -126,7 +128,8 @@ public abstract class Command
             texts = new List<KeyValuePair<string, string>> {
                 new KeyValuePair<string,string>(
                     Console.Colors.Error +
-                    Texts._("CommandLongHelpNotFound", ClassNameToCommandName()),
+                    Texts._("CommandLongHelpNotFound",
+                        ClassNameToCommandName()),
                     string.Empty)
             };
             return false;
@@ -188,25 +191,7 @@ public abstract class Command
 
     #region grammar helpers
 
-    /// <summary>
-    /// check if the arg set match the syntax described by the parameters from left to right
-    /// </summary>
-    /// <param name="args">arguments</param>
-    /// <param name="grammar">grammar to be checked</param>
-    /// <returns>true if syntax match, false otherwise and list of parse errors</returns>
-    protected CommandResult MatchSyntax(
-        ArgSet args,
-        params Arg[] grammar
-        )
-    {
-        var (hasErrors, errors) = Parser.MatchSyntax(args, grammar);
-        return new CommandResult(
-            hasErrors ? Globals.ExitFail : Globals.ExitOk,
-            errors
-            );
-    }
-
-    /// <summary>
+    /// <summary>   
     /// build a grammar from arguments grammars set
     /// </summary>
     /// <param name="grammar">arguments grammars</param>
@@ -214,7 +199,7 @@ public abstract class Command
     protected GrammarExecutionDispatchMapItem For(params Arg[] grammar)
     {
         if (_grammarMatcherDispatcher is null)
-            _grammarMatcherDispatcher = new();
+            _grammarMatcherDispatcher = new(Texts, Parser);
         return _grammarMatcherDispatcher.For(grammar);
     }
 

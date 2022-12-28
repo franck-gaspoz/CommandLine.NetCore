@@ -27,6 +27,18 @@ public sealed class Grammar
         => _args = args.ToList();
 
     /// <summary>
+    /// array get accessor
+    /// </summary>
+    /// <param name="index">argument index (from 0)</param>
+    /// <returns>argument value at index</returns>
+    public Arg this[int index] => _args[index];
+
+    /// <summary>
+    /// args count
+    /// </summary>
+    public int Count => Args.Count;
+
+    /// <summary>
     /// string representation of the grammar
     /// </summary>
     /// <returns>string representation of the grammar</returns>
