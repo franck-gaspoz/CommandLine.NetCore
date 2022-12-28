@@ -41,7 +41,7 @@ internal static class StringExt
         for (var i = 0; i < arr.Length; i++)
         {
             var c = arr[i];
-            if (char.IsUpper(c))
+            if (char.IsUpper(c) && i > 0)
                 chars.Add('-');
             chars.Add(char.ToLowerInvariant(c));
         }
