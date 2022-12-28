@@ -34,6 +34,7 @@ internal sealed class GetInfoCommand : Command
     protected override CommandResult Execute(ArgSet args) =>
 
         // env -l
+
         For(
             Param("env"),
             Opt("-l")
@@ -41,6 +42,7 @@ internal sealed class GetInfoCommand : Command
                 .Execute(DumpAllVars)
 
         // env varName
+
         .For(
             Param("env"),
             Param())
