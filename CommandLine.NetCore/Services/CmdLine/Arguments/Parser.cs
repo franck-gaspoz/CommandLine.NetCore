@@ -144,7 +144,7 @@ public sealed class Parser
                 if (!TryCatch(
                     () => ParseOptValues(opt, args, 0, currentPosition),
                     (ex) => errors.Add(BuildError(
-                        ex, SyntaxMismatchError(opt)))
+                        ex, SyntaxMismatch(opt)))
                     ))
                 {
                     parseBreaked = true;
@@ -178,7 +178,7 @@ public sealed class Parser
                     (ex) => errors.Add(
                         param.StringValue is not null ?
                             BuildError(
-                                ex, SyntaxMismatchError(param))
+                                ex, SyntaxMismatch(param))
                             : BuildError(
                                 ex, ParamValueError(param, currentPosition, arg)
                     ))))
@@ -290,23 +290,36 @@ public sealed class Parser
 
     #region errors texts
 
-    private static string TooManyArguments(List<string> args, int atIndex)
-        => $"to many arguments: '{string.Join(' ', args)}' from position {atIndex}";
+    private string TooManyArguments(List<string> args, int atIndex)
+        => _texts._("TooManyArgumentsFromPosition",
+            string.Join(' ', args),
+            atIndex);
 
-    private static string MissingArguments(Arg[] args, int atIndex)
-        => $"missing arguments, expected '{string.Join(' ', args.Select(x => x.ToGrammar()))}' at position {atIndex}";
+    private string MissingArguments(Arg[] args, int atIndex)
+        => _texts._("MissingArgumentsAtPosition",
+            string.Join(' ', args.Select(x => x.ToGrammar())),
+            atIndex);
 
-    private static string SyntaxMismatchError(IArg expectedGrammar)
-        => $"in grammar '{expectedGrammar.ToGrammar()}'";
+    private string SyntaxMismatch(IArg expectedGrammar)
+        => _texts._("SyntaxMismatch", expectedGrammar.ToGrammar());
 
-    private static string ParamValueError(IArg expectedGrammar, int atIndex, string foundSyntax)
-        => $"in grammar '{expectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
+    private string ParamValueError(IArg expectedGrammar, int atIndex, string foundSyntax)
+        => _texts._("ParamValueError",
+            expectedGrammar.ToGrammar(),
+            atIndex,
+            foundSyntax);
 
-    private static string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
+    private string UnknownGrammar(IArg arg, int atIndex)
+        => _texts._("UnknownGrammar",
+            arg.ToGrammar(),
+            atIndex);
 
     private static string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
 
-    private static string GetError(string error, string grammarText) => error + Environment.NewLine + "for grammar: " + grammarText;
+    private string GetError(string error, string grammarText)
+        => error + Environment.NewLine
+            + _texts._("ForGrammar") + " "
+            + grammarText;
 
     #endregion
 
