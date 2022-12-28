@@ -1,13 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 using CommandLine.NetCore.Extensions;
-using CommandLine.NetCore.Services.CmdLine;
-using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
+namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 /// <summary>
 /// global arguments set
@@ -48,9 +46,8 @@ public sealed class GlobalOptsSet
                 .AddRange(
                     assembly
                     .GetTypes()
-                    .Where(x => x.InheritsFrom(typeof(Opt))
-                        && x.Name.EndsWith(Globals.GlobalArgPostFix)
-                    ));
+                    .Where(x => x.InheritsFrom(typeof(GlobalOpt)))
+                    );
         }
         return globalOptTypes;
     }

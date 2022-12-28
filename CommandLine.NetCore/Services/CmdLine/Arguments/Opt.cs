@@ -1,9 +1,8 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.Text;
+﻿using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
-namespace CommandLine.NetCore.Service.CmdLine.Arguments;
+namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
 /// a command line option : -name [value1 [.. value n], --name [value1 [.. value n] of values of type string

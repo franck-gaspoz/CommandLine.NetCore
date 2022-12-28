@@ -53,7 +53,7 @@ public class Opt<T> : Arg, IOpt
     /// <summary>
     /// argument name
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; protected set; }
 
     /// <summary>
     /// build a new option
@@ -132,12 +132,12 @@ public class Opt<T> : Arg, IOpt
     /// <returns>true if description is found, otherwise false</returns>
     public bool GetDescription(out KeyValuePair<string, string> description)
     {
-        var desc = Config.GetSection("GlobalArgs:" + Name);
+        var desc = Config.GetSection("GlobalOptions:" + Name);
 
         if (!desc.Exists() || !desc.GetChildren().Any())
         {
             description = new KeyValuePair<string, string>(
-                Texts._("GlobalArgHelpNotFound", Name),
+                Texts._("GlobalOptHelpNotFound", Name),
                 string.Empty);
             return false;
         }

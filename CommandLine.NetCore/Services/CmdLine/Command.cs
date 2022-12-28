@@ -2,7 +2,6 @@
 using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
-using CommandLine.NetCore.Service.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
@@ -51,6 +50,7 @@ public abstract class Command
     /// <param name="console">console service</param>
     /// <param name="texts">texts service</param>
     /// <param name="argBuilder">args builder</param>
+    /// <param name="parser">parser</param>
     public Command(
         IConfiguration config,
         IAnsiVtConsole console,

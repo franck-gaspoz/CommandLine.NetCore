@@ -1,5 +1,4 @@
-﻿using CommandLine.NetCore.Service.CmdLine.Arguments;
-using CommandLine.NetCore.Services.Text;
+﻿using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 

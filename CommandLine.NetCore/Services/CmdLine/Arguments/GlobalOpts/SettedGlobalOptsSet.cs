@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using CommandLine.NetCore.Services.CmdLine;
-
-namespace CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
+namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 /// <summary>
 /// setted global arguments set

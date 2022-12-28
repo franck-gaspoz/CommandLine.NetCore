@@ -19,8 +19,7 @@ public sealed class Parser
         => _texts = texts;
 
     public static string ClassNameToOptName(string name)
-        => name[0..^9]
-            .ToLower();
+        => name.ToLower();
 
     public static string GetPrefixFromClassName(string name)
     {

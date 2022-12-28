@@ -1,6 +1,6 @@
 ﻿
-using CommandLine.NetCore.GlobalArgs;
-using CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
+using CommandLine.NetCore.GlobalOpts;
+using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -69,9 +69,9 @@ internal static class IServiceCollectionExt
         services.AddSingleton<cons.IAnsiVtConsole>(
             serviceProvider =>
             {
-                var settedGlobalArgs = serviceProvider.GetRequiredService<SettedGlobalOptsSet>();
+                var settedGlobalOpts = serviceProvider.GetRequiredService<SettedGlobalOptsSet>();
                 var console = new cons.AnsiVtConsole();
-                console.Out.IsMute = settedGlobalArgs.Contains<SGlobalArg>();
+                console.Out.IsMute = settedGlobalOpts.Contains<S>();
                 return console;
             });
         return services;

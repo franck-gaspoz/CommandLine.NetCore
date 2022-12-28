@@ -2,10 +2,9 @@
 
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.Service.CmdLine.Arguments;
-using CommandLine.NetCore.Service.CmdLine.Arguments.GlobalArgs;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -19,13 +18,13 @@ namespace CommandLine.NetCore.Commands.CmdLine;
 internal sealed class HelpCommand : Command
 {
     private readonly CommandsSet _commandsSet;
-    private readonly GlobalOptsSet _globalArgsSet;
+    private readonly GlobalOptsSet _globalOptsSet;
     private readonly IServiceProvider _serviceProvider;
 
     public HelpCommand(
         IConfiguration config,
         CommandsSet commands,
-        GlobalOptsSet globalArgsSet,
+        GlobalOptsSet globalOptsSet,
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
@@ -33,7 +32,7 @@ internal sealed class HelpCommand : Command
         IServiceProvider serviceProvider) :
             base(config, console, texts, argBuilder, parser)
     {
-        _globalArgsSet = globalArgsSet;
+        _globalOptsSet = globalOptsSet;
         _serviceProvider = serviceProvider;
         _commandsSet = commands;
     }
@@ -65,7 +64,7 @@ internal sealed class HelpCommand : Command
             Console.Out.WriteLine();
 
             OutputSectionTitle(Texts._("GlobalOptions"));
-            DumpGlobalArgList();
+            DumpGlobalOptList();
         }
         else
         {
@@ -93,9 +92,9 @@ internal sealed class HelpCommand : Command
             InformationalDataMessage +
             Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
 
-    private void DumpGlobalArgList()
+    private void DumpGlobalOptList()
     {
-        foreach (var kvp in _globalArgsSet.Opts)
+        foreach (var kvp in _globalOptsSet.Opts)
         {
             var globalArg = (Opt)_serviceProvider.GetRequiredService(kvp.Value);
             var isError = !globalArg.GetDescription(out var argDesc)
