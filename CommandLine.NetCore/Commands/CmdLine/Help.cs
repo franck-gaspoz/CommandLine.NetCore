@@ -97,7 +97,7 @@ internal sealed class Help : Command
     {
         foreach (var kvp in _globalOptsSet.Opts)
         {
-            var globalOpt = (Opt)_serviceProvider.GetRequiredService(kvp.Value);
+            var globalOpt = (IOpt)_serviceProvider.GetRequiredService(kvp.Value);
             var isError = !globalOpt.GetDescription(out var argDesc)
                 ? Console.Colors.Error.ToString() : "";
             Console.Out.WriteLine(

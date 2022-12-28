@@ -71,6 +71,12 @@ internal static class TypeExt
         return r;
     }
 
+    /// <summary>
+    /// indicates if a type implements an interface
+    /// </summary>
+    /// <param name="type">checked type</param>
+    /// <param name="interfaceType">interface type</param>
+    /// <returns>true if type implements interface, false otherwise</returns>
     public static bool HasInterface(this Type type, Type interfaceType)
         => type.GetInterface(interfaceType.FullName!) != null;
 

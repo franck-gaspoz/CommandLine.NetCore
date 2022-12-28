@@ -46,7 +46,8 @@ public sealed class GlobalOptsSet
                 .AddRange(
                     assembly
                     .GetTypes()
-                    .Where(x => x.InheritsFrom(typeof(GlobalOpt)))
+                    .Where(x => x.HasInterface(typeof(IGlobalOpt))
+                        && !x.IsAbstract)
                     );
         }
         return globalOptTypes;
@@ -61,7 +62,7 @@ public sealed class GlobalOptsSet
         IServiceProvider serviceProvider,
         string str,
         [NotNullWhen(true)]
-        out Opt? opt)
+        out IOpt? opt)
     {
         opt = null;
         var optName = str;
@@ -69,16 +70,16 @@ public sealed class GlobalOptsSet
             optName = optName[1..];
         if (_opts.TryGetValue(optName, out var classType))
         {
-            opt = (Opt)serviceProvider.GetRequiredService(classType);
+            opt = (IOpt)serviceProvider.GetRequiredService(classType);
             return true;
         }
         return false;
     }
 
-    public Dictionary<string, Opt> Parse(
+    internal Dictionary<string, IOpt> Parse(
         CommandLineArgs commandLineArgs)
     {
-        Dictionary<string, Opt> res = new();
+        Dictionary<string, IOpt> res = new();
         var index = 0;
         var position = 0;
         var args = commandLineArgs.Args.ToList();

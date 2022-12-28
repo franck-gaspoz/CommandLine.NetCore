@@ -7,9 +7,9 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 /// </summary>
 public sealed class SettedGlobalOptsSet
 {
-    private readonly Dictionary<string, Opt> _opts = new();
+    private readonly Dictionary<string, IOpt> _opts = new();
 
-    public IReadOnlyDictionary<string, Opt> Opts
+    public IReadOnlyDictionary<string, IOpt> Opts
         => _opts;
 
     public SettedGlobalOptsSet(
@@ -20,11 +20,11 @@ public sealed class SettedGlobalOptsSet
             Add(kvp.Value);
     }
 
-    public void Add(Opt opt)
+    public void Add(IOpt opt)
         => _opts.Add(opt.Name, opt);
 
     public bool TryGetByType<T>([NotNullWhen(true)] out T? opt)
-        where T : Opt
+        where T : IOpt
     {
         opt = (T?)_opts
             .Values
@@ -35,7 +35,7 @@ public sealed class SettedGlobalOptsSet
     }
 
     public bool Contains<T>()
-        where T : Opt
+        where T : IOpt
         => TryGetByType<T>(out _);
 }
 

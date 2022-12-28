@@ -2,7 +2,7 @@
   "profiles": {
     "CommandLine.NetCore.Example": {
       "commandName": "Project",
-      "commandLineArgs": "help"
+      "commandLineArgs": "help --parser-logging tst"
     }
   }
 }

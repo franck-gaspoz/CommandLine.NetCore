@@ -12,7 +12,7 @@ namespace CommandLine.NetCore.GlobalOpts;
 /// <para>exclude ambiguous grammar</para>
 /// <para>by default, the first matching grammar is selected in the command line arguments parser</para>
 /// </summary>
-public class ExcludeAmbiguousGrammar : GlobalOpt
+public class ExcludeAmbiguousGrammar : GlobalOpt<string>
 {
     public ExcludeAmbiguousGrammar(
         IConfiguration config,

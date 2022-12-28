@@ -8,18 +8,20 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 /// <summary>
 /// global option
 /// </summary>
-public abstract class GlobalOpt : Opt, IGlobalOpt
+public abstract class GlobalOpt<T> : Opt<T>, IGlobalOpt
 {
     public GlobalOpt(
             IConfiguration config,
             Texts texts,
-            ValueConverter valueConverter)
+            ValueConverter valueConverter,
+            int valuesCount = 0)
                 : base(
                     string.Empty,
                     config,
                     texts,
                     valueConverter,
-                    true)
+                    true,
+                    valuesCount)
         => Name = Parser.ClassNameToOptName(
                 GetType().Name);
 }

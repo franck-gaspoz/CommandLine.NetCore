@@ -173,14 +173,6 @@ public abstract class Command
     public static string ClassNameToCommandName(string className)
         => className.ToKebabCase()!;
 
-    /// <summary>
-    /// transforms a commande name to a class type name
-    /// </summary>
-    /// <param name="name">command name</param>
-    /// <returns>name of command type</returns>
-    public static string CommandNameToClassType(string name)
-        => name.ToFirstUpper() + typeof(Command).Name;
-
     #endregion
 
     #region args build helpers
