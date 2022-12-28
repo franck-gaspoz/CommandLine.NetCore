@@ -48,7 +48,7 @@ internal sealed class GetInfoCommand : Command
             Param())
                 .Do(DumpEnvVar)
 
-        .Run(args);
+        .With(args);
 
     private OperationResult DumpEnvVar(Grammar grammar) => new(Globals.ExitOk);
 

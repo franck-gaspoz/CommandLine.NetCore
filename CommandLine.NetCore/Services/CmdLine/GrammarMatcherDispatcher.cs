@@ -43,7 +43,7 @@ public sealed class GrammarMatcherDispatcher
     /// <param name="args">set of command line arguments</param>
     /// <returns>command execution result</returns>
     /// <exception cref="InvalidOperationException">the grammar matcher dispatcher delegate action is not defined</exception>
-    public CommandResult Run(ArgSet args)
+    public CommandResult With(ArgSet args)
     {
         List<CommandResult> tryCommandsResults = new();
         List<GrammarExecutionDispatchMapItem> matchingGrammars = new();
