@@ -31,16 +31,6 @@ public abstract class Command
     protected readonly IConfiguration Config;
 
     /// <summary>
-    ///  min arg count
-    /// </summary>
-    protected readonly int? MinArgCount;
-
-    /// <summary>
-    /// max arg count
-    /// </summary>
-    protected readonly int? MaxArgCount;
-
-    /// <summary>
     /// name of the command
     /// </summary>
     public string Name => ClassNameToCommandName();
@@ -54,33 +44,16 @@ public abstract class Command
     /// <param name="console">console service</param>
     /// <param name="texts">texts service</param>
     /// <param name="argBuilder">args builder</param>
-    /// <param name="minArgCount">command minimum args count</param>
-    /// <param name="maxArgCount">command maximum args count</param>
     public Command(
         IConfiguration config,
         IAnsiVtConsole console,
         Texts texts,
-        ArgBuilder argBuilder,
-        int minArgCount = 0,
-        int maxArgCount = 0)
+        ArgBuilder argBuilder)
     {
         _argBuilder = argBuilder;
         Config = config;
         Texts = texts;
         Console = console;
-        MinArgCount = minArgCount;
-        MaxArgCount = maxArgCount;
-    }
-
-    /// <summary>
-    /// exec command
-    /// </summary>
-    /// <param name="args">arguments</param>
-    /// <returns>return code</returns>
-    public int Run(ArgSet args)
-    {
-        CheckMinMaxArgs(args.Args.ToArray());
-        return Execute(args);
     }
 
     /// <summary>
@@ -89,7 +62,7 @@ public abstract class Command
     /// <param name="args">args</param>
     /// <returns>return code</returns>
     /// <exception cref="NotImplementedException">not implemented</exception>
-    protected abstract int Execute(ArgSet args);
+    public abstract int Execute(ArgSet args);
 
     /// <summary>
     /// short description of the command
@@ -163,48 +136,6 @@ public abstract class Command
     /// <returns>name of command type</returns>
     public static string CommandNameToClassType(string name)
         => name.ToFirstUpper() + typeof(Command).Name;
-
-    #endregion
-
-    #region args helpers
-
-    /// <summary>
-    /// check args count doesn't exceed max arg count allowed
-    /// </summary>
-    /// <param name="args">args</param>
-    /// <exception cref="ArgumentException">too many arguments</exception>
-    protected void CheckMaxArgs(string[] args)
-    {
-        if (MaxArgCount is null)
-            return;
-        if (args.Length > MaxArgCount)
-            throw new ArgumentException(Texts._("TooManyArguments", MaxArgCount));
-    }
-
-    /// <summary>
-    /// check args count is not lower than min allowed arg count
-    /// </summary>
-    /// <param name="args">args</param>
-    /// <exception cref="ArgumentException">not enough arguments</exception>
-    protected void CheckMinArgs(string[] args)
-    {
-        if (MinArgCount is null)
-            return;
-        if (args.Length < MinArgCount)
-            throw new ArgumentException(Texts._("NotEnoughArguments", MinArgCount));
-    }
-
-    /// <summary>
-    /// check args count doesn't exceed max arg count allowed and args count is not lower than min allowed arg count
-    /// </summary>
-    /// <param name="args">args</param>
-    /// <exception cref="ArgumentException">too many arguments</exception>
-    /// <exception cref="ArgumentException">not enough arguments</exception>
-    protected void CheckMinMaxArgs(string[] args)
-    {
-        CheckMaxArgs(args);
-        CheckMinArgs(args);
-    }
 
     #endregion
 

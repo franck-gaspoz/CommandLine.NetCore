@@ -1,9 +1,5 @@
 ﻿using System.Diagnostics;
 
-using AnsiVtConsole.NetCore;
-
-using CommandLine.NetCore.Services.Text;
-
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
@@ -22,24 +18,18 @@ public sealed class ArgSet
     private readonly List<string> _args;
 
     private readonly Parser _parser;
-    private readonly IAnsiVtConsole _console;
-    private readonly Texts _texts;
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="args">arguments</param>
     /// <param name="parser">syntax parser</param>
-    /// <param name="console">console</param>
-    /// <param name="texts">texts</param>
     public ArgSet(
         IEnumerable<string> args,
-        Parser parser,
-        IAnsiVtConsole console,
-        Texts texts
+        Parser parser
         )
-        => (_args, _parser, _console, _texts)
-            = (new List<string>(args), parser, console, texts);
+        => (_args, _parser)
+            = (new List<string>(args), parser);
 
     /// <summary>
     /// args count

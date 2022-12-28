@@ -28,10 +28,10 @@ internal sealed class GetInfoCommand : Command
         IAnsiVtConsole console,
         ArgBuilder argBuilder,
         Texts texts) :
-            base(config, console, texts, argBuilder, 1, 4)
+            base(config, console, texts, argBuilder)
     { }
 
-    protected override int Execute(ArgSet args)
+    public override int Execute(ArgSet args)
     {
         // getinfo env [-o fic.txt] varName
         args.MatchSyntax(

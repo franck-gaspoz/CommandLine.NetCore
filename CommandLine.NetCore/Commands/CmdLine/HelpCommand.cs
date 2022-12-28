@@ -30,7 +30,7 @@ internal sealed class HelpCommand : Command
         Texts texts,
         ArgBuilder argBuilder,
         IServiceProvider serviceProvider) :
-            base(config, console, texts, argBuilder, 0, 1)
+            base(config, console, texts, argBuilder)
     {
         _globalArgsSet = globalArgsSet;
         _serviceProvider = serviceProvider;
@@ -47,7 +47,7 @@ internal sealed class HelpCommand : Command
 
     private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
 
-    protected override int Execute(ArgSet args)
+    public override int Execute(ArgSet args)
     {
         OutputAppTitle();
 
