@@ -124,11 +124,13 @@ public sealed class Parser
         List<string> args,
         List<IOpt> optionals,
         string arg,
-        IArg gram,
+        (bool isRemainingOptional, IArg arg) gramSpec,
         List<string> errors)
     {
         var parseBreaked = false;
         var currentPosition = position;
+
+        var (isRemainingOptional, gram) = gramSpec;
 
         if (gram is IOpt opt)
         {
@@ -145,7 +147,14 @@ public sealed class Parser
                 }
 
                 position += 1 + opt.ExpectedValuesCount;
-                grammar_index++;
+                if (!isRemainingOptional)
+                {
+                    grammar_index++;
+                }
+                else
+                {
+                    optionals.Remove(opt);
+                }
             }
             else
             {
@@ -208,23 +217,23 @@ public sealed class Parser
         var optionals = new List<IOpt>();
         var parseBreaked = false;
         var errors = new List<string>();
-        var isParsingOptions = false;
-        var grammars = new List<IArg>();
+        var isParsingRemainingOptions = false;
+        var grammars = new List<(bool isRemainingOptional, IArg arg)>();
 
         while (args.Count > 0
-            && (grammar_index < grammar.Length || isParsingOptions)
+            && (grammar_index < grammar.Length || isParsingRemainingOptions)
             && !parseBreaked)
         {
             Arg currentSyntax() => grammar[grammar_index];
             string currentArg() => args[0];
 
-            var arg = currentArg();
-
             grammars.Clear();
-            if (!isParsingOptions)
-                grammars.Add(currentSyntax());
-            else
-                grammars.AddRange(optionals);
+            if (!isParsingRemainingOptions)
+                grammars.Add((false, currentSyntax()));
+
+            grammars.AddRange(
+                optionals
+                    .Select(x => (true, (IArg)x)));
 
             var hasError = false;
             foreach (var gram in grammars)
@@ -234,20 +243,34 @@ public sealed class Parser
                     ref position,
                     args,
                     optionals,
-                    arg,
+                    currentArg(),
                     gram,
                     errors);
             }
 
-            isParsingOptions = grammar_index == grammar.Length
+            isParsingRemainingOptions = grammar_index == grammar.Length
                 && optionals.Any();
 
             parseBreaked = hasError;
         }
 
+        bool RemainingGrammarIsOnlyOptional()
+        {
+            var remainingGrammarIsOnlyOptional = true;
+            for (var i = grammar_index; i < grammar.Length; i++)
+            {
+                remainingGrammarIsOnlyOptional &=
+                    grammar[grammar_index] is IOpt opt
+                    && opt.IsOptional;
+            }
+
+            return remainingGrammarIsOnlyOptional;
+        }
+
         if (!errors.Any())
         {
-            if (grammar_index < grammar.Length)
+            if (grammar_index < grammar.Length
+                && !RemainingGrammarIsOnlyOptional())
             {
                 errors.Add(
                     MissingArguments(grammar[grammar_index..], position));

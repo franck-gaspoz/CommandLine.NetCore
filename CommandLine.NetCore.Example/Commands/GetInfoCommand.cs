@@ -32,11 +32,12 @@ internal sealed class GetInfoCommand : Command
 
     protected override CommandResult Execute(ArgSet args)
     {
-        // getinfo env [-o fic.txt] varName
+        // getinfo env [-o fic.txt] varName [-t debug]
         var commandResult = args.MatchSyntax(
             Param("env"),
             Opt("o", true, 1),
-            Opt("l")
+            Opt("l"),
+            Opt("t", true, 1)
             );
 
         /*args.MatchSyntax(
