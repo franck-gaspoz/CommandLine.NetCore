@@ -3,6 +3,7 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,11 @@ public abstract class Command
     protected readonly Parser Parser;
 
     /// <summary>
+    /// setted global options
+    /// </summary>
+    protected readonly SettedGlobalOptsSet SettedGlobalOptsSet;
+
+    /// <summary>
     /// name of the command
     /// </summary>
     public string Name => ClassNameToCommandName();
@@ -50,15 +56,19 @@ public abstract class Command
     /// <param name="console">console service</param>
     /// <param name="texts">texts service</param>
     /// <param name="argBuilder">args builder</param>
+    /// <param name="settedGlobalOptsSet">setted global options set</param>
     /// <param name="parser">parser</param>
     public Command(
         IConfiguration config,
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
-        Parser parser)
+        SettedGlobalOptsSet settedGlobalOptsSet,
+        Parser parser
+        )
     {
         _argBuilder = argBuilder;
+        SettedGlobalOptsSet = settedGlobalOptsSet;
         Config = config;
         Texts = texts;
         Console = console;
@@ -199,7 +209,7 @@ public abstract class Command
     protected GrammarExecutionDispatchMapItem For(params Arg[] grammar)
     {
         if (_grammarMatcherDispatcher is null)
-            _grammarMatcherDispatcher = new(Texts, Parser);
+            _grammarMatcherDispatcher = new(Texts, Parser, SettedGlobalOptsSet);
         return _grammarMatcherDispatcher.For(grammar);
     }
 

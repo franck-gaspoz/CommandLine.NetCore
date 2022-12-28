@@ -3,6 +3,7 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -25,9 +26,10 @@ internal sealed class GetInfo : Command
         IConfiguration config,
         IAnsiVtConsole console,
         ArgBuilder argBuilder,
+        SettedGlobalOptsSet settedGlobalOptsSet,
         Parser parser,
         Texts texts) :
-            base(config, console, texts, argBuilder, parser)
+            base(config, console, texts, argBuilder, settedGlobalOptsSet, parser)
     { }
 
     /// <inheritdoc/>

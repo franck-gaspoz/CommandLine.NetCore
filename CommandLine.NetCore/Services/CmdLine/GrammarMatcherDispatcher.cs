@@ -1,5 +1,7 @@
 ﻿
+using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Services.CmdLine;
@@ -12,16 +14,20 @@ public sealed class GrammarMatcherDispatcher
     private readonly List<GrammarExecutionDispatchMapItem> _maps = new();
     private readonly Texts _texts;
     private readonly Parser _parser;
+    private readonly SettedGlobalOptsSet _settedGlobalOptsSet;
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="texts">texts service</param>
     /// <param name="parser">parser</param>
+    /// <param name="settedGlobalOptsSet">setted global options</param>
     public GrammarMatcherDispatcher(
         Texts texts,
-        Parser parser)
-        => (_texts, _parser) = (texts, parser);
+        Parser parser,
+        SettedGlobalOptsSet settedGlobalOptsSet)
+        => (_texts, _parser, _settedGlobalOptsSet)
+            = (texts, parser, settedGlobalOptsSet);
 
     /// <summary>
     /// build a grammar from arguments grammars set
@@ -82,7 +88,8 @@ public sealed class GrammarMatcherDispatcher
                 null);
         }
 
-        if (matchingGrammars.Count > 1)
+        if (matchingGrammars.Count > 1
+            && _settedGlobalOptsSet.Contains<ExcludeAmbiguousGrammar>())
         {
             parseErrors.Add(
                 _texts._(

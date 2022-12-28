@@ -358,11 +358,6 @@ public sealed class Parser
 
     private static string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
 
-    private string GetError(string error, string grammarText)
-        => error + Environment.NewLine
-            + _texts._("ForGrammar") + " "
-            + grammarText;
-
     #endregion
 
 }

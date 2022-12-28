@@ -28,9 +28,10 @@ internal sealed class Help : Command
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
+        SettedGlobalOptsSet settedGlobalOptsSet,
         Parser parser,
         IServiceProvider serviceProvider) :
-            base(config, console, texts, argBuilder, parser)
+            base(config, console, texts, argBuilder, settedGlobalOptsSet, parser)
     {
         _globalOptsSet = globalOptsSet;
         _serviceProvider = serviceProvider;
