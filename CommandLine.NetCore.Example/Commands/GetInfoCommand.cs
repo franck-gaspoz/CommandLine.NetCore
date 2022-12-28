@@ -37,7 +37,7 @@ internal sealed class GetInfoCommand : Command
 
         For(
             Param("env"),
-            Opt("-l")
+            Opt("l")
             )
                 .Then(DumpAllVars)
 
