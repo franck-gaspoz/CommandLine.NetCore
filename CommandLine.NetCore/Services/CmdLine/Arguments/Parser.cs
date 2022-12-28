@@ -92,7 +92,12 @@ public sealed class Parser
             catch (ArgumentException ex)
             {
                 throw new ArgumentException(
-                    _texts._("InvalidOptionValue", position, opt.Name, ex.Message));
+                    _texts._(
+                        "InvalidOptionValue",
+                        position,
+                        opt.Name,
+                        ex.Message,
+                        opt.ToGrammar()));
             }
             args.RemoveAt(index);
             expectedCount--;
