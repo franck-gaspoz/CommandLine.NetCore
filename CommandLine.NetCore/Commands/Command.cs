@@ -3,6 +3,7 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Service.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
@@ -62,7 +63,29 @@ public abstract class Command
     /// <param name="args">args</param>
     /// <returns>return code</returns>
     /// <exception cref="NotImplementedException">not implemented</exception>
-    public abstract int Execute(ArgSet args);
+    public CommandResult Run(ArgSet args)
+    {
+        var commandResult = Execute(args);
+
+        if (commandResult.ParseErrors.Any())
+        {
+            Console.Logger.LogError(
+                string.Join(
+                    Environment.NewLine,
+                    commandResult.ParseErrors)
+                + "(br)");
+        }
+
+        return commandResult;
+    }
+
+    /// <summary>
+    /// command run body to be implemented by subclasses
+    /// </summary>
+    /// <param name="args">args</param>
+    /// <returns>return code</returns>
+    /// <exception cref="NotImplementedException">not implemented</exception>
+    protected abstract CommandResult Execute(ArgSet args);
 
     /// <summary>
     /// short description of the command

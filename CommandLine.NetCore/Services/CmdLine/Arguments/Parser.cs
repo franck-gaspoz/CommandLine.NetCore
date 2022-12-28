@@ -1,6 +1,4 @@
 ﻿
-using AnsiVtConsole.NetCore;
-
 using CommandLine.NetCore.Services.Text;
 
 using static CommandLine.NetCore.Services.CmdLine.Globals;
@@ -12,17 +10,13 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 public sealed class Parser
 {
     private readonly Texts _texts;
-    private readonly IAnsiVtConsole _console;
 
     /// <summary>
     /// build a new arguments parser
     /// </summary>
     /// <param name="texts">texts</param>
-    /// <param name="console">console</param>
-    public Parser(
-        Texts texts,
-        IAnsiVtConsole console)
-        => (_texts, _console) = (texts, console);
+    public Parser(Texts texts)
+        => _texts = texts;
 
     public static string ClassNameToOptName(string name)
         => name[0..^9]
@@ -200,7 +194,7 @@ public sealed class Parser
         return parseBreaked;
     }
 
-    public bool MatchSyntax(
+    public (bool, List<string> errors) MatchSyntax(
         List<string> arguments,
         params Arg[] grammar
         )
@@ -269,9 +263,13 @@ public sealed class Parser
         var error = string.Join(Environment.NewLine, errors);
 
         if (!string.IsNullOrWhiteSpace(error))
-            _console.Logger.LogError(GetError(error, grammarText) + "(br)");
+        {
+            errors.Add(
+                _texts._("ForGrammar") + " "
+                + grammarText);
+        }
 
-        return false;
+        return (string.IsNullOrWhiteSpace(error), errors);
     }
 
     private static bool TryCatch(Action tryDelegate, Action<Exception> elseDelegate)

@@ -47,7 +47,7 @@ internal sealed class HelpCommand : Command
 
     private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
 
-    public override int Execute(ArgSet args)
+    protected override CommandResult Execute(ArgSet args)
     {
         OutputAppTitle();
 
@@ -75,7 +75,7 @@ internal sealed class HelpCommand : Command
         DumpInformationalData();
         Sep();
 
-        return Globals.ExitOk;
+        return new CommandResult(Globals.ExitOk);
     }
 
     private void DumpCommandHelp(ArgSet args)

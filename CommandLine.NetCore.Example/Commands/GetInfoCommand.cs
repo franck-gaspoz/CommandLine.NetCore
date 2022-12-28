@@ -2,12 +2,11 @@
 using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Commands;
+using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
-
-using static CommandLine.NetCore.Services.CmdLine.Globals;
 
 namespace CommandLine.NetCore.Example.Commands;
 
@@ -31,10 +30,10 @@ internal sealed class GetInfoCommand : Command
             base(config, console, texts, argBuilder)
     { }
 
-    public override int Execute(ArgSet args)
+    protected override CommandResult Execute(ArgSet args)
     {
         // getinfo env [-o fic.txt] varName
-        args.MatchSyntax(
+        var commandResult = args.MatchSyntax(
             Param("env"),
             Opt("o", true, 1),
             Opt("l")
@@ -45,6 +44,6 @@ internal sealed class GetInfoCommand : Command
             Param()
             );*/
 
-        return ExitOk;
+        return commandResult;
     }
 }

@@ -46,9 +46,15 @@ public sealed class ArgSet
     /// <summary>
     /// check if the arg set match the syntax described by the parameters from left to right
     /// </summary>
-    /// <returns>true if syntax match, false otherwise</returns>
-    public bool MatchSyntax(
+    /// <returns>true if syntax match, false otherwise and list of errors</returns>
+    public CommandResult MatchSyntax(
         params Arg[] grammar
         )
-        => _parser.MatchSyntax(_args, grammar);
+    {
+        var (hasErrors, errors) = _parser.MatchSyntax(_args, grammar);
+        return new CommandResult(
+            hasErrors ? Globals.ExitFail : Globals.ExitOk,
+            errors
+            );
+    }
 }

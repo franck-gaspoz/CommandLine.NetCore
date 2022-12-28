@@ -104,14 +104,14 @@ public sealed class CommandLineInterfaceBuilder
                 lineBreak = true;
 
                 var command = commandSet.GetCommand(args.Args.ToArray()[0]);
-                var exitCode = command.Execute(
+                var commandResult = command.Run(
                     new ArgSet(
                         args.Args.ToArray()[1..],
                         parser));
 
                 console.Out.WriteLine();
 
-                return exitCode;
+                return commandResult.ExitCode;
             }
             catch (Exception commandExecutionException)
             {
