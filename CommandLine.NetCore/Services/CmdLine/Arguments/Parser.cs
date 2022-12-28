@@ -1,4 +1,5 @@
 ﻿
+using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.Text;
 
 using static CommandLine.NetCore.Services.CmdLine.Globals;
@@ -18,9 +19,20 @@ public sealed class Parser
     public Parser(Texts texts)
         => _texts = texts;
 
+    /// <summary>
+    /// transform a class name to an option or command name
+    /// <para>norm is kebab-case</para>
+    /// </summary>
+    /// <param name="name">name to be normalized</param>
+    /// <returns>normalized name</returns>
     public static string ClassNameToOptName(string name)
-        => name.ToLower();
+        => name.ToKebabCase()!;
 
+    /// <summary>
+    /// returns the prefix that will be used for an option name
+    /// </summary>
+    /// <param name="name">class name of the option</param>
+    /// <returns>prefix</returns>
     public static string GetPrefixFromClassName(string name)
     {
         var argName = ClassNameToOptName(name);
@@ -29,6 +41,11 @@ public sealed class Parser
             : LongArgNamePrefix;
     }
 
+    /// <summary>
+    /// returns the prefix that will be used for an option name
+    /// </summary>
+    /// <param name="name">option name without prefix</param>
+    /// <returns>prefix</returns>
     public static string GetPrefixFromOptName(string name)
         => name.Length == 1
             ? ShortArgNamePrefix

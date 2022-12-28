@@ -29,6 +29,26 @@ internal static class StringExt
             : char.ToUpperInvariant(text[0]) + text[1..];
 
     /// <summary>
+    /// transform a PascalCase or a camelCase text to a kebab-case text
+    /// </summary>
+    /// <param name="text">text to be kebabized</param>
+    /// <returns>kebabized text</returns>
+    public static string? ToKebabCase(this string? text)
+    {
+        if (text == null) return null;
+        var arr = text.ToCharArray();
+        List<char> chars = new();
+        for (var i = 0; i < arr.Length; i++)
+        {
+            var c = arr[i];
+            if (char.IsUpper(c))
+                chars.Add('-');
+            chars.Add(char.ToLowerInvariant(c));
+        }
+        return new string(chars.ToArray());
+    }
+
+    /// <summary>
     /// transforms \ to \\
     /// </summary>
     /// <param name="s">string</param>
