@@ -68,7 +68,7 @@ public sealed class GrammarMatcherDispatcher
             }
             else
             {
-                if (!parseErrors.Any())
+                if (parseErrors.Any())
                     parseErrors.Add(string.Empty);
                 parseErrors.AddRange(errors);
             }
