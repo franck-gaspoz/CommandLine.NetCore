@@ -39,24 +39,18 @@ internal sealed class GetInfoCommand : Command
             Param("env"),
             Opt("-l")
             )
-                .Execute(DumpAllVars)
+                .Then(DumpAllVars)
 
         // env varName
 
         .For(
             Param("env"),
             Param())
-                .Execute(DumpEnvVar)
+                .Then(DumpEnvVar)
 
         .Run(args);
 
-    private void DumpEnvVar()
-    {
+    private OperationResult DumpEnvVar(Grammar grammar) => new(Globals.ExitOk);
 
-    }
-
-    private void DumpAllVars()
-    {
-
-    }
+    private OperationResult DumpAllVars(Grammar grammar) => new(Globals.ExitOk);
 }

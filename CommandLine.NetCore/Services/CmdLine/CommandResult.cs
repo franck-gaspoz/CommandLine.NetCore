@@ -3,22 +3,12 @@
 /// <summary>
 /// command result
 /// </summary>
-public class CommandResult
+public class CommandResult : OperationResult
 {
-    /// <summary>
-    /// an exit code
-    /// </summary>
-    public int ExitCode { get; set; }
-
     /// <summary>
     /// list of parse errors (if any else empty)
     /// </summary>
     public List<string> ParseErrors { get; set; }
-
-    /// <summary>
-    /// any result
-    /// </summary>
-    public object? Result { get; set; }
 
     /// <summary>
     /// build a new instance
@@ -30,20 +20,12 @@ public class CommandResult
         int exitCode,
         List<string> parseErrors,
         object? result = null)
-    {
-        ExitCode = exitCode;
-        ParseErrors = parseErrors;
-        Result = result;
-    }
+        : base(exitCode, result) => ParseErrors = parseErrors;
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="exitCode">exit code</param>
     public CommandResult(int exitCode)
-    {
-        ExitCode = exitCode;
-        ParseErrors = new List<string>();
-        Result = null;
-    }
+        : base(exitCode) => ParseErrors = new List<string>();
 }

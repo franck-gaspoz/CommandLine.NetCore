@@ -16,7 +16,7 @@ public sealed class GrammarExecutionDispatchMapItem
     /// <summary>
     /// execute action delegate
     /// </summary>
-    public Action? Delegate { get; private set; }
+    public Func<Grammar, OperationResult>? Delegate { get; private set; }
 
     /// <summary>
     /// the grammar matcher dispatcher owner of this
@@ -39,7 +39,7 @@ public sealed class GrammarExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate"></param>
     /// <returns></returns>
-    public GrammarMatcherDispatcher Execute(Action @delegate)
+    public GrammarMatcherDispatcher Then(Func<Grammar, OperationResult> @delegate)
     {
         Delegate = @delegate;
         return GrammarMatcherDispatcher;
