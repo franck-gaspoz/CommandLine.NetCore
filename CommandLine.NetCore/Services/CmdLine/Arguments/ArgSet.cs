@@ -92,23 +92,39 @@ public sealed class ArgSet
         var optionals = new List<IOpt>();
         var parseBreaked = false;
         var errors = new List<string>();
+        var parseOptions = false;
+        var grammars = new List<IArg>();
 
-        while (args.Count > 0 && grammar_index < grammar.Length && !parseBreaked)
+        while (args.Count > 0
+            && (grammar_index < grammar.Length || parseOptions)
+            && !parseBreaked)
         {
             Arg currentSyntax() => grammar[grammar_index];
             string currentArg() => args[0];
 
             var arg = currentArg();
-            var gram = currentSyntax();
 
-            var hasError = ParseArg(
-                ref grammar_index,
-                ref position,
-                args,
-                optionals,
-                arg,
-                gram,
-                errors);
+            grammars.Clear();
+            if (!parseOptions)
+                grammars.Add(currentSyntax());
+            else
+                grammars.AddRange(optionals);
+
+            var hasError = false;
+            foreach (var gram in grammars)
+            {
+                hasError |= ParseArg(
+                    ref grammar_index,
+                    ref position,
+                    args,
+                    optionals,
+                    arg,
+                    gram,
+                    errors);
+            }
+
+            parseOptions = grammar_index == grammar.Length
+                && optionals.Any();
 
             parseBreaked = hasError;
         }
@@ -142,7 +158,7 @@ public sealed class ArgSet
         List<string> args,
         List<IOpt> optionals,
         string arg,
-        Arg gram,
+        IArg gram,
         List<string> errors)
     {
         var parseBreaked = false;
@@ -153,8 +169,6 @@ public sealed class ArgSet
             // option
             if (arg == opt.PrefixedName)
             {
-                args.RemoveAt(0);
-
                 if (!TryCatch(
                     () => _parser.ParseOptValues(opt, args, 0, currentPosition),
                     (ex) => errors.Add(BuildError(
