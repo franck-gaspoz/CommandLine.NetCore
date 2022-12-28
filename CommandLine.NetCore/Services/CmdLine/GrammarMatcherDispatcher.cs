@@ -82,7 +82,7 @@ public sealed class GrammarMatcherDispatcher
                 null);
         }
 
-        if (matchingGrammars.Count > 0)
+        if (matchingGrammars.Count > 1)
         {
             parseErrors.Add(
                 _texts._(
