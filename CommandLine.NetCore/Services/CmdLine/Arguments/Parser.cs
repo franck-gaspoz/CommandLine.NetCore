@@ -85,7 +85,15 @@ public sealed class Parser
                     _texts._("MissingOptionValue", position, opt.Name));
             }
 
-            opt.AddValue(args[index]);
+            try
+            {
+                opt.AddValue(args[index]);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(
+                    _texts._("InvalidOptionValue", position, opt.Name, ex.Message));
+            }
             args.RemoveAt(index);
             expectedCount--;
         }

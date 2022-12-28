@@ -54,6 +54,7 @@ public abstract class Arg : IArg
     /// <typeparam name="T">expected type</typeparam>
     /// <param name="value">text representation of the value</param>
     /// <returns>a value of type T or null</returns>
+    /// <exception cref="ArgumentException">convert error</exception>
     public T? ConvertValue<T>(string? value)
     {
         if (value == null)
@@ -77,7 +78,7 @@ public abstract class Arg : IArg
                     + string.Join(',', possibleValues);
             throw new ArgumentException(
                 Texts._("UnableToConvertValue", value, typeof(T).UnmangledName())
-                + values);
+                + ", " + values);
         }
 
         if (convertedValue is null)

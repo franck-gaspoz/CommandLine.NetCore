@@ -102,8 +102,12 @@ public class Opt<T> : Arg, IOpt
     /// add a value to the option
     /// </summary>
     /// <param name="value">string representation of the value</param>
+    /// <exception cref="ArgumentException">convert error</exception>
     public void AddValue(string value)
-        => Values.Add(value);
+    {
+        Values.Add(value);
+        ConvertValue<T>(Values.Last());
+    }
 
     /// <summary>
     /// build an exception value not available at index
