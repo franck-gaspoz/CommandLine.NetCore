@@ -66,7 +66,7 @@ public abstract class Command
     }
 
     /// <summary>
-    /// command run body to be implemented by subclasses
+    /// run the command with the specified arguments
     /// </summary>
     /// <param name="args">args</param>
     /// <returns>return code</returns>
