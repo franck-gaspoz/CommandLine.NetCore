@@ -2,7 +2,7 @@
   "profiles": {
     "CommandLine.NetCore.Example": {
       "commandName": "Project",
-      "commandLineArgs": "getinfo x -o"
+      "commandLineArgs": "getinfo env -l -o fic.txt"
     }
   }
 }

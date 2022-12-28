@@ -53,6 +53,28 @@ public sealed class ArgSet
     /// <returns>argument value at index</returns>
     public string this[int index] => _args[index];
 
+    #region errors texts
+
+    private static string TooManyArguments(List<string> args, int atIndex)
+        => $"to many arguments: '{string.Join(' ', args)}' from position {atIndex}";
+
+    private static string MissingArguments(Arg[] args, int atIndex)
+        => $"missing arguments, expected '{string.Join(' ', args.Select(x => x.ToGrammar()))}' at position {atIndex}";
+
+    private static string SyntaxMismatchError(IArg expectedGrammar)
+        => $"in grammar '{expectedGrammar.ToGrammar()}'";
+
+    private static string ParamValueError(IArg expectedGrammar, int atIndex, string foundSyntax)
+        => $"in grammar '{expectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
+
+    private static string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
+
+    private static string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
+
+    private static string GetError(string error, string grammarText) => error + Environment.NewLine + "for grammar: " + grammarText;
+
+    #endregion
+
     /// <summary>
     /// check if the arg set match the syntax described by the parameters from left to right
     /// </summary>
@@ -64,46 +86,82 @@ public sealed class ArgSet
         var grammar_index = 0;
         var position = 0;
         var args = _args.ToList();
-        string? error = null;
         var grammarText = string.Join(' ',
             grammar.Select(
                 x => x.ToGrammar()));
+        var optionals = new List<IOpt>();
+        var parseBreaked = false;
+        var errors = new List<string>();
 
-        string TooManyArguments(List<string> args, int atIndex)
-            => $"to many arguments: '{string.Join(' ', args)}' from position {atIndex}";
-
-        string MissingArguments(Arg[] args, int atIndex)
-            => $"missing arguments, expeceted '{string.Join(' ', args.Select(x => x.ToGrammar()))}' from position {atIndex}";
-
-        string SyntaxMismatchError(IArg ewpectedGrammar, int atIndex, string foundSyntax)
-            => $"in grammar '{ewpectedGrammar.ToGrammar()}'";
-
-        string ParamValueError(IArg ewpectedGrammar, int atIndex, string foundSyntax)
-            => $"in grammar '{ewpectedGrammar.ToGrammar()}' at position '{atIndex}' but found '{foundSyntax}'";
-
-        string UnknownGrammar(IArg arg, int atIndex) => $"unknown grammar: '{arg.ToGrammar()}' at position {atIndex}";
-
-        string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
-
-        string GetError(string error) => error + Environment.NewLine + "for grammar: " + grammarText;
-
-        while (args.Count > 0 && grammar_index < grammar.Length)
+        while (args.Count > 0 && grammar_index < grammar.Length && !parseBreaked)
         {
             Arg currentSyntax() => grammar[grammar_index];
             string currentArg() => args[0];
 
             var arg = currentArg();
             var gram = currentSyntax();
-            if (gram is IOpt opt)
+
+            var hasError = ParseArg(
+                ref grammar_index,
+                ref position,
+                args,
+                optionals,
+                arg,
+                gram,
+                errors);
+
+            parseBreaked = hasError;
+        }
+
+        if (!errors.Any())
+        {
+            if (grammar_index < grammar.Length)
             {
-                // option
+                errors.Add(
+                    MissingArguments(grammar[grammar_index..], position));
+            }
+
+            if (args.Count > 0)
+            {
+                errors.Add(
+                    TooManyArguments(args, position));
+            }
+        }
+
+        var error = string.Join(Environment.NewLine, errors);
+
+        if (!string.IsNullOrWhiteSpace(error))
+            _console.Logger.LogError(GetError(error, grammarText) + "(br)");
+
+        return false;
+    }
+
+    private bool ParseArg(
+        ref int grammar_index,
+        ref int position,
+        List<string> args,
+        List<IOpt> optionals,
+        string arg,
+        Arg gram,
+        List<string> errors)
+    {
+        var parseBreaked = false;
+        var currentPosition = position;
+
+        if (gram is IOpt opt)
+        {
+            // option
+            if (arg == opt.PrefixedName)
+            {
+                args.RemoveAt(0);
+
                 if (!TryCatch(
-                    () => _parser.ParseOptValues(opt, args, 0, position),
-                    (ex) => error = BuildError(
-                        ex, SyntaxMismatchError(opt, position, arg))
+                    () => _parser.ParseOptValues(opt, args, 0, currentPosition),
+                    (ex) => errors.Add(BuildError(
+                        ex, SyntaxMismatchError(opt)))
                     ))
                 {
-                    break;
+                    parseBreaked = true;
                 }
 
                 position += 1 + opt.ExpectedValuesCount;
@@ -111,45 +169,49 @@ public sealed class ArgSet
             }
             else
             {
-                // parameter
-                if (gram is IParam param)
+                if (!opt.IsOptional)
                 {
-                    if (!TryCatch(
-                        () => _parser.ParseParamValue(param, args, 0, position),
-                        (ex) => error =
-                            param.StringValue is not null ?
-                                BuildError(
-                                    ex, SyntaxMismatchError(param, position, arg))
-                                : BuildError(
-                                    ex, ParamValueError(param, position, arg)
-                        )))
-                    {
-                        break;
-                    }
-
-                    position++;
-                    grammar_index++;
+                    errors.Add(
+                        _texts._("ExpectedOption", opt.PrefixedName, position, arg));
+                    parseBreaked = true;
                 }
                 else
                 {
-                    // type mismatch
-                    error = UnknownGrammar(gram, grammar_index);
+                    optionals.Add(opt);
+                    grammar_index++;
                 }
             }
         }
-
-        if (error is null)
+        else
         {
-            if (grammar_index < grammar.Length)
-                error = MissingArguments(grammar[grammar_index..], position);
+            // parameter
+            if (gram is IParam param)
+            {
+                if (!TryCatch(
+                    () => _parser.ParseParamValue(param, args, 0, currentPosition),
+                    (ex) => errors.Add(
+                        param.StringValue is not null ?
+                            BuildError(
+                                ex, SyntaxMismatchError(param))
+                            : BuildError(
+                                ex, ParamValueError(param, currentPosition, arg)
+                    ))))
+                {
+                    parseBreaked = true;
+                }
 
-            if (args.Count > 0)
-                error = TooManyArguments(args, position);
+                position++;
+                grammar_index++;
+            }
+            else
+            {
+                // type mismatch
+                errors.Add(UnknownGrammar(gram, grammar_index));
+                parseBreaked = true;
+            }
         }
 
-        if (error is not null) _console.Logger.LogError(GetError(error) + "(br)");
-
-        return false;
+        return parseBreaked;
     }
 
     private static bool TryCatch(Action tryDelegate, Action<Exception> elseDelegate)

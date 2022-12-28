@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ public class Param<T> : Arg, IParam
     /// <inheritdoc/>
     public override string ToGrammar()
     {
-        var val = Value is null ? "?" : "'" + Value?.ToString() + "'";
+        var val = Value.ToText();
         return $"Param<{typeof(T).Name}>{val}";
     }
 

@@ -38,4 +38,9 @@ public interface IOpt : IArg
     /// <param name="description">returned description</param>
     /// <returns>true if found, false otherwise</returns>
     bool GetDescription(out KeyValuePair<string, string> description);
+
+    /// <summary>
+    /// true if optinal
+    /// </summary>
+    bool IsOptional { get; }
 }

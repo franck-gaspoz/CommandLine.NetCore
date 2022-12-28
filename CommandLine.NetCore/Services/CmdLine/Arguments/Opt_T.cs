@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -15,17 +16,27 @@ public class Opt<T> : Arg, IOpt
 {
     private string DebuggerDisplay => ToGrammar();
 
-    /// <summary>
-    /// true if optinal
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsOptional { get; private set; }
 
     /// <inheritdoc/>
     public override string ToGrammar()
     {
         var values = string.Empty;
+        object? nullObj = null;
         if (ExpectedValuesCount > 0)
-            values = $" = {string.Join(',', Values)}";
+        {
+            var valueSet = new List<string>();
+            for (var i = 0; i < ExpectedValuesCount; i++)
+            {
+                valueSet.Add(
+                    (i < Values.Count) ?
+                    Values[i].ToText()
+                    : nullObj.ToText());
+            }
+
+            values = $"{{{string.Join(',', valueSet)}}}";
+        }
         return $"Opt<{typeof(T).Name}>{PrefixedName}{values}";
     }
 
@@ -94,6 +105,11 @@ public class Opt<T> : Arg, IOpt
     public void AddValue(string value)
         => Values.Add(value);
 
+    /// <summary>
+    /// build an exception value not available at index
+    /// </summary>
+    /// <param name="index">index</param>
+    /// <returns>ArgumentException</returns>
     protected ArgumentException ValueIndexNotAvailaible(int index)
         => new ArgumentException(
             Texts._("NoArgumentValueAtIndex", index));

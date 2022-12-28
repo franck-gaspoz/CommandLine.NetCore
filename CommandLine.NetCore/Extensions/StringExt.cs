@@ -36,6 +36,12 @@ internal static class StringExt
     public static string Unslash(this string s)
         => s.Replace(@"\", @"\\");
 
+    /// <summary>
+    /// split a text that is not unslashed
+    /// </summary>
+    /// <param name="s">text to split</param>
+    /// <param name="c">split character</param>
+    /// <returns>text parts</returns>
     public static List<string> SplitNotUnslashed(this string s, char c)
     {
         var r = new List<string>();
@@ -58,6 +64,12 @@ internal static class StringExt
         return r;
     }
 
+    /// <summary>
+    /// split a text that is not unslashed with a set of characters
+    /// </summary>
+    /// <param name="s">text to be splited</param>
+    /// <param name="chars">set of split characters</param>
+    /// <returns>text parts</returns>
     public static List<string> SplitByPrefixsNotUnslashed(this string s, List<char> chars)
     {
         var r = new List<string>();

@@ -28,26 +28,22 @@ internal sealed class GetInfoCommand : Command
         IAnsiVtConsole console,
         ArgBuilder argBuilder,
         Texts texts) :
-            base(config, console, texts, argBuilder, 1, 2)
-    {
-        // env envVarName
-        // Value<string> = env , Value<string> = varName
-
-        // env -l
-        // Value<string> = env , Arg = l,0
-    }
+            base(config, console, texts, argBuilder, 1, 4)
+    { }
 
     protected override int Execute(ArgSet args)
     {
+        // getinfo env [-o fic.txt] varName
         args.MatchSyntax(
             Param("env"),
+            Opt("o", true, 1),
             Opt("l")
             );
 
-        args.MatchSyntax(
+        /*args.MatchSyntax(
             Param("env"),
             Param()
-            );
+            );*/
 
         return ExitOk;
     }

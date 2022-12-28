@@ -4,6 +4,9 @@ using CommandLine.NetCore.Services.Text;
 using static CommandLine.NetCore.Services.CmdLine.Globals;
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
+/// <summary>
+/// options and argument syntax parser
+/// </summary>
 public sealed class Parser
 {
     private readonly Texts _texts;
@@ -55,7 +58,7 @@ public sealed class Parser
         while (expectedCount > 0)
         {
             position++;
-            if (!args.Any() || !IsOpt(args[index]))
+            if (!args.Any() || IsOpt(args[index]))
             {
                 throw new ArgumentException(
                     _texts._("MissingOptionValue", position, opt.Name));
@@ -67,6 +70,14 @@ public sealed class Parser
         }
     }
 
+    /// <summary>
+    /// parse value of a parameter
+    /// </summary>
+    /// <param name="param">parsed parameter</param>
+    /// <param name="args">arg list. the list is consumed (elements are removed)</param>
+    /// <param name="index">begin index</param>
+    /// <param name="position">actual begin index in arguments list</param>
+    /// <exception cref="ArgumentException"></exception>
     public void ParseParamValue(
         IParam param,
         List<string> args,
