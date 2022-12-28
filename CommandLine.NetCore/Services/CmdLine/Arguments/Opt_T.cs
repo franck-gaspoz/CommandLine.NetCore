@@ -137,8 +137,8 @@ public class Opt<T> : Arg, IOpt
         if (!desc.Exists() || !desc.GetChildren().Any())
         {
             description = new KeyValuePair<string, string>(
-                Texts._("GlobalOptHelpNotFound", Name),
-                string.Empty);
+                Parser.GetPrefixFromOptName(Name) + Name,
+                Texts._("GlobalOptHelpNotFound", Name));
             return false;
         }
 
