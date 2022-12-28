@@ -106,8 +106,7 @@ public sealed class CommandLineInterfaceBuilder
                 var command = commandSet.GetCommand(args.Args.ToArray()[0]);
                 var commandResult = command.Run(
                     new ArgSet(
-                        args.Args.ToArray()[1..],
-                        parser));
+                        args.Args.ToArray()[1..]));
 
                 console.Out.WriteLine();
 

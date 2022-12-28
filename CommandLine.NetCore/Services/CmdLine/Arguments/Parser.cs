@@ -204,13 +204,13 @@ public sealed class Parser
     }
 
     public (bool, List<string> errors) MatchSyntax(
-        List<string> arguments,
+        ArgSet arguments,
         params Arg[] grammar
         )
     {
         var grammar_index = 0;
         var position = 0;
-        var args = arguments.ToList();
+        var args = arguments.Args.ToList();
         var grammarText = string.Join(' ',
             grammar.Select(
                 x => x.ToGrammar()));

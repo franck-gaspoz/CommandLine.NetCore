@@ -3,13 +3,12 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Service.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
-namespace CommandLine.NetCore.Commands;
+namespace CommandLine.NetCore.Services.CmdLine;
 
 /// <summary>
 /// abstract command
@@ -32,11 +31,18 @@ public abstract class Command
     protected readonly IConfiguration Config;
 
     /// <summary>
+    /// parser
+    /// </summary>
+    protected readonly Parser Parser;
+
+    /// <summary>
     /// name of the command
     /// </summary>
     public string Name => ClassNameToCommandName();
 
     private readonly ArgBuilder _argBuilder;
+
+    private GrammarMatcherDispatcher? _grammarMatcherDispatcher;
 
     /// <summary>
     /// construit une instance de commande
@@ -49,12 +55,14 @@ public abstract class Command
         IConfiguration config,
         IAnsiVtConsole console,
         Texts texts,
-        ArgBuilder argBuilder)
+        ArgBuilder argBuilder,
+        Parser parser)
     {
         _argBuilder = argBuilder;
         Config = config;
         Texts = texts;
         Console = console;
+        Parser = parser;
     }
 
     /// <summary>
@@ -175,6 +183,40 @@ public abstract class Command
 
     protected Param Param(string? value = null)
         => _argBuilder.Param(value);
+
+    #endregion
+
+    #region grammar helpers
+
+    /// <summary>
+    /// check if the arg set match the syntax described by the parameters from left to right
+    /// </summary>
+    /// <param name="args">arguments</param>
+    /// <param name="grammar">grammar to be checked</param>
+    /// <returns>true if syntax match, false otherwise and list of parse errors</returns>
+    protected CommandResult MatchSyntax(
+        ArgSet args,
+        params Arg[] grammar
+        )
+    {
+        var (hasErrors, errors) = Parser.MatchSyntax(args, grammar);
+        return new CommandResult(
+            hasErrors ? Globals.ExitFail : Globals.ExitOk,
+            errors
+            );
+    }
+
+    /// <summary>
+    /// build a grammar from arguments grammars set
+    /// </summary>
+    /// <param name="grammar">arguments grammars</param>
+    /// <returns>a grammar dispatcher map item</returns>
+    protected GrammarExecutionDispatchMapItem For(params Arg[] grammar)
+    {
+        if (_grammarMatcherDispatcher is null)
+            _grammarMatcherDispatcher = new();
+        return _grammarMatcherDispatcher.For(grammar);
+    }
 
     #endregion
 }

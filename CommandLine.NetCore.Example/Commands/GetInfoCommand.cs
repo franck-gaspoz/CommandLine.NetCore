@@ -1,7 +1,6 @@
 ﻿
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.Commands;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
@@ -26,25 +25,36 @@ internal sealed class GetInfoCommand : Command
         IConfiguration config,
         IAnsiVtConsole console,
         ArgBuilder argBuilder,
+        Parser parser,
         Texts texts) :
-            base(config, console, texts, argBuilder)
+            base(config, console, texts, argBuilder, parser)
     { }
 
-    protected override CommandResult Execute(ArgSet args)
+    /// <inheritdoc/>
+    protected override CommandResult Execute(ArgSet args) =>
+
+        // env -l
+        For(
+            Param("env"),
+            Opt("-l")
+            )
+                .Execute(DumpAllVars)
+
+        // env varName
+        .For(
+            Param("env"),
+            Param())
+                .Execute(DumpEnvVar)
+
+        .Run(args);
+
+    private void DumpEnvVar()
     {
-        // getinfo env [-o fic.txt] varName [-t debug]
-        var commandResult = args.MatchSyntax(
-            Param("env"),
-            Opt("o", true, 1),
-            Opt("l"),
-            Opt("t", true, 1)
-            );
 
-        /*args.MatchSyntax(
-            Param("env"),
-            Param()
-            );*/
+    }
 
-        return commandResult;
+    private void DumpAllVars()
+    {
+
     }
 }
