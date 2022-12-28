@@ -294,7 +294,7 @@ public sealed class Parser
                 + grammarText);
         }
 
-        return (string.IsNullOrWhiteSpace(error), errors);
+        return (!string.IsNullOrWhiteSpace(error), errors);
     }
 
     private static bool TryCatch(Action tryDelegate, Action<Exception> elseDelegate)
