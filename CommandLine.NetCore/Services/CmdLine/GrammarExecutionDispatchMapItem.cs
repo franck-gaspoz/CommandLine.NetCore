@@ -94,6 +94,22 @@ public sealed class GrammarExecutionDispatchMapItem
         return GrammarMatcherDispatcher;
     }
 
+    /// set up delegate for this grammar execution dispatch map
+    /// <para>takes a method with no parameter </para>
+    /// </summary>
+    /// <param name="delegate">with no parameter and void result delegate</param>
+    /// <returns>grammar matcher dispatcher</returns>
+    public GrammarMatcherDispatcher Do(Func<OperationResult> @delegate)
+    {
+        Name = @delegate.Method.Name;
+        Delegate = (Grammar grammar) =>
+        {
+            return @delegate.Invoke();
+        };
+        Grammar.SetName(Name);
+        return GrammarMatcherDispatcher;
+    }
+
     /// <summary>
     /// set up delegate for this grammar execution dispatch map
     /// <para>takes a method in a lambda unary call expression: () => methodName</para>

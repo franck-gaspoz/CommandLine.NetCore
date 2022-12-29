@@ -246,13 +246,21 @@ public abstract class Command
                 Opt("h"))
                     .Do(HelpAboutCommandGrammar);
 
-    private OperationResult HelpAboutCommandGrammar(Grammar grammar)
-        => new(
+    private OperationResult HelpAboutCommandGrammar() =>
+        RunCommand(new string[] {
+            "help" ,
+            ClassNameToCommandName() });
+
+    /// <summary>
+    /// run a command from command line arguments
+    /// </summary>
+    /// <param name="args">command line arguments</param>
+    /// <returns>operation result</returns>
+    public OperationResult RunCommand(string[] args) =>
+        new(
             new CommandLineInterfaceBuilder()
                 .UseAssemblySet(SettedGlobalOptsSet.AssemblySet)
-                .Build(new string[] {
-                    "help" ,
-                    ClassNameToCommandName() })
+                .Build(args)
                 .Run());
 
     #endregion
