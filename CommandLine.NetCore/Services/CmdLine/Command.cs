@@ -201,7 +201,14 @@ public abstract class Command
     protected GrammarExecutionDispatchMapItem For(params Arg[] grammar)
     {
         if (_grammarMatcherDispatcher is null)
-            _grammarMatcherDispatcher = new(Texts, Parser, SettedGlobalOptsSet);
+        {
+            _grammarMatcherDispatcher = new(
+                Texts,
+                Parser,
+                SettedGlobalOptsSet,
+                Console);
+        }
+
         return _grammarMatcherDispatcher.For(grammar);
     }
 

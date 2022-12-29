@@ -1,8 +1,12 @@
 ﻿
+using AnsiVtConsole.NetCore;
+
 using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
+
+using Microsoft.Extensions.Logging;
 
 namespace CommandLine.NetCore.Services.CmdLine;
 
@@ -15,6 +19,7 @@ public sealed class GrammarMatcherDispatcher
     private readonly Texts _texts;
     private readonly Parser _parser;
     private readonly SettedGlobalOptsSet _settedGlobalOptsSet;
+    private readonly IAnsiVtConsole _console;
 
     /// <summary>
     /// build a new instance
@@ -22,12 +27,14 @@ public sealed class GrammarMatcherDispatcher
     /// <param name="texts">texts service</param>
     /// <param name="parser">parser</param>
     /// <param name="settedGlobalOptsSet">setted global options</param>
+    /// <param name="console">console</param>
     public GrammarMatcherDispatcher(
         Texts texts,
         Parser parser,
-        SettedGlobalOptsSet settedGlobalOptsSet)
-        => (_texts, _parser, _settedGlobalOptsSet)
-            = (texts, parser, settedGlobalOptsSet);
+        SettedGlobalOptsSet settedGlobalOptsSet,
+        IAnsiVtConsole console)
+        => (_texts, _parser, _settedGlobalOptsSet, _console)
+            = (texts, parser, settedGlobalOptsSet, console);
 
     /// <summary>
     /// build a grammar from arguments grammars set
@@ -51,6 +58,15 @@ public sealed class GrammarMatcherDispatcher
     /// <exception cref="InvalidOperationException">the grammar matcher dispatcher delegate action is not defined</exception>
     public CommandResult With(ArgSet args)
     {
+        var logLevel = _settedGlobalOptsSet.TryGetByType<ParserLogging>(out var parserLogging) ?
+            parserLogging.GetValue() : LogLevel.Error;
+        var logTrace = logLevel == LogLevel.Trace
+            || logLevel == LogLevel.Debug;
+        void Trace(string? text = "")
+            => _console.Logger.Log(
+                    _console.Colors.Debug + text
+                );
+
         List<CommandResult> tryCommandsResults = new();
         List<GrammarExecutionDispatchMapItem> matchingGrammars = new();
         List<string> parseErrors = new();
@@ -68,6 +84,14 @@ public sealed class GrammarMatcherDispatcher
                 args,
                 grammarMatcherDispatcher.Grammar);
 
+            if (logTrace)
+            {
+                Trace(
+                    grammarMatcherDispatcher.Grammar.ToGrammar() +
+                    $" : match={!hasErrors}"
+                    );
+            }
+
             if (!hasErrors)
             {
                 matchingGrammars.Add(grammarMatcherDispatcher);
@@ -79,6 +103,8 @@ public sealed class GrammarMatcherDispatcher
                 parseErrors.AddRange(errors);
             }
         }
+
+        if (logTrace) Trace();
 
         if (!matchingGrammars.Any())
         {
