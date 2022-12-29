@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 
 using static CommandLine.NetCore.Services.CmdLine.Globals;
 
-namespace CommandLine.NetCore.Services.s;
+namespace CommandLine.NetCore.Services;
 
 internal sealed class AppHostBuilder
 {
