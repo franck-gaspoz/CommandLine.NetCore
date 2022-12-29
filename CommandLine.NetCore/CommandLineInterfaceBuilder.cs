@@ -126,6 +126,13 @@ public sealed class CommandLineInterfaceBuilder
 
                 return commandResult.ExitCode;
             }
+            catch (TargetInvocationException invokeCommandOperationExecutionException)
+            {
+                return ExitWithError(
+                    invokeCommandOperationExecutionException.InnerException!,
+                    console,
+                    lineBreak);
+            }
             catch (Exception commandExecutionException)
             {
                 return ExitWithError(

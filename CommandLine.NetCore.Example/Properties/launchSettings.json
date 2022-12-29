@@ -20,6 +20,10 @@
     "get-info env Path": {
       "commandName": "Project",
       "commandLineArgs": "get-info env Path --parser-logging Trace"
+    },
+    "get-info env badName": {
+      "commandName": "Project",
+      "commandLineArgs": "get-info env badName --parser-logging Trace"
     }
   }
 }
