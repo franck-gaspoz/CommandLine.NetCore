@@ -111,7 +111,7 @@ public sealed class Parser
     /// <param name="args">arg list. the list is consumed (elements are removed)</param>
     /// <param name="index">begin index</param>
     /// <param name="position">actual begin index in arguments list</param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">convert value error</exception>
     public void ParseParamValue(
         IParam param,
         List<string> args,
