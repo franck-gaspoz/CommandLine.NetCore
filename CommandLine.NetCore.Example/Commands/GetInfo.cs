@@ -70,20 +70,20 @@ internal sealed class GetInfo : Command
 
         .With(args);
 
-    private void DumpAll(Grammar grammar)
+    private void DumpAll()
     {
-        DumpSystem(grammar);
+        DumpSystem();
 
         Console.Out.WriteLine();
 
-        DumpConsole(grammar);
+        DumpConsole();
 
         Console.Out.WriteLine();
 
-        DumpAllVars(grammar);
+        DumpAllVars();
     }
 
-    private void DumpSystem(Grammar grammar)
+    private void DumpSystem()
     {
         OutputSectionTitle(Texts._("SystemInformations"));
 
@@ -148,7 +148,7 @@ internal sealed class GetInfo : Command
             OutputKeyValue(kvp.Key, kvp.Value);
     }
 
-    private void DumpConsole(Grammar grammar)
+    private void DumpConsole()
     {
         OutputSectionTitle(Texts._("ConsoleInformations"));
         Console.Infos();
@@ -167,7 +167,7 @@ internal sealed class GetInfo : Command
         OutputKeyValue(varName!, value);
     }
 
-    private void DumpAllVars(Grammar grammar)
+    private void DumpAllVars()
     {
         OutputSectionTitle(Texts._("EnvironmentVariables"));
         var vars = Environment.GetEnvironmentVariables();
