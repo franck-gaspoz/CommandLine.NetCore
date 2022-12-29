@@ -1,8 +1,17 @@
 {
   "profiles": {
-    "CommandLine.NetCore.Example": {
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {},
+      "distributionName": ""
+    },
+    "get-info system": {
       "commandName": "Project",
       "commandLineArgs": "get-info system --parser-logging Trace"
+    },
+    "get-info -h": {
+      "commandName": "Project",
+      "commandLineArgs": "get-info -h --parser-logging Trace"
     }
   }
 }

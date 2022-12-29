@@ -209,8 +209,26 @@ public abstract class Command
                 Console);
         }
 
+        if (_grammarMatcherDispatcher.Count == 0)
+            AddHelpAboutCommandGrammar(_grammarMatcherDispatcher);
+
         return _grammarMatcherDispatcher.For(grammar);
     }
+
+    private void AddHelpAboutCommandGrammar(GrammarMatcherDispatcher grammarMatcherDispatcher)
+        => grammarMatcherDispatcher
+            .For(
+                Opt("h"))
+                    .Do(HelpAboutCommandGrammar);
+
+    private OperationResult HelpAboutCommandGrammar(Grammar grammar)
+        => new(
+            new CommandLineInterfaceBuilder()
+                .UseAssemblySet(SettedGlobalOptsSet.AssemblySet)
+                .Build(new string[] {
+                    "help" ,
+                    ClassNameToCommandName() })
+                .Run());
 
     #endregion
 }

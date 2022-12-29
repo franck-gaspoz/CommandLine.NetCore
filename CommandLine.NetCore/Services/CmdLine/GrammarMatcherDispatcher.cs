@@ -22,6 +22,11 @@ public sealed class GrammarMatcherDispatcher
     private readonly IAnsiVtConsole _console;
 
     /// <summary>
+    /// count of items in map
+    /// </summary>
+    public int Count => _maps.Count;
+
+    /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="texts">texts service</param>

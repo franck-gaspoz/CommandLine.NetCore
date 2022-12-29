@@ -4,6 +4,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 /// <summary>
 /// setted global arguments set
+/// <para>add access to global options set, command line args and assembly set</para>
 /// </summary>
 public sealed class SettedGlobalOptsSet
 {
@@ -12,10 +13,29 @@ public sealed class SettedGlobalOptsSet
     public IReadOnlyDictionary<string, IOpt> Opts
         => _opts;
 
+    /// <summary>
+    /// assembly set
+    /// </summary>
+    public AssemblySet AssemblySet { get; private set; }
+
+    /// <summary>
+    /// global opts set
+    /// </summary>
+    public GlobalOptsSet GlobalOptsSet { get; private set; }
+
+    /// <summary>
+    /// command line args
+    /// </summary>
+    public CommandLineArgs CommandLineArgs { get; private set; }
+
     public SettedGlobalOptsSet(
         CommandLineArgs commandLineArgs,
-        GlobalOptsSet globalOptsSet)
+        GlobalOptsSet globalOptsSet,
+        AssemblySet assemblySet)
     {
+        AssemblySet = assemblySet;
+        CommandLineArgs = commandLineArgs;
+        GlobalOptsSet = globalOptsSet;
         foreach (var kvp in globalOptsSet.Parse(commandLineArgs))
             Add(kvp.Value);
     }

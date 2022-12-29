@@ -47,7 +47,20 @@ public sealed class CommandLineInterfaceBuilder
     /// <returns>this</returns>
     public CommandLineInterfaceBuilder UseAssembly(Assembly assembly)
     {
-        _assemblySet.Assemblies.Add(assembly);
+        if (!_assemblySet.Assemblies.Contains(assembly))
+            _assemblySet.Assemblies.Add(assembly);
+        return this;
+    }
+
+    /// <summary>
+    /// use assemblies from an assembly set
+    /// </summary>
+    /// <param name="assemblySet">assembly set</param>
+    /// <returns>this</returns>
+    public CommandLineInterfaceBuilder UseAssemblySet(AssemblySet assemblySet)
+    {
+        foreach (var assembly in assemblySet.Assemblies)
+            UseAssembly(assembly);
         return this;
     }
 
