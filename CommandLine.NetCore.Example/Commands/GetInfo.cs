@@ -74,8 +74,6 @@ internal sealed class GetInfo : Command
 
     private OperationResult DumpAll(Grammar grammar)
     {
-        var err = new OperationResult(ExitFail);
-
         DumpSystem(grammar);
 
         Console.Out.WriteLine();
