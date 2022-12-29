@@ -9,6 +9,12 @@ namespace CommandLine.NetCore.Services.CmdLine;
 public sealed class GrammarExecutionDispatchMapItem
 {
     /// <summary>
+    /// name of the grammar
+    /// <para>is the Do method name</para>
+    /// </summary>
+    public string Name { get; private set; }
+
+    /// <summary>
     /// grammar spec
     /// </summary>
     public Grammar Grammar { get; private set; }
@@ -31,8 +37,8 @@ public sealed class GrammarExecutionDispatchMapItem
     public GrammarExecutionDispatchMapItem(
         GrammarMatcherDispatcher grammarMatcherDispatcher,
         Grammar grammar)
-        => (GrammarMatcherDispatcher, Grammar)
-            = (grammarMatcherDispatcher, grammar);
+        => (GrammarMatcherDispatcher, Grammar, Name)
+            = (grammarMatcherDispatcher, grammar, string.Empty);
 
     /// <summary>
     /// set up delegate for this grammar execution dispatch map
@@ -42,6 +48,8 @@ public sealed class GrammarExecutionDispatchMapItem
     public GrammarMatcherDispatcher Do(Func<Grammar, OperationResult> @delegate)
     {
         Delegate = @delegate;
+        Name = Delegate.Method.Name;
+        Grammar.SetName(Name);
         return GrammarMatcherDispatcher;
     }
 }

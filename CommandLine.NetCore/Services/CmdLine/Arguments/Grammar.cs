@@ -10,6 +10,8 @@ public sealed class Grammar
 {
     private string DebuggerDisplay => ToGrammar();
 
+    public string? Name { get; private set; }
+
     /// <summary>
     /// arguments
     /// </summary>
@@ -39,9 +41,17 @@ public sealed class Grammar
     public int Count => Args.Count;
 
     /// <summary>
+    /// Set the name of the grammar
+    /// </summary>
+    /// <param name="name">name</param>
+    public void SetName(string name) => Name = name;
+
+    /// <summary>
     /// string representation of the grammar
     /// </summary>
     /// <returns>string representation of the grammar</returns>
     public string ToGrammar()
-        => string.Join(' ', _args.Select(x => x.ToGrammar()));
+        => ((Name == null) ? "?" : Name!) +
+            ": " +
+            string.Join(' ', _args.Select(x => x.ToGrammar()));
 }

@@ -87,7 +87,9 @@ public sealed class GrammarMatcherDispatcher
             if (logTrace)
             {
                 Trace(
-                    grammarMatcherDispatcher.Grammar.ToGrammar() +
+                    grammarMatcherDispatcher
+                    .Grammar
+                    .ToGrammar() +
                     $" : match={!hasErrors}"
                     );
             }
