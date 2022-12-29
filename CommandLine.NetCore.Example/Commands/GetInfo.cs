@@ -92,22 +92,36 @@ internal sealed class GetInfo : Command
 
     private OperationResult DumpSystem(Grammar grammar)
     {
-        OutputSectionTitle("system informations");
+        OutputSectionTitle(Texts._("SystemInformations"));
 
         Dictionary<string, string> keyvalues = new();
 
-        keyvalues.Add("Operation System", Environment.OSVersion.ToString());
-        keyvalues.Add("Processor Architecture",
+        keyvalues.Add(
+            Texts._("OS"),
+            Environment.OSVersion.ToString());
+        keyvalues.Add("ProcArch",
             ToText(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE")));
-        keyvalues.Add("Processor Model",
+        keyvalues.Add(
+            Texts._("ProcModel"),
             ToText(Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")));
-        keyvalues.Add("Processor Level",
+        keyvalues.Add(
+            Texts._("ProcLevel"),
             ToText(Environment.GetEnvironmentVariable("PROCESSOR_LEVEL")));
-        keyvalues.Add("SystemDirectory", Environment.SystemDirectory);
-        keyvalues.Add("ProcessorCount", Environment.ProcessorCount.ToString());
-        keyvalues.Add("UserDomainName", Environment.UserDomainName);
-        keyvalues.Add("UserName", Environment.UserName);
-        keyvalues.Add("Version", Environment.Version.ToString());
+        keyvalues.Add(
+            Texts._("SysDir"),
+            Environment.SystemDirectory);
+        keyvalues.Add(
+            Texts._("ProcCount"),
+            Environment.ProcessorCount.ToString());
+        keyvalues.Add(
+            Texts._("UserDomainName"),
+            Environment.UserDomainName);
+        keyvalues.Add(
+            Texts._("UserName"),
+            Environment.UserName);
+        keyvalues.Add(
+            Texts._("OSVersion"),
+            Environment.Version.ToString());
 
         foreach (var driveInfo in DriveInfo.GetDrives())
         {
@@ -116,11 +130,21 @@ internal sealed class GetInfo : Command
                 var volumeLabel = driveInfo.VolumeLabel;
                 var name = driveInfo.Name;
                 keyvalues.Add(name, string.Empty);
-                keyvalues.Add(name + " VolumeLabel", volumeLabel);
-                keyvalues.Add(name + " DriveType", driveInfo.DriveType.ToString());
-                keyvalues.Add(name + " DriveFormat", driveInfo.DriveFormat);
-                keyvalues.Add(name + " TotalSize", driveInfo.TotalSize.ToString());
-                keyvalues.Add(name + " AvailableFreeSpace", driveInfo.AvailableFreeSpace.ToString());
+                keyvalues.Add(name + " " +
+                    Texts._("VolumeLabel"),
+                    volumeLabel);
+                keyvalues.Add(name + " " +
+                    Texts._("DriveType"),
+                    driveInfo.DriveType.ToString());
+                keyvalues.Add(name + " " +
+                    Texts._("DriveFormat"),
+                    driveInfo.DriveFormat);
+                keyvalues.Add(name + " " +
+                    Texts._("TotalSize"),
+                    driveInfo.TotalSize.ToString());
+                keyvalues.Add(name + " " +
+                    Texts._("AvailableFreeSpace"),
+                    driveInfo.AvailableFreeSpace.ToString());
             }
             catch
             {
@@ -135,7 +159,7 @@ internal sealed class GetInfo : Command
 
     private OperationResult DumpConsole(Grammar grammar)
     {
-        OutputSectionTitle("console informations");
+        OutputSectionTitle(Texts._("ConsoleInformations"));
         Console.Infos();
         return new(ExitOk);
     }
@@ -145,14 +169,18 @@ internal sealed class GetInfo : Command
         var varName = ((Param<string>)grammar[1]).Value!;
         var value = Environment.GetEnvironmentVariable(varName!);
         if (value is null)
-            throw new ArgumentException("variable is not defined");
+        {
+            throw new ArgumentException(
+                Texts._("VariableIsNotDefined"));
+        }
+
         OutputKeyValue(varName!, value);
         return new(ExitOk);
     }
 
     private OperationResult DumpAllVars(Grammar grammar)
     {
-        OutputSectionTitle("environment variables");
+        OutputSectionTitle(Texts._("EnvironmentVariables"));
         var vars = Environment.GetEnvironmentVariables();
         foreach (var obj in vars)
         {
