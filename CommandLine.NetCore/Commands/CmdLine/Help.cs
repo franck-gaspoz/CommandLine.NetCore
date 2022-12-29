@@ -23,6 +23,14 @@ internal sealed class Help : Command
     private readonly GlobalOptsSet _globalOptsSet;
     private readonly IServiceProvider _serviceProvider;
 
+    private const string TitleColor = "(bon,f=cyan)";
+    private const string SectionTitleColor = "(uon,f=yellow,bon)";
+    private const string CommandNameColor = "(bon,f=green)";
+    private const string ArgNameColor = "(f=darkyellow)";
+    private const string InformationalDataMessage = "(f=darkgreen)";
+    private const string ArgValueColor = "(bon,f=cyan)";
+    private const string StOff = "(tdoff)";
+
     public Help(
         IConfiguration config,
         CommandsSet commands,
@@ -39,14 +47,6 @@ internal sealed class Help : Command
         _serviceProvider = serviceProvider;
         _commandsSet = commands;
     }
-
-    private const string TitleColor = "(bon,f=cyan)";
-    private const string SectionTitleColor = "(uon,f=yellow,bon)";
-    private const string CommandNameColor = "(bon,f=green)";
-    private const string ArgNameColor = "(f=darkyellow)";
-    private const string InformationalDataMessage = "(f=darkgreen)";
-    private const string ArgValueColor = "(bon,f=cyan)";
-    private const string StOff = "(tdoff)";
 
     private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
 
