@@ -157,6 +157,12 @@ internal sealed class Help : Command
         Command command,
         List<KeyValuePair<string, string>> longDescriptions)
     {
+        longDescriptions.Insert(
+            0,
+            new KeyValuePair<string, string>(
+                "-h",
+                Texts._("HelpAboutThisCommand")));
+
         foreach (var kvp in longDescriptions)
             DumpSyntax(command, kvp);
     }
