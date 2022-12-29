@@ -52,6 +52,7 @@ internal sealed class Help : Command
 
     /// <inheritdoc/>
     protected override CommandResult Execute(ArgSet args) =>
+
         For()
             .Do(DumpHelpForAllCommands)
 
