@@ -8,8 +8,9 @@ internal static class ObjectExt
     /// <summary>
     /// returns the text representation of an object. if object if null returns "?"
     /// </summary>
-    /// <param name="obj"></param>
+    /// <param name="obj">object to translate to text</param>
+    /// <param name="ifNullText">text if value is null</param>
     /// <returns></returns>
-    public static string ToText(this object? obj)
-        => obj is null ? "?" : "'" + obj.ToString()! + "'";
+    public static string ToText(this object? obj, string ifNullText = "?")
+        => obj is null ? ifNullText : "'" + obj.ToString()! + "'";
 }

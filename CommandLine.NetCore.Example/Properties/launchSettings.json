@@ -2,7 +2,7 @@
   "profiles": {
     "CommandLine.NetCore.Example": {
       "commandName": "Project",
-      "commandLineArgs": "get-info env -l --parser-logging Trace"
+      "commandLineArgs": "get-info system --parser-logging Trace"
     }
   }
 }
