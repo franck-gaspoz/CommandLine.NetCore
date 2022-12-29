@@ -49,7 +49,6 @@ internal sealed class GetInfo : Command
         .For(
             Param("env"),
             Param())
-                //.DoWithMap((Param x) => DumpEnvVar(x))
                 .Do(() => DumpEnvVar)
 
         // console
@@ -158,16 +157,15 @@ internal sealed class GetInfo : Command
 
     private void DumpEnvVar([MapArg(1)] Param envVarName)
     {
-        var varName = envVarName.Value!;
-        //var varName = ((Param<string>)grammar[1]).Value!;
-        var value = Environment.GetEnvironmentVariable(varName);
+        var value = Environment.GetEnvironmentVariable(
+            envVarName.Value!);
         if (value is null)
         {
             throw new ArgumentException(
                 Texts._("VariableIsNotDefined"));
         }
 
-        OutputKeyValue(varName!, value);
+        OutputKeyValue(envVarName.Value!, value);
     }
 
     private void DumpAllVars()

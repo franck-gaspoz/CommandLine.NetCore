@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace CommandLine.NetCore.Extensions;
@@ -9,29 +10,59 @@ namespace CommandLine.NetCore.Extensions;
 internal static class LambdaExpressionExt
 {
     /// <summary>
-    /// get a method info from a lambda unary call expression:
+    /// get a method info and the target object of a method call from a lambda unary call expression:
     /// <para>() => methodName</para>
     /// </summary>
     /// <param name="expression">lambda expression</param>
-    /// <returns>the method invoked by the lambda expression if any, else null</returns>
-    public static MethodInfo? GetIndirectMethodInfo(this LambdaExpression expression)
+    /// <returns>the method invoked by the lambda expression if any, else null and the object target of the call</returns>
+    public static (MethodInfo? methodInfo, object? target) GetAnyCastDelegate(this LambdaExpression expression)
     {
-        if (expression.Body is UnaryExpression unaryExpression)
+        (MethodInfo?, object?) nullResult = (null, null);
+
+        if (expression.Body is not UnaryExpression unaryExpression) return nullResult;
+
+        var operandArgumentsField = unaryExpression
+            .Operand
+            .GetFieldsAndProperties()
+            .FirstOrDefault(x => x.Name == "Arguments");
+
+        if (operandArgumentsField is null) return nullResult;
+
+        if (operandArgumentsField
+            .GetMemberValue(unaryExpression.Operand, false)
+                is not ReadOnlyCollection<Expression> operandArguments
+                    || operandArguments.Count < 2)
         {
-            var operandObjectField = unaryExpression
-                .Operand
-                .GetFieldsAndProperties()
-                .FirstOrDefault(x => x.Name == "Object");
-            if (operandObjectField is null) return null;
-            var operandObject = operandObjectField.GetMemberValue(unaryExpression.Operand, false);
-            if (operandObject is null) return null;
-            var valueField = operandObject.GetFieldsAndProperties()
-                .FirstOrDefault(x => x.Name == "Value");
-            if (valueField is null) return null;
-            var value = valueField.GetMemberValue(operandObject, false);
-            if (value is not MethodInfo methodInfo) return null;
-            return methodInfo;
+            return nullResult;
         }
-        return null;
+
+        if (operandArguments[1] is not ConstantExpression targetExpression) return nullResult;
+
+        var target = targetExpression.Value;
+
+        var operandObjectField = unaryExpression
+            .Operand
+            .GetFieldsAndProperties()
+            .FirstOrDefault(x => x.Name == "Object");
+
+        if (operandObjectField is null) return nullResult;
+
+        var operandObject = operandObjectField
+            .GetMemberValue(unaryExpression.Operand, false);
+
+        if (operandObject is null) return nullResult;
+
+        var valueField = operandObject
+            .GetFieldsAndProperties()
+            .FirstOrDefault(x => x.Name == "Value");
+
+        if (valueField is null) return nullResult;
+
+        var value = valueField
+            .GetMemberValue(operandObject, false);
+
+        if (value is not MethodInfo methodInfo) return nullResult;
+
+        return (methodInfo, target);
     }
 }

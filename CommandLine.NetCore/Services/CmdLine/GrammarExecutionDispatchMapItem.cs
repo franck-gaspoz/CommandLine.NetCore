@@ -104,9 +104,29 @@ public sealed class GrammarExecutionDispatchMapItem
     /// <para>() => methodName</para>
     /// </param>
     /// <returns>grammar matcher dispatcher</returns>
+    /// <exception cref="MissingMethodException">the method was not found or is not suitable</exception>
     public GrammarMatcherDispatcher Do(LambdaExpression expression)
     {
-        var methodInfo = expression.GetIndirectMethodInfo();
+        var (methodInfo, target) = expression.GetAnyCastDelegate();
+        var error = () => Grammar.ToGrammar()
+                + Environment.NewLine
+                + expression.ToString();
+
+        if (methodInfo is null)
+            throw new MissingMethodException(error());
+
+        if (methodInfo.ReturnType != typeof(void)
+            || target is null
+            || target is not Command)
+        {
+            throw new InvalidOperationException(error());
+        }
+
+        foreach (var parameter in methodInfo.GetParameters())
+        {
+
+        }
+
         return GrammarMatcherDispatcher;
     }
 }
