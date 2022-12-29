@@ -15,7 +15,6 @@ namespace CommandLine.NetCore.Example.Commands;
 
 internal sealed class GetInfo : Command
 {
-    //private readonly Arg _env;
     /*
      * syntax list:
      * getinfo env varName      : dump environment variable value
