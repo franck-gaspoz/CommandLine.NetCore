@@ -52,13 +52,8 @@ internal sealed class Help : Command
 
     /// <inheritdoc/>
     protected override CommandResult Execute(ArgSet args) =>
-
-        For()
-            .Do(DumpHelpForAllCommands)
-
-        .For(Param())
-            .Do(DumpCommandHelp)
-
+        For().Do(DumpHelpForAllCommands)
+        .For(Param()).Do(DumpCommandHelp)
         .With(args);
 
     private OperationResult DumpHelpForAllCommands(Grammar grammar)
