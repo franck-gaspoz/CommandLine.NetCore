@@ -38,7 +38,7 @@ public abstract class Command
     /// <summary>
     /// setted global options
     /// </summary>
-    protected readonly GlobalSettings SettedGlobalOptsSet;
+    protected readonly GlobalSettings GlobalSettings;
 
     /// <summary>
     /// name of the command
@@ -56,19 +56,19 @@ public abstract class Command
     /// <param name="console">console service</param>
     /// <param name="texts">texts service</param>
     /// <param name="argBuilder">args builder</param>
-    /// <param name="settedGlobalOptsSet">setted global options set</param>
+    /// <param name="globalSettings">globals settings</param>
     /// <param name="parser">parser</param>
     public Command(
         IConfiguration config,
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
-        GlobalSettings settedGlobalOptsSet,
+        GlobalSettings globalSettings,
         Parser parser
         )
     {
         _argBuilder = argBuilder;
-        SettedGlobalOptsSet = settedGlobalOptsSet;
+        GlobalSettings = globalSettings;
         Config = config;
         Texts = texts;
         Console = console;
@@ -230,7 +230,7 @@ public abstract class Command
             _grammarMatcherDispatcher = new(
                 Texts,
                 Parser,
-                SettedGlobalOptsSet,
+                GlobalSettings,
                 Console);
         }
 
@@ -259,7 +259,7 @@ public abstract class Command
     public OperationResult RunCommand(params string[] args) =>
         new(
             new CommandLineInterfaceBuilder()
-                .UseAssemblySet(SettedGlobalOptsSet.AssemblySet)
+                .UseAssemblySet(GlobalSettings.AssemblySet)
                 .Build(args)
                 .Run());
 
