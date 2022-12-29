@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 namespace CommandLine.NetCore.GlobalOpts;
 
 /// <summary>
-/// global argument: -s 
+/// global option: -s 
 /// <para>turn off output</para>
 /// </summary>
 public class S : GlobalOpt

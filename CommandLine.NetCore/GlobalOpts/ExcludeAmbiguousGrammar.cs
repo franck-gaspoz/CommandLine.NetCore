@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 namespace CommandLine.NetCore.GlobalOpts;
 
 /// <summary>
-/// global argument: --exclude-ambiguous-grammar
+/// global option: --exclude-ambiguous-grammar
 /// <para>exclude ambiguous grammar</para>
 /// <para>by default, the first matching grammar is selected in the command line arguments parser</para>
 /// </summary>
