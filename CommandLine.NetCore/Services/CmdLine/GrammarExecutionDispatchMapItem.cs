@@ -94,6 +94,7 @@ public sealed class GrammarExecutionDispatchMapItem
         return GrammarMatcherDispatcher;
     }
 
+    /// <summary>
     /// set up delegate for this grammar execution dispatch map
     /// <para>takes a method with no parameter </para>
     /// </summary>
