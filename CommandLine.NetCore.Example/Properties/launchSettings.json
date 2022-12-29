@@ -16,6 +16,10 @@
     "get-info env -l": {
       "commandName": "Project",
       "commandLineArgs": "get-info env -l --parser-logging Trace"
+    },
+    "get-info env Path": {
+      "commandName": "Project",
+      "commandLineArgs": "get-info env Path --parser-logging Trace"
     }
   }
 }

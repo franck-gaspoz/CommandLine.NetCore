@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Parsing;
 
 namespace CommandLine.NetCore.Services.CmdLine;
 
@@ -122,10 +123,30 @@ public sealed class GrammarExecutionDispatchMapItem
             throw new InvalidOperationException(error());
         }
 
-        foreach (var parameter in methodInfo.GetParameters())
+        Name = methodInfo.Name;
+        Grammar.SetName(Name);
+        Delegate = (Grammar grammar) =>
         {
+            var callParameters = new List<object?>();
 
-        }
+            foreach (var parameter in methodInfo.GetParameters())
+            {
+                if (parameter
+                    .GetCustomAttributes(false)
+                    .Where(x => x.GetType() == typeof(MapArgAttribute))
+                    .FirstOrDefault() is not MapArgAttribute mapArg)
+                {
+                    throw new InvalidOperationException(error());
+                }
+
+                var argValue = Grammar[mapArg.ArgIndex];
+                callParameters.Add(argValue);
+            }
+
+            methodInfo.Invoke(target, callParameters.ToArray());
+
+            return new();
+        };
 
         return GrammarMatcherDispatcher;
     }
