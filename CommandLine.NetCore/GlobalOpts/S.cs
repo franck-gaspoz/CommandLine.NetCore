@@ -12,6 +12,13 @@ namespace CommandLine.NetCore.GlobalOpts;
 /// </summary>
 public class S : GlobalOpt
 {
+    /// <summary>
+    /// global option: -s 
+    /// <para>turn off output</para>
+    /// </summary>
+    /// <param name="config">config</param>
+    /// <param name="texts">texts</param>
+    /// <param name="valueConverter">value converter</param>
     public S(
         IConfiguration config,
         Texts texts,

@@ -70,7 +70,7 @@ internal static class StringExt
         {
             if ((s[i] == c) && i > 0 && s[i] - 1 != '\\')
             {
-                r.Add(new string(s.Substring(j, i - j)));
+                r.Add(new string(s.AsSpan()[j..i]));
                 j = i + 1;
             }
             else if ((s[i] == c) && i == 0)
@@ -80,7 +80,7 @@ internal static class StringExt
             }
         }
 
-        if (j < s.Length) r.Add(new string(s.Substring(j)));
+        if (j < s.Length) r.Add(new string(s.AsSpan()[j..]));
         return r;
     }
 
@@ -110,7 +110,7 @@ internal static class StringExt
             }
         }
 
-        if (j < s.Length) r.Add(new string(s.Substring(j)));
+        if (j < s.Length) r.Add(new string(s.AsSpan()[j..]));
         return r.Select(x => new string(x.Reverse().ToArray())).ToList();
     }
 }

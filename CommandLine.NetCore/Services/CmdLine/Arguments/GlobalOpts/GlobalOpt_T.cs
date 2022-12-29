@@ -10,6 +10,13 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 /// </summary>
 public abstract class GlobalOpt<T> : Opt<T>, IGlobalOpt
 {
+    /// <summary>
+    /// global option
+    /// </summary>
+    /// <param name="config">config</param>
+    /// <param name="texts">texts</param>
+    /// <param name="valueConverter">value converter</param>
+    /// <param name="valuesCount">values count</param>
     public GlobalOpt(
             IConfiguration config,
             Texts texts,

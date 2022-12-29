@@ -10,6 +10,9 @@ public sealed class Grammar
 {
     private string DebuggerDisplay => ToGrammar();
 
+    /// <summary>
+    /// name of the grammar
+    /// </summary>
     public string? Name { get; private set; }
 
     /// <summary>

@@ -17,9 +17,19 @@ public sealed class GlobalOptsSet
     private readonly Texts _texts;
     private readonly Parser _parser;
 
+    /// <summary>
+    /// options
+    /// </summary>
     public IReadOnlyDictionary<string, Type> Opts
         => _opts;
 
+    /// <summary>
+    /// set of global options
+    /// </summary>
+    /// <param name="serviceProvider">service provider</param>
+    /// <param name="assemblySet">assembly set</param>
+    /// <param name="texts">texts</param>
+    /// <param name="parser">parser</param>
     public GlobalOptsSet(
         IServiceProvider serviceProvider,
         AssemblySet assemblySet,
@@ -37,6 +47,11 @@ public sealed class GlobalOptsSet
         }
     }
 
+    /// <summary>
+    /// get global options types
+    /// </summary>
+    /// <param name="assemblySet">assemblies where to look up</param>
+    /// <returns>types of global options classes</returns>
     public static IEnumerable<Type> GetGlobalOptTypes(AssemblySet assemblySet)
     {
         var globalOptTypes = new List<Type>();

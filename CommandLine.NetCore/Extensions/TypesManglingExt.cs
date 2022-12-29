@@ -12,7 +12,8 @@ namespace CommandLine.NetCore.Extensions;
 /// </summary>
 public static class TypesManglingExt
 {
-    private static readonly Dictionary<Type, string> keywordTypes = new Dictionary<Type, string>() {
+    private static readonly Dictionary<Type, string> _keywordTypes = new()
+    {
         { typeof(void), "void" },
         { typeof(bool), "bool" },
         { typeof(char), "char" },
@@ -31,14 +32,33 @@ public static class TypesManglingExt
         { typeof(object), "object" }
     };
 
+    /// <summary>
+    /// get keywork for a type
+    /// </summary>
+    /// <param name="type">type</param>
+    /// <returns>keyword from predefined list or null</returns>
     public static string? GetKeyword(this Type type)
     {
         if (type == null) return null;
-        keywordTypes.TryGetValue(type, out var result);
+        _keywordTypes.TryGetValue(type, out var result);
         return result;
     }
 
-    public static string FriendlyName(this Type type, bool useKeywords = true, bool showGenericArguments = true, bool showDeclaringType = true, bool compactNullable = true)
+    /// <summary>
+    /// get the friendly name of a type
+    /// </summary>
+    /// <param name="type">type</param>
+    /// <param name="useKeywords">keyworks describing types</param>
+    /// <param name="showGenericArguments">if true add generic arguments to name</param>
+    /// <param name="showDeclaringType">if true add declaring type to name</param>
+    /// <param name="compactNullable">if true compact the nam of a nullable type</param>
+    /// <returns></returns>
+    public static string FriendlyName(
+        this Type type,
+        bool useKeywords = true,
+        bool showGenericArguments = true,
+        bool showDeclaringType = true,
+        bool compactNullable = true)
     {
         if (type == null) return string.Empty;
         var b = new StringBuilder();
@@ -87,7 +107,7 @@ public static class TypesManglingExt
             isBasic = false;
             var name = type.Name;
             var index = name.IndexOf('`');
-            if (index > 0) name = name.Substring(0, name.IndexOf('`'));
+            if (index > 0) name = name[..name.IndexOf('`')];
             if (type.IsGenericTypeDefinition)
             {
                 if (compactNullable && type == typeof(Nullable<>))

@@ -16,6 +16,15 @@ namespace CommandLine.NetCore.GlobalOpts;
 /// </summary>
 public class ParserLogging : GlobalOpt<LogLevel>
 {
+    /// <summary>
+    /// global option: --parser-logging
+    /// <para>set up the logging level of the parser</para>
+    /// <para>possibles values from Microsoft.Extensions.Logging.LogLevel</para>
+    /// <para>for Trace or Debug the parser add detailed informations about the parsed grammars</para>
+    /// </summary>
+    /// <param name="config">config</param>
+    /// <param name="texts">texts</param>
+    /// <param name="valueConverter">value converter</param>
     public ParserLogging(
         IConfiguration config,
         Texts texts,

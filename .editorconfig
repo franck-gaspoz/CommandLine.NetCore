@@ -111,12 +111,12 @@ csharp_style_namespace_declarations = file_scoped
 # Préférences de niveau expression
 csharp_prefer_simple_default_expression = true
 csharp_style_deconstructed_variable_declaration = true:warning
-csharp_style_implicit_object_creation_when_type_is_apparent = true:silent
+csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
 csharp_style_inlined_variable_declaration = true:warning
 csharp_style_pattern_local_over_anonymous_function = true:warning
-csharp_style_prefer_index_operator = true:silent
+csharp_style_prefer_index_operator = true:warning
 csharp_style_prefer_null_check_over_type_check = true:warning
-csharp_style_prefer_range_operator = true:silent
+csharp_style_prefer_range_operator = true:warning
 csharp_style_throw_expression = true:silent
 csharp_style_unused_value_assignment_preference = discard_variable:silent
 csharp_style_unused_value_expression_statement_preference = discard_variable
@@ -192,18 +192,6 @@ dotnet_naming_rule.non_field_members_should_be_pascal_case.severity = warning
 dotnet_naming_rule.non_field_members_should_be_pascal_case.symbols = non_field_members
 dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
 
-dotnet_naming_rule.champ_protégé__should_be_pascal_case.severity = warning
-dotnet_naming_rule.champ_protégé__should_be_pascal_case.symbols = champ_protégé_
-dotnet_naming_rule.champ_protégé__should_be_pascal_case.style = pascal_case
-
-dotnet_naming_rule.champ_readonly_protégé_ou_privé_should_be_commence_par___et_casse_mixte.severity = warning
-dotnet_naming_rule.champ_readonly_protégé_ou_privé_should_be_commence_par___et_casse_mixte.symbols = champ_readonly_protégé_ou_privé
-dotnet_naming_rule.champ_readonly_protégé_ou_privé_should_be_commence_par___et_casse_mixte.style = commence_par___et_casse_mixte
-
-dotnet_naming_rule.champ_static_protégé_ou_privé_should_be_commence_par___et_casse_mixte.severity = warning
-dotnet_naming_rule.champ_static_protégé_ou_privé_should_be_commence_par___et_casse_mixte.symbols = champ_static_protégé_ou_privé
-dotnet_naming_rule.champ_static_protégé_ou_privé_should_be_commence_par___et_casse_mixte.style = commence_par___et_casse_mixte
-
 dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.severity = warning
 dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.symbols = public_or_protected_field
 dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.style = pascal_case
@@ -211,6 +199,22 @@ dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.style = pasca
 dotnet_naming_rule.property_should_be_pascal_case.severity = warning
 dotnet_naming_rule.property_should_be_pascal_case.symbols = property
 dotnet_naming_rule.property_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_rule.private_const_should_be_pascal_case.severity = warning
+dotnet_naming_rule.private_const_should_be_pascal_case.symbols = private_const
+dotnet_naming_rule.private_const_should_be_pascal_case.style = pascal_case
+
+dotnet_naming_rule.champ_readonly_privé_should_be_commence_par___et_casse_mixte.severity = warning
+dotnet_naming_rule.champ_readonly_privé_should_be_commence_par___et_casse_mixte.symbols = champ_readonly_privé
+dotnet_naming_rule.champ_readonly_privé_should_be_commence_par___et_casse_mixte.style = commence_par___et_casse_mixte
+
+dotnet_naming_rule.champ_static_privé_should_be_commence_par___et_casse_mixte.severity = warning
+dotnet_naming_rule.champ_static_privé_should_be_commence_par___et_casse_mixte.symbols = champ_static_privé
+dotnet_naming_rule.champ_static_privé_should_be_commence_par___et_casse_mixte.style = commence_par___et_casse_mixte
+
+dotnet_naming_rule.champ_privé_should_be_commence_par___et_casse_mixte.severity = warning
+dotnet_naming_rule.champ_privé_should_be_commence_par___et_casse_mixte.symbols = champ_privé
+dotnet_naming_rule.champ_privé_should_be_commence_par___et_casse_mixte.style = commence_par___et_casse_mixte
 
 # Spécifications de symboles
 
@@ -234,17 +238,21 @@ dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, meth
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.non_field_members.required_modifiers = 
 
-dotnet_naming_symbols.champ_readonly_protégé_ou_privé.applicable_kinds = field
-dotnet_naming_symbols.champ_readonly_protégé_ou_privé.applicable_accessibilities = private
-dotnet_naming_symbols.champ_readonly_protégé_ou_privé.required_modifiers = readonly
+dotnet_naming_symbols.champ_readonly_privé.applicable_kinds = field
+dotnet_naming_symbols.champ_readonly_privé.applicable_accessibilities = private
+dotnet_naming_symbols.champ_readonly_privé.required_modifiers = readonly
 
-dotnet_naming_symbols.champ_static_protégé_ou_privé.applicable_kinds = field
-dotnet_naming_symbols.champ_static_protégé_ou_privé.applicable_accessibilities = private
-dotnet_naming_symbols.champ_static_protégé_ou_privé.required_modifiers = static
+dotnet_naming_symbols.champ_static_privé.applicable_kinds = field
+dotnet_naming_symbols.champ_static_privé.applicable_accessibilities = private
+dotnet_naming_symbols.champ_static_privé.required_modifiers = static
 
-dotnet_naming_symbols.champ_protégé_.applicable_kinds = field
-dotnet_naming_symbols.champ_protégé_.applicable_accessibilities = private
-dotnet_naming_symbols.champ_protégé_.required_modifiers = 
+dotnet_naming_symbols.champ_privé.applicable_kinds = field
+dotnet_naming_symbols.champ_privé.applicable_accessibilities = private
+dotnet_naming_symbols.champ_privé.required_modifiers = 
+
+dotnet_naming_symbols.private_const.applicable_kinds = *
+dotnet_naming_symbols.private_const.applicable_accessibilities = private
+dotnet_naming_symbols.private_const.required_modifiers = const
 
 # Styles de nommage
 
@@ -262,6 +270,3 @@ dotnet_naming_style.commence_par___et_casse_mixte.required_prefix = _
 dotnet_naming_style.commence_par___et_casse_mixte.required_suffix = 
 dotnet_naming_style.commence_par___et_casse_mixte.word_separator = 
 dotnet_naming_style.commence_par___et_casse_mixte.capitalization = camel_case
-
-# CS1591: Commentaire XML manquant pour le type ou le membre visible publiquement
-dotnet_diagnostic.CS1591.severity = silent

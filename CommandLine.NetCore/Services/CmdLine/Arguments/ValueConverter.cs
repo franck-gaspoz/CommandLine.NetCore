@@ -14,6 +14,11 @@ public sealed class ValueConverter
 {
     private readonly Texts _texts;
 
+    /// <summary>
+    /// value converter
+    /// <para>this code is part of my project OrbitalShell https://github.com/OrbitalShell/Orbital-Shell</para>
+    /// </summary>
+    /// <param name="texts">texts</param>
     public ValueConverter(Texts texts)
         => _texts = texts;
 
@@ -157,7 +162,7 @@ public sealed class ValueConverter
 
                 foreach (var fval in fvalues)
                 {
-                    var val = fval.Substring(1);
+                    var val = fval[1..];
                     var flagEnabling = fval[0] == Globals.ParameterTypeFlagEnumValuePrefixEnabled;
                     if (ToTypedValue(
                         val,

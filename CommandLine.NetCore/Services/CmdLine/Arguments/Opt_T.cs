@@ -115,7 +115,7 @@ public class Opt<T> : Arg, IOpt
     /// <param name="index">index</param>
     /// <returns>ArgumentException</returns>
     protected ArgumentException ValueIndexNotAvailaible(int index)
-        => new ArgumentException(
+        => new(
             Texts._("NoArgumentValueAtIndex", index));
 
     /// <summary>
