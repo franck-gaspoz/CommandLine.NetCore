@@ -140,8 +140,12 @@ public sealed class Parser
             catch (ArgumentException ex)
             {
                 throw new ArgumentException(
-                    ex.Message
-                    + _texts._("ParameterValueConvertError", position));
+                    _texts._(
+                        "InvalidParameterValue",
+                        position,
+                        param.StringValue,
+                        ex.Message,
+                        param.ToGrammar()));
             }
         }
         args.RemoveAt(index);
