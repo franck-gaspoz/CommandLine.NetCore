@@ -69,9 +69,11 @@ internal static class IServiceCollectionExt
         services.AddSingleton<cons.IAnsiVtConsole>(
             serviceProvider =>
             {
-                var settedGlobalOpts = serviceProvider.GetRequiredService<SettedGlobalOptsSet>();
+                var globalSettings = serviceProvider.GetRequiredService<GlobalSettings>();
                 var console = new cons.AnsiVtConsole();
-                console.Out.IsMute = settedGlobalOpts.Contains<S>();
+                console.Out.IsMute = globalSettings
+                    .SettedGlobalOptsSet
+                    .Contains<S>();
                 return console;
             });
         return services;
@@ -85,7 +87,7 @@ internal static class IServiceCollectionExt
     public static IServiceCollection AddSettedGlobalArguments(
         this IServiceCollection services)
     {
-        services.AddSingleton<SettedGlobalOptsSet>();
+        services.AddSingleton<GlobalSettings>();
 
         return services;
     }

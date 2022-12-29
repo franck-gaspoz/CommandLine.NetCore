@@ -2,6 +2,7 @@
 
 using AnsiVtConsole.NetCore;
 
+using CommandLine.NetCore.Services;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
@@ -38,7 +39,7 @@ internal sealed class Help : Command
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
-        SettedGlobalOptsSet settedGlobalOptsSet,
+        GlobalSettings settedGlobalOptsSet,
         Parser parser,
         IServiceProvider serviceProvider) :
             base(config, console, texts, argBuilder, settedGlobalOptsSet, parser)

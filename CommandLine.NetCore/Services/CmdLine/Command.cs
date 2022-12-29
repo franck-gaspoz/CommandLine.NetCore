@@ -3,7 +3,6 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -38,7 +37,7 @@ public abstract class Command
     /// <summary>
     /// setted global options
     /// </summary>
-    protected readonly SettedGlobalOptsSet SettedGlobalOptsSet;
+    protected readonly GlobalSettings SettedGlobalOptsSet;
 
     /// <summary>
     /// name of the command
@@ -63,7 +62,7 @@ public abstract class Command
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
-        SettedGlobalOptsSet settedGlobalOptsSet,
+        GlobalSettings settedGlobalOptsSet,
         Parser parser
         )
     {

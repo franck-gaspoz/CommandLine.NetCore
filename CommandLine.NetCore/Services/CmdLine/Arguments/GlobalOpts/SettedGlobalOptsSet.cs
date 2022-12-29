@@ -4,9 +4,8 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 /// <summary>
 /// setted global arguments set
-/// <para>add access to global options set, command line args and assembly set</para>
 /// </summary>
-public sealed class SettedGlobalOptsSet
+public class SettedGlobalOptsSet
 {
     private readonly Dictionary<string, IOpt> _opts = new();
 
@@ -17,35 +16,14 @@ public sealed class SettedGlobalOptsSet
         => _opts;
 
     /// <summary>
-    /// assembly set
-    /// </summary>
-    public AssemblySet AssemblySet { get; private set; }
-
-    /// <summary>
-    /// global opts set
-    /// </summary>
-    public GlobalOptsSet GlobalOptsSet { get; private set; }
-
-    /// <summary>
-    /// command line args
-    /// </summary>
-    public CommandLineArgs CommandLineArgs { get; private set; }
-
-    /// <summary>
     /// setted global arguments set
-    /// <para>add access to global options set, command line args and assembly set</para>
     /// </summary>
-    /// <param name="commandLineArgs">command line args</param>
     /// <param name="globalOptsSet">global options set</param>
-    /// <param name="assemblySet">assembly set</param>
+    /// <param name="commandLineArgs">command line args</param>
     public SettedGlobalOptsSet(
-        CommandLineArgs commandLineArgs,
         GlobalOptsSet globalOptsSet,
-        AssemblySet assemblySet)
+        CommandLineArgs commandLineArgs)
     {
-        AssemblySet = assemblySet;
-        CommandLineArgs = commandLineArgs;
-        GlobalOptsSet = globalOptsSet;
         foreach (var kvp in globalOptsSet.Parse(commandLineArgs))
             Add(kvp.Value);
     }
@@ -83,4 +61,3 @@ public sealed class SettedGlobalOptsSet
         where T : IOpt
         => TryGetByType<T>(out _);
 }
-

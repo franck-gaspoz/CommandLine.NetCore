@@ -3,7 +3,6 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Logging;
@@ -18,7 +17,7 @@ public sealed class GrammarMatcherDispatcher
     private readonly List<GrammarExecutionDispatchMapItem> _maps = new();
     private readonly Texts _texts;
     private readonly Parser _parser;
-    private readonly SettedGlobalOptsSet _settedGlobalOptsSet;
+    private readonly GlobalSettings _globalSettings;
     private readonly IAnsiVtConsole _console;
 
     /// <summary>
@@ -31,15 +30,15 @@ public sealed class GrammarMatcherDispatcher
     /// </summary>
     /// <param name="texts">texts service</param>
     /// <param name="parser">parser</param>
-    /// <param name="settedGlobalOptsSet">setted global options</param>
+    /// <param name="globalSettings">setted global options</param>
     /// <param name="console">console</param>
     public GrammarMatcherDispatcher(
         Texts texts,
         Parser parser,
-        SettedGlobalOptsSet settedGlobalOptsSet,
+        GlobalSettings globalSettings,
         IAnsiVtConsole console)
-        => (_texts, _parser, _settedGlobalOptsSet, _console)
-            = (texts, parser, settedGlobalOptsSet, console);
+        => (_texts, _parser, _globalSettings, _console)
+            = (texts, parser, globalSettings, console);
 
     /// <summary>
     /// build a grammar from arguments grammars set
@@ -63,8 +62,10 @@ public sealed class GrammarMatcherDispatcher
     /// <exception cref="InvalidOperationException">the grammar matcher dispatcher delegate action is not defined</exception>
     public CommandResult With(ArgSet args)
     {
-        var logLevel = _settedGlobalOptsSet.TryGetByType<ParserLogging>(out var parserLogging) ?
-            parserLogging.GetValue() : LogLevel.Error;
+        var logLevel = _globalSettings
+            .SettedGlobalOptsSet
+            .TryGetByType<ParserLogging>(out var parserLogging) ?
+                parserLogging.GetValue() : LogLevel.Error;
         var logTrace = logLevel == LogLevel.Trace
             || logLevel == LogLevel.Debug;
         void Trace(string? text = "")
@@ -122,7 +123,9 @@ public sealed class GrammarMatcherDispatcher
         }
 
         if (matchingGrammars.Count > 1
-            && _settedGlobalOptsSet.Contains<ExcludeAmbiguousGrammar>())
+            && _globalSettings
+                .SettedGlobalOptsSet
+                .Contains<ExcludeAmbiguousGrammar>())
         {
             parseErrors.Add(
                 _texts._(
