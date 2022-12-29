@@ -52,4 +52,22 @@ public sealed class GrammarExecutionDispatchMapItem
         Grammar.SetName(Name);
         return GrammarMatcherDispatcher;
     }
+
+    /// <summary>
+    /// set up delegate for this grammar execution dispatch map
+    /// <para>allow a method with a default command result (code ok, result null)</para>
+    /// </summary>
+    /// <param name="delegate"></param>
+    /// <returns></returns>
+    public GrammarMatcherDispatcher Do(Action<Grammar> @delegate)
+    {
+        Name = @delegate.Method.Name;
+        Delegate = (Grammar grammar) =>
+        {
+            @delegate.Invoke(grammar);
+            return new();
+        };
+        Grammar.SetName(Name);
+        return GrammarMatcherDispatcher;
+    }
 }

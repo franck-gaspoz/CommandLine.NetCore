@@ -1,4 +1,6 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine;
+﻿using static CommandLine.NetCore.Services.CmdLine.Globals;
+
+namespace CommandLine.NetCore.Services.CmdLine;
 
 /// <summary>
 /// result of an operation done by a command successfully parsed
@@ -18,9 +20,9 @@ public class OperationResult
     /// <summary>
     /// build a new instance
     /// </summary>
-    /// <param name="exitCode">exit code</param>
-    /// <param name="result">eventual result</param>
-    public OperationResult(int exitCode, object? result = null)
+    /// <param name="exitCode">exit code (default ExitOk)</param>
+    /// <param name="result">eventual result (default null)</param>
+    public OperationResult(int exitCode = ExitOk, object? result = null)
     {
         ExitCode = exitCode;
         Result = result;

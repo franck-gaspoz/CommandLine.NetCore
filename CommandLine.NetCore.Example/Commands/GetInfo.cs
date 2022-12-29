@@ -9,8 +9,6 @@ using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
-using static CommandLine.NetCore.Services.CmdLine.Globals;
-
 namespace CommandLine.NetCore.Example.Commands;
 
 internal sealed class GetInfo : Command
@@ -72,7 +70,7 @@ internal sealed class GetInfo : Command
 
         .With(args);
 
-    private OperationResult DumpAll(Grammar grammar)
+    private void DumpAll(Grammar grammar)
     {
         DumpSystem(grammar);
 
@@ -83,11 +81,9 @@ internal sealed class GetInfo : Command
         Console.Out.WriteLine();
 
         DumpAllVars(grammar);
-
-        return new(ExitOk);
     }
 
-    private OperationResult DumpSystem(Grammar grammar)
+    private void DumpSystem(Grammar grammar)
     {
         OutputSectionTitle(Texts._("SystemInformations"));
 
@@ -150,18 +146,15 @@ internal sealed class GetInfo : Command
 
         foreach (var kvp in keyvalues)
             OutputKeyValue(kvp.Key, kvp.Value);
-
-        return new(ExitOk);
     }
 
-    private OperationResult DumpConsole(Grammar grammar)
+    private void DumpConsole(Grammar grammar)
     {
         OutputSectionTitle(Texts._("ConsoleInformations"));
         Console.Infos();
-        return new(ExitOk);
     }
 
-    private OperationResult DumpEnvVar(Grammar grammar)
+    private void DumpEnvVar(Grammar grammar)
     {
         var varName = ((Param<string>)grammar[1]).Value!;
         var value = Environment.GetEnvironmentVariable(varName!);
@@ -172,10 +165,9 @@ internal sealed class GetInfo : Command
         }
 
         OutputKeyValue(varName!, value);
-        return new(ExitOk);
     }
 
-    private OperationResult DumpAllVars(Grammar grammar)
+    private void DumpAllVars(Grammar grammar)
     {
         OutputSectionTitle(Texts._("EnvironmentVariables"));
         var vars = Environment.GetEnvironmentVariables();
@@ -188,8 +180,6 @@ internal sealed class GetInfo : Command
                     ToText(kvp.Value, "{null}"));
             }
         }
-
-        return new(ExitOk);
     }
 
     #region utils
