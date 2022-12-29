@@ -155,7 +155,7 @@ internal sealed class GetInfo : Command
         Console.Infos();
     }
 
-    private void DumpEnvVar([MapArg(1)] Param envVarName)
+    private void DumpEnvVar(Param envVarName)
     {
         var value = Environment.GetEnvironmentVariable(
             envVarName.Value!);

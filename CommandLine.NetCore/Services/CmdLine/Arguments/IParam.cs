@@ -16,4 +16,9 @@ public interface IParam : IArg
     /// <param name="value">string representation of the value</param>
     /// <exception cref="ArgumentException">convert from string to value error</exception>
     public void SetValue(string value);
+
+    /// <summary>
+    /// indicates if the parameter is expecting a value or have any one in syntax
+    /// </summary>
+    public bool IsExpectingValue { get; }
 }

@@ -128,6 +128,8 @@ public sealed class GrammarExecutionDispatchMapItem
         Delegate = (Grammar grammar) =>
         {
             var callParameters = new List<object?>();
+            int argIndex;
+            var currentParamIndex = -1;
 
             foreach (var parameter in methodInfo.GetParameters())
             {
@@ -136,10 +138,16 @@ public sealed class GrammarExecutionDispatchMapItem
                     .Where(x => x.GetType() == typeof(MapArgAttribute))
                     .FirstOrDefault() is not MapArgAttribute mapArg)
                 {
-                    throw new InvalidOperationException(error());
+                    currentParamIndex = argIndex =
+                        Grammar.GetIndexOfArgWithExpectedValueFromIndex(
+                            currentParamIndex + 1);
+                }
+                else
+                {
+                    currentParamIndex = argIndex = mapArg.ArgIndex;
                 }
 
-                var argValue = Grammar[mapArg.ArgIndex];
+                var argValue = Grammar[argIndex];
                 callParameters.Add(argValue);
             }
 

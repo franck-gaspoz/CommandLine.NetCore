@@ -41,7 +41,11 @@ public class Param<T> : Arg, IParam
     public string? StringValue { get; private set; }
 
     /// <inheritdoc/>
-    public void SetValue(string value) => Value = ConvertValue<T>(value);
+    public bool IsExpectingValue { get; private set; }
+
+    /// <inheritdoc/>
+    public void SetValue(string value) =>
+        Value = ConvertValue<T>(value);
 
     /// <summary>
     /// generic type parameter
@@ -58,6 +62,7 @@ public class Param<T> : Arg, IParam
         : base(config, texts, valueConverter)
     {
         StringValue = value;
+        IsExpectingValue = value is null;
         Value = ConvertValue<T>(value);
     }
 }

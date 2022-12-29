@@ -57,4 +57,23 @@ public sealed class Grammar
         => ((Name == null) ? "?" : Name!) +
             ": " +
             string.Join(' ', _args.Select(x => x.ToGrammar()));
+
+    /// <summary>
+    /// get index of next arg with expected value from an index
+    /// </summary>
+    /// <param name="fromIndex">from index</param>
+    /// <returns>index if found else -1</returns>
+    public int GetIndexOfArgWithExpectedValueFromIndex(int fromIndex)
+    {
+        for (var i = fromIndex; i < _args.Count; i++)
+        {
+            var arg = _args[i];
+            if ((arg is IOpt opt && opt.ExpectedValuesCount > 0)
+                || (arg is IParam param && param.IsExpectingValue))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
