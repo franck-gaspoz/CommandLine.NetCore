@@ -12,6 +12,10 @@
     "get-info -h": {
       "commandName": "Project",
       "commandLineArgs": "get-info -h --parser-logging Trace"
+    },
+    "get-info env -l": {
+      "commandName": "Project",
+      "commandLineArgs": "get-info env -l --parser-logging Trace"
     }
   }
 }

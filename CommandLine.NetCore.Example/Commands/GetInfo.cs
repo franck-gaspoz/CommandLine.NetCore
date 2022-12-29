@@ -5,6 +5,7 @@ using AnsiVtConsole.NetCore;
 using CommandLine.NetCore.Services;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -48,7 +49,8 @@ internal sealed class GetInfo : Command
         .For(
             Param("env"),
             Param())
-                .Do(DumpEnvVar)
+                //.DoWithMap((Param x) => DumpEnvVar(x))
+                .Do(() => DumpEnvVar)
 
         // console
 
@@ -154,10 +156,11 @@ internal sealed class GetInfo : Command
         Console.Infos();
     }
 
-    private void DumpEnvVar(Grammar grammar)
+    private void DumpEnvVar([MapArg(1)] Param envVarName)
     {
-        var varName = ((Param<string>)grammar[1]).Value!;
-        var value = Environment.GetEnvironmentVariable(varName!);
+        var varName = envVarName.Value!;
+        //var varName = ((Param<string>)grammar[1]).Value!;
+        var value = Environment.GetEnvironmentVariable(varName);
         if (value is null)
         {
             throw new ArgumentException(

@@ -5,6 +5,7 @@ using AnsiVtConsole.NetCore;
 using CommandLine.NetCore.Services;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;

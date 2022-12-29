@@ -1,9 +1,11 @@
 ﻿
 using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.Text;
 
 using static CommandLine.NetCore.Services.CmdLine.Globals;
-namespace CommandLine.NetCore.Services.CmdLine.Arguments;
+
+namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 
 /// <summary>
 /// options and argument syntax parser

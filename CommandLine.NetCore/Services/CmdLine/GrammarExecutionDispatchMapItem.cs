@@ -1,4 +1,7 @@
 ﻿
+using System.Linq.Expressions;
+
+using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 
 namespace CommandLine.NetCore.Services.CmdLine;
@@ -43,8 +46,8 @@ public sealed class GrammarExecutionDispatchMapItem
     /// <summary>
     /// set up delegate for this grammar execution dispatch map
     /// </summary>
-    /// <param name="delegate"></param>
-    /// <returns></returns>
+    /// <param name="delegate">with parameter grammar and OperationResult result delegate</param>
+    /// <returns>grammar matcher dispatcher</returns>
     public GrammarMatcherDispatcher Do(Func<Grammar, OperationResult> @delegate)
     {
         Delegate = @delegate;
@@ -55,10 +58,10 @@ public sealed class GrammarExecutionDispatchMapItem
 
     /// <summary>
     /// set up delegate for this grammar execution dispatch map
-    /// <para>allow a method with a default command result (code ok, result null)</para>
+    /// <para>takes a method with a default command result (code ok, result null)</para>
     /// </summary>
-    /// <param name="delegate"></param>
-    /// <returns></returns>
+    /// <param name="delegate">with parameter grammar and void delegate</param>
+    /// <returns>grammar matcher dispatcher</returns>
     public GrammarMatcherDispatcher Do(Action<Grammar> @delegate)
     {
         Name = @delegate.Method.Name;
@@ -73,11 +76,11 @@ public sealed class GrammarExecutionDispatchMapItem
 
     /// <summary>
     /// set up delegate for this grammar execution dispatch map
-    /// <para>allows a method with no parameter </para>
-    /// <para>allows a method with a default command result (code ok, result null)</para>
+    /// <para>takes a method with no parameter </para>
+    /// <para>takes a method with a default command result (code ok, result null)</para>
     /// </summary>
-    /// <param name="delegate"></param>
-    /// <returns></returns>
+    /// <param name="delegate">with no parameter and void result delegate</param>
+    /// <returns>grammar matcher dispatcher</returns>
     public GrammarMatcherDispatcher Do(Action @delegate)
     {
         Name = @delegate.Method.Name;
@@ -87,6 +90,23 @@ public sealed class GrammarExecutionDispatchMapItem
             return new();
         };
         Grammar.SetName(Name);
+        return GrammarMatcherDispatcher;
+    }
+
+    /// <summary>
+    /// set up delegate for this grammar execution dispatch map
+    /// <para>takes a method in a lambda unary call expression: () => methodName</para>
+    /// <para>takes a called method with no parameter</para>
+    /// <para>takes a called method with a default command result (code ok, result null)</para>
+    /// </summary>
+    /// <param name="expression">
+    /// a lambda unary call expression:
+    /// <para>() => methodName</para>
+    /// </param>
+    /// <returns>grammar matcher dispatcher</returns>
+    public GrammarMatcherDispatcher Do(LambdaExpression expression)
+    {
+        var methodInfo = expression.GetIndirectMethodInfo();
         return GrammarMatcherDispatcher;
     }
 }

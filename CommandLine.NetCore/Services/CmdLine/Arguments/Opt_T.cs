@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 
 using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
