@@ -114,6 +114,38 @@ public abstract class Command
     }
 
     /// <summary>
+    /// get descriptions for the command options
+    /// </summary>
+    /// <param name="texts">founded descriptions or empty list</param>
+    /// <returns>true if some options exists</returns>
+    public bool GetOptionsDescriptions(out List<KeyValuePair<string, string>> texts)
+    {
+        var sectionName = $"Commands:{ClassNameToCommandName()}:Options";
+        var optDescs = Config.GetSection(sectionName);
+
+        if (!optDescs.Exists() || !optDescs.GetChildren().Any())
+        {
+            texts = new List<KeyValuePair<string, string>>();
+            return false;
+        }
+
+        texts = new List<KeyValuePair<string, string>>();
+        foreach (var desc in optDescs.GetChildren())
+        {
+            var optDesc = desc.GetChildren().FirstOrDefault();
+            if (optDesc is not null)
+            {
+                texts.Add(
+                    new KeyValuePair<string, string>(
+                        desc.Key,
+                        desc.Value ?? string.Empty
+                    ));
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
     /// long descriptions of the command
     /// </summary>
     /// <param name="texts">command syntaxes descriptions or error text if not found in help settings</param>

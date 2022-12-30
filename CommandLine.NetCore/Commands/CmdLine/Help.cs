@@ -82,7 +82,18 @@ internal sealed class Help : Command
         else
             Console.Out.WriteLine(command.Name + StOff);
 
+        if (command.GetOptionsDescriptions(out var optDescs))
+            DumpCommandOptions(optDescs);
+
         CommandEnd();
+    }
+
+    private void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
+    {
+        Console.Out.WriteLine();
+        OutputSectionTitle(Texts._("CommandOptions"));
+        foreach (var optDesc in optDescs)
+            DumpOpt(optDesc, true);
     }
 
     private void CommandEnd()
@@ -102,12 +113,23 @@ internal sealed class Help : Command
         foreach (var kvp in _globalOptsSet.Opts)
         {
             var globalOpt = (IOpt)_serviceProvider.GetRequiredService(kvp.Value);
-            var isError = !globalOpt.GetDescription(out var argDesc)
-                ? Console.Colors.Error.ToString() : "";
-            Console.Out.WriteLine(
-                ArgNameColor + argDesc.Key + $"{StOff} :{Br}"
-                + isError + argDesc.Value + StOff);
+            var descriptionAvailable = globalOpt.GetDescription(out var argDesc);
+            DumpOpt(
+                argDesc,
+                descriptionAvailable
+                );
         }
+    }
+
+    private void DumpOpt(
+        KeyValuePair<string, string> optDesc,
+        bool descriptionAvailable)
+    {
+        var isError = !descriptionAvailable
+            ? Console.Colors.Error.ToString() : "";
+        Console.Out.WriteLine(
+            ArgNameColor + optDesc.Key + $"{StOff} :{Br}"
+            + isError + optDesc.Value + StOff);
     }
 
     private void DumpCommandList()

@@ -24,6 +24,10 @@
     "get-info env badName": {
       "commandName": "Project",
       "commandLineArgs": "get-info env badName --parser-logging Trace"
+    },
+    "help -h": {
+      "commandName": "Project",
+      "commandLineArgs": "help -h"
     }
   }
 }
