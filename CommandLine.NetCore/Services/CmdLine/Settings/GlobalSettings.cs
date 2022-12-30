@@ -1,6 +1,8 @@
 ﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
+using Microsoft.Extensions.Configuration;
+
 namespace CommandLine.NetCore.Services.CmdLine.Settings;
 
 /// <summary>
@@ -33,20 +35,28 @@ public sealed class GlobalSettings
     public CommandLineArgs CommandLineArgs { get; private set; }
 
     /// <summary>
+    /// configuration
+    /// </summary>
+    public IConfiguration Configuration { get; private set; }
+
+    /// <summary>
     /// global settings of the command line engine
     /// <para>provides access to:
     /// - global options set
     /// - setted global options set
     /// - command line args and assembly set</para>
     /// </summary>
+    /// <param name="configuration">configuration</param>
     /// <param name="commandLineArgs">command line args</param>
     /// <param name="globalOptsSet">global options set</param>
     /// <param name="assemblySet">assembly set</param>
     public GlobalSettings(
+        IConfiguration configuration,
         CommandLineArgs commandLineArgs,
         GlobalOptsSet globalOptsSet,
         AssemblySet assemblySet)
     {
+        Configuration = configuration;
         AssemblySet = assemblySet;
         CommandLineArgs = commandLineArgs;
         GlobalOptsSet = globalOptsSet;

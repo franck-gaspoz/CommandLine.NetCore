@@ -9,7 +9,7 @@ using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// abstract command
@@ -53,27 +53,15 @@ public abstract class Command
     /// <summary>
     /// construit une instance de commande
     /// </summary>
-    /// <param name="config">app config</param>
-    /// <param name="console">console service</param>
-    /// <param name="texts">texts service</param>
-    /// <param name="argBuilder">args builder</param>
-    /// <param name="globalSettings">globals settings</param>
-    /// <param name="parser">parser</param>
-    public Command(
-        IConfiguration config,
-        IAnsiVtConsole console,
-        Texts texts,
-        ArgBuilder argBuilder,
-        GlobalSettings globalSettings,
-        Parser parser
-        )
+    /// <param name="dependencies">command dependencies</param>
+    public Command(Dependencies dependencies)
     {
-        _argBuilder = argBuilder;
-        GlobalSettings = globalSettings;
-        Config = config;
-        Texts = texts;
-        Console = console;
-        Parser = parser;
+        _argBuilder = dependencies.ArgBuilder;
+        GlobalSettings = dependencies.GlobalSettings;
+        Config = dependencies.GlobalSettings.Configuration;
+        Texts = dependencies.Texts;
+        Console = dependencies.Console;
+        Parser = dependencies.Parser;
     }
 
     /// <summary>

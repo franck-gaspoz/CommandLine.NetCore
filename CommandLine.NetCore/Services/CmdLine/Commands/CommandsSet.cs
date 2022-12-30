@@ -4,7 +4,7 @@ using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 internal sealed class CommandsSet
 {

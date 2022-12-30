@@ -1,6 +1,7 @@
 ﻿
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
@@ -63,6 +64,7 @@ internal sealed class AppHostBuilder
                     .AddSingleton<ArgBuilder>()
                     .AddSingleton<ValueConverter>()
                     .AddSingleton<Parser>()
+                    .AddSingleton<Dependencies>()
                     .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)

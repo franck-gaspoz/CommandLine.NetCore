@@ -1,14 +1,8 @@
 ﻿using System.Collections;
 
-using AnsiVtConsole.NetCore;
-
-using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Parsing;
-using CommandLine.NetCore.Services.CmdLine.Settings;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.Text;
-
-using Microsoft.Extensions.Configuration;
 
 namespace CommandLine.NetCore.Example.Commands;
 
@@ -23,15 +17,7 @@ internal sealed class GetInfo : Command
      * getinfo --all            : list all infos
      */
 
-    public GetInfo(
-        IConfiguration config,
-        IAnsiVtConsole console,
-        ArgBuilder argBuilder,
-        GlobalSettings settedGlobalOptsSet,
-        Parser parser,
-        Texts texts) :
-            base(config, console, texts, argBuilder, settedGlobalOptsSet, parser)
-    { }
+    public GetInfo(Dependencies dependencies) : base(dependencies) { }
 
     /// <inheritdoc/>
     protected override CommandResult Execute(ArgSet args) =>

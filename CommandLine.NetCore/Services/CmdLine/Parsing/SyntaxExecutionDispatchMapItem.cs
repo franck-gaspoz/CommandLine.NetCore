@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 
 namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 

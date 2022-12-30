@@ -1,6 +1,6 @@
 ﻿using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// result of an operation done by a command successfully parsed

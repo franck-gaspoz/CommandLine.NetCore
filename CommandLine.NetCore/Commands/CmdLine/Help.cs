@@ -1,11 +1,8 @@
 ﻿using System.Reflection;
 
-using AnsiVtConsole.NetCore;
-
-using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
-using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
@@ -32,18 +29,11 @@ internal sealed class Help : Command
     private const string StOff = "(tdoff)";
 
     public Help(
-        IConfiguration config,
+        Dependencies dependencies,
         CommandsSet commands,
-        GlobalOptsSet globalOptsSet,
-        IAnsiVtConsole console,
-        Texts texts,
-        ArgBuilder argBuilder,
-        GlobalSettings settedGlobalOptsSet,
-        Parser parser,
-        IServiceProvider serviceProvider) :
-            base(config, console, texts, argBuilder, settedGlobalOptsSet, parser)
+        IServiceProvider serviceProvider) : base(dependencies)
     {
-        _globalOptsSet = globalOptsSet;
+        _globalOptsSet = dependencies.GlobalSettings.GlobalOptsSet;
         _serviceProvider = serviceProvider;
         _commandsSet = commands;
     }

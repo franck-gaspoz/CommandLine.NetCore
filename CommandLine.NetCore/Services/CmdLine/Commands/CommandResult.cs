@@ -1,4 +1,4 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine;
+﻿namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// command result
