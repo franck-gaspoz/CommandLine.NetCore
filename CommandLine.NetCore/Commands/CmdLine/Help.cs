@@ -27,6 +27,7 @@ internal sealed class Help : Command
     private const string InformationalDataMessage = "(f=darkgreen)";
     private const string ArgValueColor = "(bon,f=cyan)";
     private const string StOff = "(tdoff)";
+    private const string Br = "(br)";
 
     public Help(
         Dependencies dependencies,
@@ -38,14 +39,15 @@ internal sealed class Help : Command
         _commandsSet = commands;
     }
 
-    private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
-
     /// <inheritdoc/>
     protected override CommandResult Execute(ArgSet args) =>
+
         For()
             .Do(DumpHelpForAllCommands)
+
         .For(Param())
             .Do(() => DumpCommandHelp)
+
         .With(args);
 
     private void DumpHelpForAllCommands()
@@ -103,7 +105,7 @@ internal sealed class Help : Command
             var isError = !globalOpt.GetDescription(out var argDesc)
                 ? Console.Colors.Error.ToString() : "";
             Console.Out.WriteLine(
-                ArgNameColor + argDesc.Key + $"{StOff} : "
+                ArgNameColor + argDesc.Key + $"{StOff} :{Br}"
                 + isError + argDesc.Value + StOff);
         }
     }
@@ -133,7 +135,7 @@ internal sealed class Help : Command
     }
 
     private void OutputSectionTitle(string text)
-        => Console.Out.WriteLine(SectionTitleColor + text + StOff);
+        => Console.Out.WriteLine(SectionTitleColor + text + StOff + Br);
 
     private void DumpCommandSyntax(string text)
     {
@@ -185,6 +187,8 @@ internal sealed class Help : Command
             Console.Out.Write(" : " + desc);
         Console.Out.WriteLine();
     }
+
+    private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
 
     private static string StringAt(int i, ref string[] t)
         => i <= t.Length ? t[i] : "";
