@@ -3,6 +3,7 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
@@ -230,6 +231,14 @@ public abstract class Command
     /// <returns>Param</returns>
     protected Param Param(string? value = null)
         => _argBuilder.Param(value);
+
+    /// <summary>
+    /// build an option set
+    /// </summary>
+    /// <param name="options">options</param>
+    /// <returns>option set</returns>
+    protected static OptSet OptSet(params IOpt[] options)
+        => new(options);
 
     #endregion
 

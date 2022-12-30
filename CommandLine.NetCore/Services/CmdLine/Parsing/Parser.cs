@@ -160,13 +160,13 @@ public sealed class Parser
         List<string> args,
         List<IOpt> optionals,
         string arg,
-        (bool isRemainingOptional, IArg arg) gramSpec,
+        CheckableSyntaxWord checkableSyntaxWords,
         List<string> errors)
     {
         var parseBreaked = false;
         var currentPosition = position;
 
-        var (isRemainingOptional, gram) = gramSpec;
+        var (isRemainingOptional, gram) = checkableSyntaxWords;
 
         if (gram is IOpt opt)
         {
@@ -175,8 +175,9 @@ public sealed class Parser
             {
                 if (!TryCatch(
                     () => ParseOptValues(opt, args, 0, currentPosition),
-                    (ex) => errors.Add(BuildError(
-                        ex, SyntaxMismatch(opt)))
+                    (ex) => errors.Add(
+                        BuildError(
+                            ex, SyntaxMismatch(opt)))
                     ))
                 {
                     parseBreaked = true;
@@ -184,13 +185,9 @@ public sealed class Parser
 
                 position += 1 + opt.ExpectedValuesCount;
                 if (!isRemainingOptional)
-                {
                     syntax_index++;
-                }
                 else
-                {
                     optionals.Remove(opt);
-                }
             }
             else
             {
@@ -202,7 +199,8 @@ public sealed class Parser
                 }
                 else
                 {
-                    optionals.Add(opt);
+                    if (!optionals.Contains(opt))
+                        optionals.Add(opt);
                     syntax_index++;
                 }
             }
@@ -239,47 +237,77 @@ public sealed class Parser
         return parseBreaked;
     }
 
+    /// <summary>
+    /// check if a syntax match a set of arguments
+    /// <para>produces errors in any</para>
+    /// </summary>
+    /// <param name="arguments">arguments to be checked</param>
+    /// <param name="syntax">syntax reference</param>
+    /// <param name="options">command options</param>
+    /// <param name="settedOptions">coomand options that have been setttd in command line args</param>
+    /// <returns>true if args match the syntax, false otherwise</returns>
     internal (bool, List<string> errors) MatchSyntax(
         ArgSet arguments,
-        Syntax syntax
+        Syntax syntax,
+        OptSet? options,
+        out OptSet settedOptions
         )
     {
         var syntax_index = 0;
         var position = 0;
         var args = arguments.Args.ToList();
-        var syntaxText = syntax.ToSyntax();
         var optionals = new List<IOpt>();
         var parseBreaked = false;
         var errors = new List<string>();
         var isParsingRemainingOptions = false;
-        var syntaxes = new List<(bool isRemainingOptional, IArg arg)>();
+        var toBeCheckedSyntaxWords = new List<CheckableSyntaxWord>();
+        var cmdOptions = options?.Opts.ToList() ?? new List<IOpt>();
+        settedOptions = new OptSet();
+
+        syntax.AddOptions(options);
+
+        var syntaxText = syntax.ToSyntax();
 
         while (args.Count > 0
             && (syntax_index < syntax.Count || isParsingRemainingOptions)
             && !parseBreaked)
         {
-            Arg currentSyntax() => syntax[syntax_index];
+            IArg currentSyntax() => syntax[syntax_index];
             string currentArg() => args[0];
 
-            syntaxes.Clear();
+            toBeCheckedSyntaxWords.Clear();
             if (!isParsingRemainingOptions)
-                syntaxes.Add((false, currentSyntax()));
+            {
+                toBeCheckedSyntaxWords.Add(
+                    new(false, currentSyntax()));
+            }
 
-            syntaxes.AddRange(
+            toBeCheckedSyntaxWords.AddRange(
                 optionals
-                    .Select(x => (true, (IArg)x)));
+                    .Select(x => new CheckableSyntaxWord(true, x)));
 
             var hasError = false;
-            foreach (var gram in syntaxes)
+            foreach (var gram in toBeCheckedSyntaxWords)
             {
-                hasError |= ParseArg(
-                    ref syntax_index,
-                    ref position,
-                    args,
-                    optionals,
-                    currentArg(),
-                    gram,
-                    errors);
+                if (args.Count > 0)
+                {
+                    hasError |= ParseArg(
+                        ref syntax_index,
+                        ref position,
+                        args,
+                        optionals,
+                        currentArg(),
+                        gram,
+                        errors);
+
+                    if (options is not null
+                        && !hasError
+                        && gram is IOpt opt
+                        && options.Opts.Contains(opt))
+                    {
+                        settedOptions.Add(opt);
+                    }
+                }
             }
 
             isParsingRemainingOptions = syntax_index == syntax.Count
@@ -357,7 +385,7 @@ public sealed class Parser
             string.Join(' ', args),
             atIndex);
 
-    private string MissingArguments(Arg[] args, int atIndex)
+    private string MissingArguments(IArg[] args, int atIndex)
         => _texts._("MissingArgumentsAtPosition",
             string.Join(' ', args.Select(x => x.ToSyntax())),
             atIndex);

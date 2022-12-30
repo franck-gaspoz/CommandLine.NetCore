@@ -43,4 +43,10 @@ public interface IOpt : IArg
     /// true if optinal
     /// </summary>
     bool IsOptional { get; }
+
+    /// <summary>
+    /// change the is optional value
+    /// </summary>
+    /// <param name="isOptional"></param>
+    void SetIsOptional(bool isOptional);
 }

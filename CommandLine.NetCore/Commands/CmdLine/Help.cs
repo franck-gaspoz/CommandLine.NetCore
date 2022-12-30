@@ -48,6 +48,8 @@ internal sealed class Help : Command
         .For(Param())
             .Do(() => DumpCommandHelp)
 
+        .Options(Opt("v"), Opt("info"))
+
         .With(args);
 
     private void DumpHelpForAllCommands()

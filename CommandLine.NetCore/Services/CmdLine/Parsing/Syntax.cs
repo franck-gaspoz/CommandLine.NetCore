@@ -18,25 +18,40 @@ public sealed class Syntax
     /// <summary>
     /// arguments
     /// </summary>
-    public IReadOnlyCollection<Arg> Args => _args;
+    public IReadOnlyCollection<IArg> Args => _args;
 
-    private readonly List<Arg> _args;
+    private readonly List<IArg> _args;
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="args">arguments</param>
     public Syntax(
-        Arg[] args
+        IArg[] args
         )
         => _args = args.ToList();
+
+    /// <summary>
+    /// add command options to the syntax
+    /// <para>can be called multiple times, addition is unique</para>
+    /// </summary>
+    /// <param name="optSet">options set</param>
+    public void AddOptions(OptSet? optSet)
+    {
+        if (optSet is null) return;
+        foreach (var opt in optSet.Opts)
+        {
+            if (!_args.Contains(opt))
+                _args.Add(opt);
+        }
+    }
 
     /// <summary>
     /// array get accessor
     /// </summary>
     /// <param name="index">argument index (from 0)</param>
     /// <returns>argument value at index</returns>
-    public Arg this[int index] => _args[index];
+    public IArg this[int index] => _args[index];
 
     /// <summary>
     /// args count

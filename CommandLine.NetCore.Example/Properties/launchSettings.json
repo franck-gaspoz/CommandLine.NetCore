@@ -28,6 +28,18 @@
     "help -h": {
       "commandName": "Project",
       "commandLineArgs": "help -h"
+    },
+    "help -h -v": {
+      "commandName": "Project",
+      "commandLineArgs": "help -h -v"
+    },
+    "help -h --info -v": {
+      "commandName": "Project",
+      "commandLineArgs": "help -h --info -v --parser-logging Debug"
+    },
+    "help -h --info": {
+      "commandName": "Project",
+      "commandLineArgs": "help -h --info --parser-logging Debug"
     }
   }
 }

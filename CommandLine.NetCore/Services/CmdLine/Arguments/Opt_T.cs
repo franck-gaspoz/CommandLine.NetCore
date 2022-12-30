@@ -38,7 +38,7 @@ public class Opt<T> : Arg, IOpt
 
             values = $"{{{string.Join(',', valueSet)}}}";
         }
-        return $"Opt<{typeof(T).Name}>{PrefixedName}{values}";
+        return $"Opt{(IsOptional ? "?" : string.Empty)}<{typeof(T).Name}>{PrefixedName}{values}";
     }
 
     /// <summary>
@@ -161,4 +161,8 @@ public class Opt<T> : Arg, IOpt
     /// returns the prefix allowed for this option
     /// </summary>
     public string Prefix => Parser.GetPrefixFromOptName(Name);
+
+    /// <inheritdoc/>
+    public void SetIsOptional(bool isOptional)
+        => IsOptional = isOptional;
 }

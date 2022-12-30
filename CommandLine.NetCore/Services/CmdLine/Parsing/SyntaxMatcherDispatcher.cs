@@ -22,6 +22,7 @@ public sealed class SyntaxMatcherDispatcher
     private readonly Parser _parser;
     private readonly GlobalSettings _globalSettings;
     private readonly IAnsiVtConsole _console;
+    private OptSet? _options;
 
     /// <summary>
     /// count of items in map
@@ -58,6 +59,17 @@ public sealed class SyntaxMatcherDispatcher
     }
 
     /// <summary>
+    /// add options to command
+    /// </summary>
+    /// <param name="options">options set</param>
+    /// <returns>this</returns>
+    public SyntaxMatcherDispatcher Options(params IOpt[] options)
+    {
+        _options = new OptSet(options);
+        return this;
+    }
+
+    /// <summary>
     /// run the syntax matching the given args or produces an error result
     /// </summary>
     /// <param name="args">set of command line arguments</param>
@@ -77,7 +89,7 @@ public sealed class SyntaxMatcherDispatcher
                 );
 
         List<CommandResult> tryCommandsResults = new();
-        List<SyntaxExecutionDispatchMapItem> matchingSyntaxes = new();
+        List<MatchingSyntax> matchingSyntaxes = new();
         List<string> parseErrors = new();
 
         foreach (var syntaxMatcherDispatcher in _maps)
@@ -91,7 +103,10 @@ public sealed class SyntaxMatcherDispatcher
 
             var (hasErrors, errors) = _parser.MatchSyntax(
                 args,
-                syntaxMatcherDispatcher.Syntax);
+                syntaxMatcherDispatcher.Syntax,
+                _options,
+                out var settedOptions
+                );
 
             if (logTrace)
             {
@@ -105,7 +120,8 @@ public sealed class SyntaxMatcherDispatcher
 
             if (!hasErrors)
             {
-                matchingSyntaxes.Add(syntaxMatcherDispatcher);
+                matchingSyntaxes.Add(
+                    new(syntaxMatcherDispatcher, settedOptions));
             }
             else
             {
@@ -138,6 +154,7 @@ public sealed class SyntaxMatcherDispatcher
             foreach (var syntaxExecutionDispatchMapItem in matchingSyntaxes)
             {
                 parseErrors.Add(syntaxExecutionDispatchMapItem
+                    .SyntaxExecutionDispatchMapItem
                     .Syntax
                     .ToSyntax());
             }
@@ -151,8 +168,11 @@ public sealed class SyntaxMatcherDispatcher
         var selectedSyntaxExecutionDispatchMapItem = matchingSyntaxes
             .First();
         var operationResult = selectedSyntaxExecutionDispatchMapItem
+            .SyntaxExecutionDispatchMapItem
             .Delegate!
-            .Invoke(selectedSyntaxExecutionDispatchMapItem.Syntax);
+            .Invoke(selectedSyntaxExecutionDispatchMapItem
+                .SyntaxExecutionDispatchMapItem
+                .Syntax);
         return new CommandResult(
             operationResult.ExitCode,
             operationResult.Result
