@@ -2,21 +2,20 @@
 
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.Services;
-using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using static CommandLine.NetCore.Services.CmdLine.Globals;
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 using cons = AnsiVtConsole.NetCore;
 
-namespace CommandLine.NetCore;
+namespace CommandLine.NetCore.Services.CmdLine;
 
 /// <summary>
 /// command line interface

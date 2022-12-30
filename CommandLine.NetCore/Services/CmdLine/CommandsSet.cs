@@ -1,4 +1,5 @@
 ﻿using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,4 @@
-﻿using static CommandLine.NetCore.Services.CmdLine.Globals;
+﻿using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 namespace CommandLine.NetCore.Services.CmdLine;
 

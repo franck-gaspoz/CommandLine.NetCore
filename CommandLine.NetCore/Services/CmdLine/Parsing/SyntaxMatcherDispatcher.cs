@@ -3,19 +3,20 @@ using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Logging;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 
 /// <summary>
-/// takes grammar definitions and try run the valid one
+/// takes syntax definitions and try run the valid one
 /// </summary>
-public sealed class GrammarMatcherDispatcher
+public sealed class SyntaxMatcherDispatcher
 {
-    private readonly List<GrammarExecutionDispatchMapItem> _maps = new();
+    private readonly List<SyntaxExecutionDispatchMapItem> _maps = new();
     private readonly Texts _texts;
     private readonly Parser _parser;
     private readonly GlobalSettings _globalSettings;
@@ -33,7 +34,7 @@ public sealed class GrammarMatcherDispatcher
     /// <param name="parser">parser</param>
     /// <param name="globalSettings">setted global options</param>
     /// <param name="console">console</param>
-    public GrammarMatcherDispatcher(
+    public SyntaxMatcherDispatcher(
         Texts texts,
         Parser parser,
         GlobalSettings globalSettings,
@@ -42,25 +43,25 @@ public sealed class GrammarMatcherDispatcher
             = (texts, parser, globalSettings, console);
 
     /// <summary>
-    /// build a grammar from arguments grammars set
+    /// build a syntax from arguments syntaxes set
     /// </summary>
-    /// <param name="grammar">arguments grammars</param>
-    /// <returns>a grammar object</returns>
-    public GrammarExecutionDispatchMapItem For(params Arg[] grammar)
+    /// <param name="syntax">arguments syntaxes</param>
+    /// <returns>a syntax object</returns>
+    public SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
     {
-        var dispatchMap = new GrammarExecutionDispatchMapItem(
+        var dispatchMap = new SyntaxExecutionDispatchMapItem(
             this,
-            new Grammar(grammar));
+            new Syntax(syntax));
         _maps.Add(dispatchMap);
         return dispatchMap;
     }
 
     /// <summary>
-    /// run the grammar matching the given args or produces an error result
+    /// run the syntax matching the given args or produces an error result
     /// </summary>
     /// <param name="args">set of command line arguments</param>
     /// <returns>command execution result</returns>
-    /// <exception cref="InvalidOperationException">the grammar matcher dispatcher delegate action is not defined</exception>
+    /// <exception cref="InvalidOperationException">the syntax matcher dispatcher delegate action is not defined</exception>
     public CommandResult With(ArgSet args)
     {
         var logLevel = _globalSettings
@@ -75,35 +76,35 @@ public sealed class GrammarMatcherDispatcher
                 );
 
         List<CommandResult> tryCommandsResults = new();
-        List<GrammarExecutionDispatchMapItem> matchingGrammars = new();
+        List<SyntaxExecutionDispatchMapItem> matchingSyntaxes = new();
         List<string> parseErrors = new();
 
-        foreach (var grammarMatcherDispatcher in _maps)
+        foreach (var syntaxMatcherDispatcher in _maps)
         {
-            if (grammarMatcherDispatcher.Delegate is null)
+            if (syntaxMatcherDispatcher.Delegate is null)
             {
                 throw new InvalidOperationException(
-                    _texts._("GrammarExecutionDispatchMapItemDelegateNotDefined",
-                        grammarMatcherDispatcher.Grammar.ToGrammar()));
+                    _texts._("SyntaxExecutionDispatchMapItemDelegateNotDefined",
+                        syntaxMatcherDispatcher.Syntax.ToSyntax()));
             }
 
             var (hasErrors, errors) = _parser.MatchSyntax(
                 args,
-                grammarMatcherDispatcher.Grammar);
+                syntaxMatcherDispatcher.Syntax);
 
             if (logTrace)
             {
                 Trace(
-                    grammarMatcherDispatcher
-                    .Grammar
-                    .ToGrammar() +
+                    syntaxMatcherDispatcher
+                    .Syntax
+                    .ToSyntax() +
                     $" : match={!hasErrors}"
                     );
             }
 
             if (!hasErrors)
             {
-                matchingGrammars.Add(grammarMatcherDispatcher);
+                matchingSyntaxes.Add(syntaxMatcherDispatcher);
             }
             else
             {
@@ -115,7 +116,7 @@ public sealed class GrammarMatcherDispatcher
 
         if (logTrace) Trace();
 
-        if (!matchingGrammars.Any())
+        if (!matchingSyntaxes.Any())
         {
             return new CommandResult(
                 Globals.ExitFail,
@@ -123,21 +124,21 @@ public sealed class GrammarMatcherDispatcher
                 null);
         }
 
-        if (matchingGrammars.Count > 1
+        if (matchingSyntaxes.Count > 1
             && _globalSettings
                 .SettedGlobalOptsSet
-                .Contains<ExcludeAmbiguousGrammar>())
+                .Contains<ExcludeAmbiguousSyntax>())
         {
             parseErrors.Add(
                 _texts._(
-                    "AmbiguousGrammars",
+                    "AmbiguousSyntaxes",
                     args.ToText()));
 
-            foreach (var grammarExecutionDispatchMapItem in matchingGrammars)
+            foreach (var syntaxExecutionDispatchMapItem in matchingSyntaxes)
             {
-                parseErrors.Add(grammarExecutionDispatchMapItem
-                    .Grammar
-                    .ToGrammar());
+                parseErrors.Add(syntaxExecutionDispatchMapItem
+                    .Syntax
+                    .ToSyntax());
             }
 
             return new CommandResult(
@@ -146,11 +147,11 @@ public sealed class GrammarMatcherDispatcher
                 null);
         }
 
-        var selectedGrammarExecutionDispatchMapItem = matchingGrammars
+        var selectedSyntaxExecutionDispatchMapItem = matchingSyntaxes
             .First();
-        var operationResult = selectedGrammarExecutionDispatchMapItem
+        var operationResult = selectedSyntaxExecutionDispatchMapItem
             .Delegate!
-            .Invoke(selectedGrammarExecutionDispatchMapItem.Grammar);
+            .Invoke(selectedSyntaxExecutionDispatchMapItem.Syntax);
         return new CommandResult(
             operationResult.ExitCode,
             operationResult.Result

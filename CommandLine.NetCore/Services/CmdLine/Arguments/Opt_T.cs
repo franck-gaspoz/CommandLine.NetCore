@@ -15,13 +15,13 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 [DebuggerDisplay("{DebuggerDisplay}")]
 public class Opt<T> : Arg, IOpt
 {
-    private string DebuggerDisplay => ToGrammar();
+    private string DebuggerDisplay => ToSyntax();
 
     /// <inheritdoc/>
     public bool IsOptional { get; private set; }
 
     /// <inheritdoc/>
-    public override string ToGrammar()
+    public override string ToSyntax()
     {
         var values = string.Empty;
         object? nullObj = null;

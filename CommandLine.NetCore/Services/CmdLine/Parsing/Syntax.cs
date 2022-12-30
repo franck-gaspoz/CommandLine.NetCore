@@ -1,17 +1,17 @@
 ﻿using System.Diagnostics;
 
-namespace CommandLine.NetCore.Services.CmdLine.Arguments;
+namespace CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 
 /// <summary>
-/// a command line grammar
+/// a command line syntax
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay}")]
-public sealed class Grammar
+public sealed class Syntax
 {
-    private string DebuggerDisplay => ToGrammar();
+    private string DebuggerDisplay => ToSyntax();
 
     /// <summary>
-    /// name of the grammar
+    /// name of the syntax
     /// </summary>
     public string? Name { get; private set; }
 
@@ -26,7 +26,7 @@ public sealed class Grammar
     /// build a new instance
     /// </summary>
     /// <param name="args">arguments</param>
-    public Grammar(
+    public Syntax(
         Arg[] args
         )
         => _args = args.ToList();
@@ -44,19 +44,19 @@ public sealed class Grammar
     public int Count => Args.Count;
 
     /// <summary>
-    /// Set the name of the grammar
+    /// Set the name of the syntax
     /// </summary>
     /// <param name="name">name</param>
     public void SetName(string name) => Name = name;
 
     /// <summary>
-    /// string representation of the grammar
+    /// string representation of the syntax
     /// </summary>
-    /// <returns>string representation of the grammar</returns>
-    public string ToGrammar()
+    /// <returns>string representation of the syntax</returns>
+    public string ToSyntax()
         => ((Name == null) ? "?" : Name!) +
             ": " +
-            string.Join(' ', _args.Select(x => x.ToGrammar()));
+            string.Join(' ', _args.Select(x => x.ToSyntax()));
 
     /// <summary>
     /// get index of next arg with expected value from an index

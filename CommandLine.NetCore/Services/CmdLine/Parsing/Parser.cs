@@ -1,9 +1,10 @@
 ﻿
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.Text;
 
-using static CommandLine.NetCore.Services.CmdLine.Globals;
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 
@@ -99,7 +100,7 @@ public sealed class Parser
                         position,
                         opt.Name,
                         ex.Message,
-                        opt.ToGrammar()));
+                        opt.ToSyntax()));
             }
             args.RemoveAt(index);
             expectedCount--;
@@ -147,14 +148,14 @@ public sealed class Parser
                         position,
                         param.StringValue,
                         ex.Message,
-                        param.ToGrammar()));
+                        param.ToSyntax()));
             }
         }
         args.RemoveAt(index);
     }
 
     private bool ParseArg(
-        ref int grammar_index,
+        ref int syntax_index,
         ref int position,
         List<string> args,
         List<IOpt> optionals,
@@ -184,7 +185,7 @@ public sealed class Parser
                 position += 1 + opt.ExpectedValuesCount;
                 if (!isRemainingOptional)
                 {
-                    grammar_index++;
+                    syntax_index++;
                 }
                 else
                 {
@@ -202,7 +203,7 @@ public sealed class Parser
                 else
                 {
                     optionals.Add(opt);
-                    grammar_index++;
+                    syntax_index++;
                 }
             }
         }
@@ -225,12 +226,12 @@ public sealed class Parser
                 }
 
                 position++;
-                grammar_index++;
+                syntax_index++;
             }
             else
             {
                 // type mismatch
-                errors.Add(UnknownGrammar(gram, grammar_index));
+                errors.Add(UnknownSyntax(gram, syntax_index));
                 parseBreaked = true;
             }
         }
@@ -240,39 +241,39 @@ public sealed class Parser
 
     internal (bool, List<string> errors) MatchSyntax(
         ArgSet arguments,
-        Grammar grammar
+        Syntax syntax
         )
     {
-        var grammar_index = 0;
+        var syntax_index = 0;
         var position = 0;
         var args = arguments.Args.ToList();
-        var grammarText = grammar.ToGrammar();
+        var syntaxText = syntax.ToSyntax();
         var optionals = new List<IOpt>();
         var parseBreaked = false;
         var errors = new List<string>();
         var isParsingRemainingOptions = false;
-        var grammars = new List<(bool isRemainingOptional, IArg arg)>();
+        var syntaxes = new List<(bool isRemainingOptional, IArg arg)>();
 
         while (args.Count > 0
-            && (grammar_index < grammar.Count || isParsingRemainingOptions)
+            && (syntax_index < syntax.Count || isParsingRemainingOptions)
             && !parseBreaked)
         {
-            Arg currentSyntax() => grammar[grammar_index];
+            Arg currentSyntax() => syntax[syntax_index];
             string currentArg() => args[0];
 
-            grammars.Clear();
+            syntaxes.Clear();
             if (!isParsingRemainingOptions)
-                grammars.Add((false, currentSyntax()));
+                syntaxes.Add((false, currentSyntax()));
 
-            grammars.AddRange(
+            syntaxes.AddRange(
                 optionals
                     .Select(x => (true, (IArg)x)));
 
             var hasError = false;
-            foreach (var gram in grammars)
+            foreach (var gram in syntaxes)
             {
                 hasError |= ParseArg(
-                    ref grammar_index,
+                    ref syntax_index,
                     ref position,
                     args,
                     optionals,
@@ -281,35 +282,35 @@ public sealed class Parser
                     errors);
             }
 
-            isParsingRemainingOptions = grammar_index == grammar.Count
+            isParsingRemainingOptions = syntax_index == syntax.Count
                 && optionals.Any();
 
             parseBreaked = hasError;
         }
 
-        bool RemainingGrammarIsOnlyOptional()
+        bool RemainingSyntaxIsOnlyOptional()
         {
-            var remainingGrammarIsOnlyOptional = true;
-            for (var i = grammar_index; i < grammar.Count; i++)
+            var remainingSyntaxIsOnlyOptional = true;
+            for (var i = syntax_index; i < syntax.Count; i++)
             {
-                remainingGrammarIsOnlyOptional &=
-                    grammar[grammar_index] is IOpt opt
+                remainingSyntaxIsOnlyOptional &=
+                    syntax[syntax_index] is IOpt opt
                     && opt.IsOptional;
             }
 
-            return remainingGrammarIsOnlyOptional;
+            return remainingSyntaxIsOnlyOptional;
         }
 
         if (!errors.Any())
         {
-            if (grammar_index < grammar.Count
-                && !RemainingGrammarIsOnlyOptional())
+            if (syntax_index < syntax.Count
+                && !RemainingSyntaxIsOnlyOptional())
             {
                 errors.Add(
                     MissingArguments(
-                        grammar
+                        syntax
                             .Args
-                            .ToArray()[grammar_index..],
+                            .ToArray()[syntax_index..],
                         position));
             }
 
@@ -325,8 +326,8 @@ public sealed class Parser
         if (!string.IsNullOrWhiteSpace(error))
         {
             errors.Add(
-                _texts._("ForGrammar") + " "
-                + grammarText);
+                _texts._("ForSyntax") + " "
+                + syntaxText);
         }
 
         return (!string.IsNullOrWhiteSpace(error), errors);
@@ -358,21 +359,21 @@ public sealed class Parser
 
     private string MissingArguments(Arg[] args, int atIndex)
         => _texts._("MissingArgumentsAtPosition",
-            string.Join(' ', args.Select(x => x.ToGrammar())),
+            string.Join(' ', args.Select(x => x.ToSyntax())),
             atIndex);
 
-    private string SyntaxMismatch(IArg expectedGrammar)
-        => _texts._("SyntaxMismatch", expectedGrammar.ToGrammar());
+    private string SyntaxMismatch(IArg expectedSyntax)
+        => _texts._("SyntaxMismatch", expectedSyntax.ToSyntax());
 
-    private string ParamValueError(IArg expectedGrammar, int atIndex, string foundSyntax)
+    private string ParamValueError(IArg expectedSyntax, int atIndex, string foundSyntax)
         => _texts._("ParamValueError",
-            expectedGrammar.ToGrammar(),
+            expectedSyntax.ToSyntax(),
             atIndex,
             foundSyntax);
 
-    private string UnknownGrammar(IArg arg, int atIndex)
-        => _texts._("UnknownGrammar",
-            arg.ToGrammar(),
+    private string UnknownSyntax(IArg arg, int atIndex)
+        => _texts._("UnknownSyntax",
+            arg.ToSyntax(),
             atIndex);
 
     private static string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;

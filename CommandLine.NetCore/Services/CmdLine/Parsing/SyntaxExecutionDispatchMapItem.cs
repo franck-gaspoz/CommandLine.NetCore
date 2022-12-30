@@ -2,117 +2,116 @@
 using System.Linq.Expressions;
 
 using CommandLine.NetCore.Extensions;
-using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 
 /// <summary>
-/// a grammar dispatch map
+/// a syntax dispatch map
 /// </summary>
-public sealed class GrammarExecutionDispatchMapItem
+public sealed class SyntaxExecutionDispatchMapItem
 {
     /// <summary>
-    /// name of the grammar
+    /// name of the syntax
     /// <para>is the Do method name</para>
     /// </summary>
     public string Name { get; private set; }
 
     /// <summary>
-    /// grammar spec
+    /// syntax spec
     /// </summary>
-    public Grammar Grammar { get; private set; }
+    public Syntax Syntax { get; private set; }
 
     /// <summary>
     /// execute action delegate
     /// </summary>
-    public Func<Grammar, OperationResult>? Delegate { get; private set; }
+    public Func<Syntax, OperationResult>? Delegate { get; private set; }
 
     /// <summary>
-    /// the grammar matcher dispatcher owner of this
+    /// the syntax matcher dispatcher owner of this
     /// </summary>
-    public GrammarMatcherDispatcher GrammarMatcherDispatcher { get; private set; }
+    public SyntaxMatcherDispatcher SyntaxMatcherDispatcher { get; private set; }
 
     /// <summary>
     /// build a new instance
     /// </summary>
-    /// <param name="grammarMatcherDispatcher">the grammar matcher dispatcher owner of this</param>
-    /// <param name="grammar">grammar</param>
-    public GrammarExecutionDispatchMapItem(
-        GrammarMatcherDispatcher grammarMatcherDispatcher,
-        Grammar grammar)
-        => (GrammarMatcherDispatcher, Grammar, Name)
-            = (grammarMatcherDispatcher, grammar, string.Empty);
+    /// <param name="syntaxMatcherDispatcher">the syntax matcher dispatcher owner of this</param>
+    /// <param name="syntax">syntax</param>
+    public SyntaxExecutionDispatchMapItem(
+        SyntaxMatcherDispatcher syntaxMatcherDispatcher,
+        Syntax syntax)
+        => (SyntaxMatcherDispatcher, Syntax, Name)
+            = (syntaxMatcherDispatcher, syntax, string.Empty);
 
     /// <summary>
-    /// set up delegate for this grammar execution dispatch map
+    /// set up delegate for this syntax execution dispatch map
     /// </summary>
-    /// <param name="delegate">with parameter grammar and OperationResult result delegate</param>
-    /// <returns>grammar matcher dispatcher</returns>
-    public GrammarMatcherDispatcher Do(Func<Grammar, OperationResult> @delegate)
+    /// <param name="delegate">with parameter syntax and OperationResult result delegate</param>
+    /// <returns>syntax matcher dispatcher</returns>
+    public SyntaxMatcherDispatcher Do(Func<Syntax, OperationResult> @delegate)
     {
         Delegate = @delegate;
         Name = Delegate.Method.Name;
-        Grammar.SetName(Name);
-        return GrammarMatcherDispatcher;
+        Syntax.SetName(Name);
+        return SyntaxMatcherDispatcher;
     }
 
     /// <summary>
-    /// set up delegate for this grammar execution dispatch map
+    /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method with a default command result (code ok, result null)</para>
     /// </summary>
-    /// <param name="delegate">with parameter grammar and void delegate</param>
-    /// <returns>grammar matcher dispatcher</returns>
-    public GrammarMatcherDispatcher Do(Action<Grammar> @delegate)
+    /// <param name="delegate">with parameter syntax and void delegate</param>
+    /// <returns>syntax matcher dispatcher</returns>
+    public SyntaxMatcherDispatcher Do(Action<Syntax> @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (Grammar grammar) =>
+        Delegate = (Syntax syntax) =>
         {
-            @delegate.Invoke(grammar);
+            @delegate.Invoke(syntax);
             return new();
         };
-        Grammar.SetName(Name);
-        return GrammarMatcherDispatcher;
+        Syntax.SetName(Name);
+        return SyntaxMatcherDispatcher;
     }
 
     /// <summary>
-    /// set up delegate for this grammar execution dispatch map
+    /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method with no parameter </para>
     /// <para>takes a method with a default command result (code ok, result null)</para>
     /// </summary>
     /// <param name="delegate">with no parameter and void result delegate</param>
-    /// <returns>grammar matcher dispatcher</returns>
-    public GrammarMatcherDispatcher Do(Action @delegate)
+    /// <returns>syntax matcher dispatcher</returns>
+    public SyntaxMatcherDispatcher Do(Action @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (Grammar grammar) =>
+        Delegate = (Syntax syntax) =>
         {
             @delegate.Invoke();
             return new();
         };
-        Grammar.SetName(Name);
-        return GrammarMatcherDispatcher;
+        Syntax.SetName(Name);
+        return SyntaxMatcherDispatcher;
     }
 
     /// <summary>
-    /// set up delegate for this grammar execution dispatch map
+    /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method with no parameter </para>
     /// </summary>
     /// <param name="delegate">with no parameter and void result delegate</param>
-    /// <returns>grammar matcher dispatcher</returns>
-    public GrammarMatcherDispatcher Do(Func<OperationResult> @delegate)
+    /// <returns>syntax matcher dispatcher</returns>
+    public SyntaxMatcherDispatcher Do(Func<OperationResult> @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (Grammar grammar) =>
+        Delegate = (Syntax syntax) =>
         {
             return @delegate.Invoke();
         };
-        Grammar.SetName(Name);
-        return GrammarMatcherDispatcher;
+        Syntax.SetName(Name);
+        return SyntaxMatcherDispatcher;
     }
 
     /// <summary>
-    /// set up delegate for this grammar execution dispatch map
+    /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method in a lambda unary call expression: () => methodName</para>
     /// <para>takes a called method with no parameter</para>
     /// <para>takes a called method with a default command result (code ok, result null)</para>
@@ -121,12 +120,12 @@ public sealed class GrammarExecutionDispatchMapItem
     /// a lambda unary call expression:
     /// <para>() => methodName</para>
     /// </param>
-    /// <returns>grammar matcher dispatcher</returns>
+    /// <returns>syntax matcher dispatcher</returns>
     /// <exception cref="MissingMethodException">the method was not found or is not suitable</exception>
-    public GrammarMatcherDispatcher Do(LambdaExpression expression)
+    public SyntaxMatcherDispatcher Do(LambdaExpression expression)
     {
         var (methodInfo, target) = expression.GetAnyCastDelegate();
-        var error = () => Grammar.ToGrammar()
+        var error = () => Syntax.ToSyntax()
                 + Environment.NewLine
                 + expression.ToString();
 
@@ -141,8 +140,8 @@ public sealed class GrammarExecutionDispatchMapItem
         }
 
         Name = methodInfo.Name;
-        Grammar.SetName(Name);
-        Delegate = (Grammar grammar) =>
+        Syntax.SetName(Name);
+        Delegate = (Syntax syntax) =>
         {
             var callParameters = new List<object?>();
             int argIndex;
@@ -156,7 +155,7 @@ public sealed class GrammarExecutionDispatchMapItem
                     .FirstOrDefault() is not MapArgAttribute mapArg)
                 {
                     currentParamIndex = argIndex =
-                        Grammar.GetIndexOfArgWithExpectedValueFromIndex(
+                        Syntax.GetIndexOfArgWithExpectedValueFromIndex(
                             currentParamIndex + 1);
                 }
                 else
@@ -164,7 +163,7 @@ public sealed class GrammarExecutionDispatchMapItem
                     currentParamIndex = argIndex = mapArg.ArgIndex;
                 }
 
-                var argValue = Grammar[argIndex];
+                var argValue = Syntax[argIndex];
                 callParameters.Add(argValue);
             }
 
@@ -173,6 +172,6 @@ public sealed class GrammarExecutionDispatchMapItem
             return new();
         };
 
-        return GrammarMatcherDispatcher;
+        return SyntaxMatcherDispatcher;
     }
 }

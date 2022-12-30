@@ -2,13 +2,14 @@
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using static CommandLine.NetCore.Services.CmdLine.Globals;
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 namespace CommandLine.NetCore.Services;
 

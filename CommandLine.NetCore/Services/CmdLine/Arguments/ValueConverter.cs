@@ -4,6 +4,8 @@ using System.Reflection;
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.Text;
 
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
+
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
@@ -76,7 +78,7 @@ public sealed class ValueConverter
                     _texts._("CollectionTypeHasNoMethodAdd", ptype.UnmangledName()));
             }
 
-            var values = s.SplitNotUnslashed(Globals.ParameterTypeListValuesSeparator);
+            var values = s.SplitNotUnslashed(ParameterTypeListValuesSeparator);
             foreach (var val in values)
             {
                 if (ToTypedValue(
@@ -152,18 +154,18 @@ public sealed class ValueConverter
         else if (ptype.IsEnum && ovalue is string str)
         {
             if (ptype.GetCustomAttribute<FlagsAttribute>() != null
-                && str.Contains(Globals.ParameterTypeFlagEnumValuePrefixs))
+                && str.Contains(ParameterTypeFlagEnumValuePrefixs))
             {
                 // flag enum Name
                 var fvalues = str.SplitByPrefixsNotUnslashed(
-                    Globals.ParameterTypeFlagEnumValuePrefixs);
+                    ParameterTypeFlagEnumValuePrefixs);
 
                 var flag = defaultValue ?? Activator.CreateInstance(ptype);
 
                 foreach (var fval in fvalues)
                 {
                     var val = fval[1..];
-                    var flagEnabling = fval[0] == Globals.ParameterTypeFlagEnumValuePrefixEnabled;
+                    var flagEnabling = fval[0] == ParameterTypeFlagEnumValuePrefixEnabled;
                     if (ToTypedValue(
                         val,
                         ptype,

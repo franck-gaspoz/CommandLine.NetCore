@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Settings;
 
 /// <summary>
 /// assemblies where lookup for commands and arguments

@@ -43,10 +43,10 @@ public abstract class Arg : IArg
     }
 
     /// <summary>
-    /// returns a grammar representation of this param
+    /// returns a syntax representation of this param
     /// </summary>
     /// <returns></returns>
-    public abstract string ToGrammar();
+    public abstract string ToSyntax();
 
     /// <summary>
     /// convert the value with string representation to a value of the expected type

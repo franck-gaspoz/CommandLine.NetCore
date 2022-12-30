@@ -6,8 +6,8 @@
 public interface IArg
 {
     /// <summary>
-    /// returns a grammar representation of this param
+    /// returns a syntax representation of this param
     /// </summary>
     /// <returns></returns>
-    string ToGrammar();
+    string ToSyntax();
 }

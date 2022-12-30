@@ -1,4 +1,6 @@
-﻿namespace CommandLine.NetCore.Example;
+﻿using CommandLine.NetCore.Services.CmdLine;
+
+namespace CommandLine.NetCore.Example;
 
 public class Program
 {

@@ -4,6 +4,7 @@ using AnsiVtConsole.NetCore;
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -47,7 +48,7 @@ public abstract class Command
 
     private readonly ArgBuilder _argBuilder;
 
-    private GrammarMatcherDispatcher? _grammarMatcherDispatcher;
+    private SyntaxMatcherDispatcher? _syntaxMatcherDispatcher;
 
     /// <summary>
     /// construit une instance de commande
@@ -216,37 +217,37 @@ public abstract class Command
 
     #endregion
 
-    #region grammar helpers
+    #region syntax helpers
 
     /// <summary>   
-    /// build a grammar from arguments grammars set
+    /// build a syntax from arguments syntaxes set
     /// </summary>
-    /// <param name="grammar">arguments grammars</param>
-    /// <returns>a grammar dispatcher map item</returns>
-    protected GrammarExecutionDispatchMapItem For(params Arg[] grammar)
+    /// <param name="syntax">arguments syntaxes</param>
+    /// <returns>a syntax dispatcher map item</returns>
+    protected SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
     {
-        if (_grammarMatcherDispatcher is null)
+        if (_syntaxMatcherDispatcher is null)
         {
-            _grammarMatcherDispatcher = new(
+            _syntaxMatcherDispatcher = new(
                 Texts,
                 Parser,
                 GlobalSettings,
                 Console);
         }
 
-        if (_grammarMatcherDispatcher.Count == 0)
-            AddHelpAboutCommandGrammar(_grammarMatcherDispatcher);
+        if (_syntaxMatcherDispatcher.Count == 0)
+            AddHelpAboutCommandSyntax(_syntaxMatcherDispatcher);
 
-        return _grammarMatcherDispatcher.For(grammar);
+        return _syntaxMatcherDispatcher.For(syntax);
     }
 
-    private void AddHelpAboutCommandGrammar(GrammarMatcherDispatcher grammarMatcherDispatcher)
-        => grammarMatcherDispatcher
+    private void AddHelpAboutCommandSyntax(SyntaxMatcherDispatcher syntaxMatcherDispatcher)
+        => syntaxMatcherDispatcher
             .For(
                 Opt("h"))
-                    .Do(HelpAboutCommandGrammar);
+                    .Do(HelpAboutCommandSyntax);
 
-    private OperationResult HelpAboutCommandGrammar() =>
+    private OperationResult HelpAboutCommandSyntax() =>
         RunCommand(
             "help",
             ClassNameToCommandName());

@@ -2,17 +2,15 @@
 
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.Services;
 using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using static CommandLine.NetCore.Services.CmdLine.Globals;
 
 namespace CommandLine.NetCore.Commands.CmdLine;
 
@@ -54,11 +52,13 @@ internal sealed class Help : Command
 
     /// <inheritdoc/>
     protected override CommandResult Execute(ArgSet args) =>
-        For().Do(DumpHelpForAllCommands)
-        .For(Param()).Do(DumpCommandHelp)
+        For()
+            .Do(DumpHelpForAllCommands)
+        .For(Param())
+            .Do(() => DumpCommandHelp)
         .With(args);
 
-    private OperationResult DumpHelpForAllCommands(Grammar grammar)
+    private void DumpHelpForAllCommands()
     {
         OutputAppTitle();
 
@@ -76,16 +76,14 @@ internal sealed class Help : Command
         DumpGlobalOptList();
 
         CommandEnd();
-
-        return new(ExitOk);
     }
 
-    private OperationResult DumpCommandHelp(Grammar grammar)
+    private void DumpCommandHelp(Param comandName)
     {
         OutputAppTitle();
 
         var command = _commandsSet.GetCommand(
-            ((Param<string>)grammar[0]).Value!);
+            comandName.Value!);
 
         if (command.GetLongDescriptions(out var longDescs))
             DumpSyntaxes(command, longDescs);
@@ -93,8 +91,6 @@ internal sealed class Help : Command
             Console.Out.WriteLine(command.Name + StOff);
 
         CommandEnd();
-
-        return new(ExitOk);
     }
 
     private void CommandEnd()

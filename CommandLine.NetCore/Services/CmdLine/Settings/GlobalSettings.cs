@@ -1,8 +1,7 @@
-﻿
-using CommandLine.NetCore.Services.CmdLine;
+﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
-namespace CommandLine.NetCore.Services;
+namespace CommandLine.NetCore.Services.CmdLine.Settings;
 
 /// <summary>
 /// global settings of the command line engine

@@ -1,4 +1,4 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine;
+﻿namespace CommandLine.NetCore.Services.CmdLine.Settings;
 
 /// <summary>
 /// command line core globals

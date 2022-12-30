@@ -1,6 +1,8 @@
 ﻿
 using CommandLine.NetCore.GlobalOpts;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 
 using Microsoft.Extensions.DependencyInjection;
 

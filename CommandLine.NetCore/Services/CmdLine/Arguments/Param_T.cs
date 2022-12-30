@@ -13,10 +13,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 [DebuggerDisplay("{DebuggerDisplay}")]
 public class Param<T> : Arg, IParam
 {
-    private string DebuggerDisplay => ToGrammar();
+    private string DebuggerDisplay => ToSyntax();
 
     /// <inheritdoc/>
-    public override string ToGrammar()
+    public override string ToSyntax()
     {
         var val = Value.ToText();
         return $"Param<{typeof(T).Name}>{val}";
