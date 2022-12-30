@@ -130,17 +130,13 @@ public abstract class Command
         }
 
         texts = new List<KeyValuePair<string, string>>();
-        foreach (var desc in optDescs.GetChildren())
+        foreach (var optDesc in optDescs.GetChildren())
         {
-            var optDesc = desc.GetChildren().FirstOrDefault();
-            if (optDesc is not null)
-            {
-                texts.Add(
-                    new KeyValuePair<string, string>(
-                        desc.Key,
-                        desc.Value ?? string.Empty
-                    ));
-            }
+            texts.Add(
+                new KeyValuePair<string, string>(
+                    optDesc.Key,
+                    optDesc.Value ?? string.Empty
+                ));
         }
         return true;
     }
