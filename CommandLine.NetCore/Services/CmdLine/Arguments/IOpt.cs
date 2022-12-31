@@ -47,7 +47,7 @@ public interface IOpt : IArg
     /// <summary>
     /// true if option is optional and present in the parsed syntax
     /// </summary>
-    public bool IsSetted { get; }
+    bool IsSetted { get; }
 
     /// <summary>
     /// change the is optional value
@@ -60,4 +60,16 @@ public interface IOpt : IArg
     /// </summary>
     /// <param name="isSetted">is setted</param>
     void SetIsSetted(bool isSetted);
+
+    /// <summary>
+    /// syntax as text
+    /// </summary>
+    /// <returns>text</returns>
+    string ToText();
+
+    /// <summary>
+    /// syntax as string arguments
+    /// </summary>
+    /// <returns>string arguments array</returns>
+    public string[] ToArgs();
 }

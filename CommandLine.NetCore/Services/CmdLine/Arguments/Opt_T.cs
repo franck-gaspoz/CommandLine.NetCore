@@ -31,6 +31,32 @@ public class Opt<T> : Arg, IOpt
     }
 
     /// <inheritdoc/>
+    public string ToText()
+    {
+        var text = PrefixedName;
+        var values
+            = Values.Where(x => x is not null)
+                .Select(x => x.ToText())
+                .ToList();
+
+        if (values.Any())
+            text += " " + string.Join(" ", values);
+
+        return text;
+    }
+
+    /// <inheritdoc/>
+    public string[] ToArgs()
+    {
+        var values
+            = Values.Where(x => x is not null)
+                .Select(x => x.ToText())
+                .ToList();
+        values.Insert(0, PrefixedName);
+        return values.ToArray();
+    }
+
+    /// <inheritdoc/>
     public override string ToSyntax()
     {
         var values = string.Empty;

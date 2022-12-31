@@ -270,12 +270,24 @@ public abstract class Command
         => syntaxMatcherDispatcher
             .For(
                 Opt("h"))
-                    .Do(HelpAboutCommandSyntax);
+                    .Do(HelpAboutCommandSyntax)
+                    .Options(syntaxMatcherDispatcher.OptSet);
 
-    private OperationResult HelpAboutCommandSyntax() =>
-        RunCommand(
-            "help",
-            ClassNameToCommandName());
+    private OperationResult HelpAboutCommandSyntax(Syntax syntax)
+    {
+        var args =
+            new List<string>{
+                "help" ,
+                ClassNameToCommandName() };
+
+        if (syntax.OptSet is not null)
+        {
+            foreach (var opt in syntax.OptSet.Opts)
+                args.AddRange(opt.ToArgs());
+        }
+
+        return RunCommand(args.ToArray());
+    }
 
     /// <summary>
     /// run a command from command line arguments

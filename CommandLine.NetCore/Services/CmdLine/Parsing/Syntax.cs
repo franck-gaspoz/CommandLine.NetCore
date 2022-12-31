@@ -16,6 +16,11 @@ public sealed class Syntax
     public string? Name { get; private set; }
 
     /// <summary>
+    /// options set
+    /// </summary>
+    public OptSet? OptSet { get; private set; }
+
+    /// <summary>
     /// arguments
     /// </summary>
     public IReadOnlyCollection<IArg> Args => _args;
@@ -38,6 +43,7 @@ public sealed class Syntax
     /// <param name="optSet">options set</param>
     public void AddOptions(OptSet? optSet)
     {
+        OptSet = optSet;
         if (optSet is null) return;
         foreach (var opt in optSet.Opts)
         {

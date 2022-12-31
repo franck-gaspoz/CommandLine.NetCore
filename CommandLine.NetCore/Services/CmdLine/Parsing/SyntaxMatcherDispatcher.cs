@@ -22,7 +22,11 @@ public sealed class SyntaxMatcherDispatcher
     private readonly Parser _parser;
     private readonly GlobalSettings _globalSettings;
     private readonly IAnsiVtConsole _console;
-    private OptSet? _options;
+
+    /// <summary>
+    /// command options
+    /// </summary>
+    public OptSet? OptSet { get; private set; }
 
     /// <summary>
     /// count of items in map
@@ -65,7 +69,18 @@ public sealed class SyntaxMatcherDispatcher
     /// <returns>this</returns>
     public SyntaxMatcherDispatcher Options(params IOpt[] options)
     {
-        _options = new OptSet(options);
+        OptSet = new OptSet(options);
+        return this;
+    }
+
+    /// <summary>
+    /// add options to command
+    /// </summary>
+    /// <param name="optSet">options set</param>
+    /// <returns>this</returns>
+    public SyntaxMatcherDispatcher Options(OptSet? optSet)
+    {
+        OptSet = optSet;
         return this;
     }
 
@@ -106,7 +121,7 @@ public sealed class SyntaxMatcherDispatcher
             var (hasErrors, errors) = _parser.MatchSyntax(
                 args,
                 syntaxMatcherDispatcher.Syntax,
-                _options,
+                OptSet,
                 out var settedOptions
                 );
 
@@ -169,12 +184,14 @@ public sealed class SyntaxMatcherDispatcher
 
         var selectedSyntaxExecutionDispatchMapItem = matchingSyntaxes
             .First();
+
         var operationResult = selectedSyntaxExecutionDispatchMapItem
             .SyntaxExecutionDispatchMapItem
             .Delegate!
             .Invoke(selectedSyntaxExecutionDispatchMapItem
                 .SyntaxExecutionDispatchMapItem
                 .Syntax);
+
         return new CommandResult(
             operationResult.ExitCode,
             operationResult.Result
