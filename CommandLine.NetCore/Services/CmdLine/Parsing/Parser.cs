@@ -182,6 +182,8 @@ public sealed class Parser
                 {
                     parseBreaked = true;
                 }
+                else
+                    opt.SetIsSetted(true);
 
                 position += 1 + opt.ExpectedValuesCount;
                 if (!isRemainingOptional)

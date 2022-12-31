@@ -45,8 +45,19 @@ public interface IOpt : IArg
     bool IsOptional { get; }
 
     /// <summary>
+    /// true if option is optional and present in the parsed syntax
+    /// </summary>
+    public bool IsSetted { get; }
+
+    /// <summary>
     /// change the is optional value
     /// </summary>
-    /// <param name="isOptional"></param>
+    /// <param name="isOptional">is optionnal</param>
     void SetIsOptional(bool isOptional);
+
+    /// <summary>
+    /// change the is setted value
+    /// </summary>
+    /// <param name="isSetted">is setted</param>
+    void SetIsSetted(bool isSetted);
 }

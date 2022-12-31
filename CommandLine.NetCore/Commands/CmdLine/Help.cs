@@ -72,7 +72,7 @@ internal sealed class Help : Command
         CommandEnd();
     }
 
-    private void DumpCommandHelp(Param comandName)
+    private void DumpCommandHelp(Param comandName, Opt v, Opt info)
     {
         OutputAppTitle();
 

@@ -81,8 +81,10 @@ public sealed class SyntaxMatcherDispatcher
             .SettedGlobalOptsSet
             .TryGetByType<ParserLogging>(out var parserLogging) ?
                 parserLogging.GetValue() : LogLevel.Error;
+
         var logTrace = logLevel == LogLevel.Trace
             || logLevel == LogLevel.Debug;
+
         void Trace(string? text = "")
             => _console.Logger.Log(
                     _console.Colors.Debug + text

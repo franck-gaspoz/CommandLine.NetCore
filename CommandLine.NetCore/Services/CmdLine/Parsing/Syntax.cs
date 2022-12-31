@@ -83,7 +83,7 @@ public sealed class Syntax
         for (var i = fromIndex; i < _args.Count; i++)
         {
             var arg = _args[i];
-            if ((arg is IOpt opt && opt.ExpectedValuesCount > 0)
+            if ((arg is IOpt opt)
                 || (arg is IParam param && param.IsExpectingValue))
             {
                 return i;

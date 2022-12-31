@@ -40,6 +40,14 @@
     "help -h --info": {
       "commandName": "Project",
       "commandLineArgs": "help -h --info --parser-logging Debug"
+    },
+    "help help --info -v": {
+      "commandName": "Project",
+      "commandLineArgs": "help help --info -v --parser-logging Debug"
+    },
+    "help help": {
+      "commandName": "Project",
+      "commandLineArgs": "help help --parser-logging Debug"
     }
   }
 }
