@@ -43,7 +43,7 @@ internal sealed class Help : Command
     protected override CommandResult Execute(ArgSet args) =>
 
         For()
-            .Do(DumpHelpForAllCommands)
+            .Do(() => DumpHelpForAllCommands)
 
         .For(Param())
             .Do(() => DumpCommandHelp)
@@ -52,7 +52,7 @@ internal sealed class Help : Command
 
         .With(args);
 
-    private void DumpHelpForAllCommands()
+    private void DumpHelpForAllCommands(Opt v, Opt info)
     {
         OutputAppTitle();
 
@@ -69,7 +69,7 @@ internal sealed class Help : Command
         OutputSectionTitle(Texts._("GlobalOptions"));
         DumpGlobalOptList();
 
-        CommandEnd();
+        CommandEnd(info.IsSetted);
     }
 
     private void DumpCommandHelp(Param comandName, Opt v, Opt info)
@@ -87,7 +87,7 @@ internal sealed class Help : Command
         if (command.GetOptionsDescriptions(out var optDescs))
             DumpCommandOptions(optDescs);
 
-        CommandEnd();
+        CommandEnd(info.IsSetted);
     }
 
     private void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
@@ -98,8 +98,9 @@ internal sealed class Help : Command
             DumpOpt(optDesc, true);
     }
 
-    private void CommandEnd()
+    private void CommandEnd(bool info)
     {
+        if (!info) return;
         Console.Out.WriteLine();
         DumpInformationalData();
         Sep();
