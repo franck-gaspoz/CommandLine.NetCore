@@ -248,6 +248,9 @@ Do(LambdaExpression expression)
 Options(params IOpt[] options)
 ```
 * the method **`With`** launch the command executing process. First command line parsing, then syntax matching, then operation dispatch
+```csharp
+With(ArgSet args)
+```
 
 ### Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`:
 
@@ -270,6 +273,17 @@ internal sealed class Help : Command
         // parse and run
         .With(args);
 }
+
+private void DumpCommandHelp(Param comandName, Opt v, Opt info)
+{
+// ...
+}
+
+private void DumpHelpForAllCommands(Opt v, Opt info)
+{
+// ...
+}
+
 ```
 
 ### Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`:
