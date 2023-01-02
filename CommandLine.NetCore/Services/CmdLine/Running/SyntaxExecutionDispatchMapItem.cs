@@ -48,7 +48,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// <summary>
     /// set up delegate for this syntax execution dispatch map
     /// </summary>
-    /// <param name="delegate">with parameter syntax and OperationResult result delegate</param>
+    /// <param name="delegate">with parameter operation context and OperationResult result delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
     public SyntaxMatcherDispatcher Do(Func<OperationContext, OperationResult> @delegate)
     {
