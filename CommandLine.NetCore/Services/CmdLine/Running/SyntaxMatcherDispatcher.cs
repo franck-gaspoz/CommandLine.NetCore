@@ -5,12 +5,13 @@ using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Logging;
 
-namespace CommandLine.NetCore.Services.CmdLine.Parsing;
+namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
 /// takes syntax definitions and try run the valid one
@@ -188,9 +189,13 @@ public sealed class SyntaxMatcherDispatcher
         var operationResult = selectedSyntaxExecutionDispatchMapItem
             .SyntaxExecutionDispatchMapItem
             .Delegate!
-            .Invoke(selectedSyntaxExecutionDispatchMapItem
-                .SyntaxExecutionDispatchMapItem
-                .Syntax);
+            .Invoke(
+                new OperationContext(
+                    selectedSyntaxExecutionDispatchMapItem
+                        .SyntaxExecutionDispatchMapItem
+                        .Syntax,
+                    OptSet,
+                    this));
 
         return new CommandResult(
             operationResult.ExitCode,

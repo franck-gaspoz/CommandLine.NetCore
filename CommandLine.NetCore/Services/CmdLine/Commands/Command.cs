@@ -5,6 +5,7 @@ using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Running;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
@@ -273,16 +274,16 @@ public abstract class Command
                     .Do(HelpAboutCommandSyntax)
                     .Options(syntaxMatcherDispatcher.OptSet);
 
-    private OperationResult HelpAboutCommandSyntax(Syntax syntax)
+    private OperationResult HelpAboutCommandSyntax(OperationContext context)
     {
         var args =
             new List<string>{
                 "help" ,
                 ClassNameToCommandName() };
 
-        if (syntax.OptSet is not null)
+        if (context.OptSet is not null)
         {
-            foreach (var opt in syntax.OptSet.Opts)
+            foreach (var opt in context.OptSet.Opts)
                 args.AddRange(opt.ToArgs());
         }
 

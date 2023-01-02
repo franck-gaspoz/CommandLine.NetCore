@@ -4,8 +4,9 @@ using System.Linq.Expressions;
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Parsing;
 
-namespace CommandLine.NetCore.Services.CmdLine.Parsing;
+namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
 /// a syntax dispatch map
@@ -26,7 +27,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// <summary>
     /// execute action delegate
     /// </summary>
-    public Func<Syntax, OperationResult>? Delegate { get; private set; }
+    public Func<OperationContext, OperationResult>? Delegate { get; private set; }
 
     /// <summary>
     /// the syntax matcher dispatcher owner of this
@@ -49,7 +50,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate">with parameter syntax and OperationResult result delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    public SyntaxMatcherDispatcher Do(Func<Syntax, OperationResult> @delegate)
+    public SyntaxMatcherDispatcher Do(Func<OperationContext, OperationResult> @delegate)
     {
         Delegate = @delegate;
         Name = Delegate.Method.Name;
@@ -61,14 +62,14 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method with a default command result (code ok, result null)</para>
     /// </summary>
-    /// <param name="delegate">with parameter syntax and void delegate</param>
+    /// <param name="delegate">with parameter operation context and void delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    public SyntaxMatcherDispatcher Do(Action<Syntax> @delegate)
+    public SyntaxMatcherDispatcher Do(Action<OperationContext> @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (Syntax syntax) =>
+        Delegate = (OperationContext context) =>
         {
-            @delegate.Invoke(syntax);
+            @delegate.Invoke(context);
             return new();
         };
         Syntax.SetName(Name);
@@ -85,7 +86,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     public SyntaxMatcherDispatcher Do(Action @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (Syntax syntax) =>
+        Delegate = (OperationContext context) =>
         {
             @delegate.Invoke();
             return new();
@@ -103,7 +104,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     public SyntaxMatcherDispatcher Do(Func<OperationResult> @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (Syntax syntax) =>
+        Delegate = (OperationContext context) =>
         {
             return @delegate.Invoke();
         };
@@ -142,7 +143,7 @@ public sealed class SyntaxExecutionDispatchMapItem
 
         Name = methodInfo.Name;
         Syntax.SetName(Name);
-        Delegate = (Syntax syntax) =>
+        Delegate = (OperationContext context) =>
         {
             var callParameters = new List<object?>();
             int argIndex;
