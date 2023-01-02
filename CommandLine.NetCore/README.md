@@ -255,6 +255,7 @@ With(ArgSet args)
 ### Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`:
 
 ```csharp
+// command syntax: help [commandName] [-v] [--info]
 internal sealed class Help : Command
 {
     protected override CommandResult Execute(ArgSet args) =>
@@ -289,6 +290,7 @@ private void DumpHelpForAllCommands(Opt v, Opt info)
 ### Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`:
 
 ```csharp
+// syntax: get-info (env -l) | (env {varName}) | console | system | --all
 internal sealed class GetInfo : Command
 {
     protected override CommandResult Execute(ArgSet args) =>
