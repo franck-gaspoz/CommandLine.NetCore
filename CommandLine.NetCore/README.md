@@ -288,18 +288,18 @@ internal sealed class Help : Command
 
         // parse and run
         .With(args);
-}
 
-private void DumpCommandHelp(Param commandName, Opt v, Opt info)
-{
-// ...
-}
+    
+    private void DumpCommandHelp(Param commandName, Opt v, Opt info)
+    {
+    // ...
+    }
 
-private void DumpHelpForAllCommands(Opt v, Opt info)
-{
-// ...
+    private void DumpHelpForAllCommands(Opt v, Opt info)
+    {
+    // ...
+    }
 }
-
 ```
 
 ### Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`:
@@ -340,6 +340,11 @@ internal sealed class GetInfo : Command
 
         // parse and run
         .With(args);
+
+    private void DumpEnvVar(Param envVarName)
+    {
+    // ...
+    }
 }
 ```
 
