@@ -209,7 +209,7 @@ several letters are prefixed by `--`
 
 ## 4. Implementing a command
 
-A command specification and implementation is definied in a class that inherits from `CommandLine.NetCore.Services.CmdLine.Commands.Command`.
+A command specification and implementation is defined in a class that inherits from `CommandLine.NetCore.Services.CmdLine.Commands.Command`.
 
 * the name of the command is `kebab case` from the name of the class (in this case **GetInfo** declares the **get-info** command)
 * the command class msut have a constructor with parameter `Dependencies`. These classes are instantiated by the **dependency injector**,
