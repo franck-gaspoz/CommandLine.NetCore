@@ -67,7 +67,7 @@ public static int Main(string[] args)
 That leads to the loading of any command line components like global arguments, commands and help settings
 from both the library core and your own console app.
 
-## 2. Test the integrated **help** command:
+## 2. Testing the integrated **help** command:
 
 Any console application built with the library **ComandLine.NetCore** implements by 
 default a command named **`help`** that dump any available help about commands that are 
@@ -87,7 +87,7 @@ get help about the command help:
 ./CommandLine.NetCore.Example.exe help help
 ```
 
-## 3. Configure the library and a console application built with it
+## 3. Configuring the library and a console application built with it
 
 The library settings provides the description of the application and of the commands, and also the translation of texts.
 You should override these settings according to your needs.
