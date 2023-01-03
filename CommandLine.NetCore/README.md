@@ -207,24 +207,24 @@ example of the global argument **s** :
 by convention (POSIX), single letter arguments are prefixed by `-`, whereas arguments with
 several letters are prefixed by `--`
 
-## 4. Implement a command
+## 4. Implementing a command
 
-A command specification and implementation is definied is a class that inherits from `CommandLine.NetCore.Services.CmdLine.Commands.Command`.
+A command specification and implementation is definied in a class that inherits from `CommandLine.NetCore.Services.CmdLine.Commands.Command`.
 
 * the name of the command is `kebab case` from the name of the class (in this case **GetInfo** declares the **get-info** command)
 * the command class msut have a constructor with parameter `Dependencies`. These classes are instantiated by the **dependency injector**,
 thus any registered dependency can be added as a constructor parameter
-* the command class must implements the method 
-```csharp
-CommandResult Execute(ArgSet args)
-```
+* the command class must implements the method:
+    ```csharp
+    CommandResult Execute(ArgSet args)
+    ```
 * the method `Execute` declares the syntaxes of the command and the related implementations
 * the method **`For`** declares a command syntax:
-```csharp
-For(params Arg[] syntax)
-```
-- the list of args are specifing the command syntax
-    - an `Arg` is either an `option` either a `parameter`. Their grammar is defined as this:
+    ```csharp
+    For(params Arg[] syntax)
+    ```
+- the list of arguments are specifing the command syntax
+    - an `Arg` is either an `option` or a `parameter`. Their grammar is defined as this:
         - `Option ::= [-|--]{optionName}[value0..valuen]`
             - options can be expected or optionnal
             - can have from 0 to n values of a type `T`, where T can be any scalar type, a collection of scalar types (with `,` as separator) or an Enum            
@@ -243,29 +243,29 @@ For(params Arg[] syntax)
             - `Param<T>()` builds a parameter that expect a value that must be convertible to type `T`. For instance, `Param<int>()` builds a parameter that expect a value of type `int`, like in syntax: `123`
             - `Param("color")` builds a parameter that is expected and being the syntax: `color`
             
-* the method **`Do`** chained to a **For** indicates the method that must be executed if the syntax match the command line args
-```csharp
-// with no parameter and void result delegate
-Do(Action @delegate)
-// with no parameter and void result delegate
-Do(Func<OperationResult> @delegate)
-// with parameter operation context and void delegate
-Do(Action<OperationContext> @delegate)
-// with parameter operation context and OperationResult result delegate
-Do(Func<OperationContext, OperationResult> @delegate)
-// takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
-// Allows to map command arguments to method parameters and operation context
-Do(LambdaExpression expression)
-```
+* the method **`Do`** chained to a **For** indicates the method that must be executed if the syntax match the command line args:
+    ```csharp
+    // with no parameter and void result delegate
+    Do(Action @delegate)
+    // with no parameter and void result delegate
+    Do(Func<OperationResult> @delegate)
+    // with parameter operation context and void delegate
+    Do(Action<OperationContext> @delegate)
+    // with parameter operation context and OperationResult result delegate
+    Do(Func<OperationContext, OperationResult> @delegate)
+    // takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
+    // Allows to map command arguments to method parameters and operation context
+    Do(LambdaExpression expression)
+    ```
 * methods **For** can be chained
-* the method **`Options`** can be chained to a **For**. This method allows to declares the command options
-```csharp
-Options(params IOpt[] options)
-```
-* the method **`With`** launch the command executing process. First command line parsing, then syntax matching, then operation dispatch
-```csharp
-With(ArgSet args)
-```
+* the method **`Options`** can be chained to a **For**. This method allows to declares the command options:
+    ```csharp
+    Options(params IOpt[] options)
+    ```
+* the method **`With`** launch the command executing process. First command line parsing, then syntax matching, then operation dispatch:
+    ```csharp
+    With(ArgSet args)
+    ```
 
 ### Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`:
 
@@ -290,7 +290,7 @@ internal sealed class Help : Command
         .With(args);
 }
 
-private void DumpCommandHelp(Param comandName, Opt v, Opt info)
+private void DumpCommandHelp(Param commandName, Opt v, Opt info)
 {
 // ...
 }
