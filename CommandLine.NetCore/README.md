@@ -292,12 +292,12 @@ internal sealed class Help : Command
     
     private void DumpCommandHelp(Param commandName, Opt v, Opt info)
     {
-    // ...
+        // ...
     }
 
     private void DumpHelpForAllCommands(Opt v, Opt info)
     {
-    // ...
+        // ...
     }
 }
 ```
@@ -343,7 +343,7 @@ internal sealed class GetInfo : Command
 
     private void DumpEnvVar(Param envVarName)
     {
-    // ...
+        // ...
     }
 }
 ```
