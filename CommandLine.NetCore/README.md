@@ -224,10 +224,25 @@ CommandResult Execute(ArgSet args)
 For(params Arg[] syntax)
 ```
 - the list of args are specifing the command syntax
-    - an `Arg` is either an `option` either a `parameter`. The grammar is defined as this:
+    - an `Arg` is either an `option` either a `parameter`. Their grammar is defined as this:
         - `Option ::= [-|--]{optionName}[value0..valuen]`
-        - `Parameter ::= parameterValue+`
-
+            - options can be expected or optionnal
+            - can have from 0 to n values of a type `T`, where T can be any scalar type, a collection of scalar types (with `,` as separator) or an Enum            
+            - an option can be defined with values, values are always expected
+            - `Opt("x")` builds the option `x` with no expected value: `-x`
+            - by convention (posix), if the length of the name of the option is greater than 1, the prefix becomes: `--`. For instance, `Opt("xy")` defines the syntax: `--xy`
+            - `Opt("x",true)` builds the option `x` wich is optional in the syntax
+            - `Opt<T>("value")` builds the option `value` having one expected value that must be convertible to type `T`. For instance, `Opt<int>("value")` defines an option that expect an int, like in syntax: `--value 123`
+            
+        - `Parameter ::= parameterValue?`
+            - parameters are always expected
+            - have a value of a type `T`, where T can be any scalar type, a collection of scalar types (with `,` as separator) or an Enum            
+            - if a parameter if defined with a value, it is an expected word in the syntax
+            - if a parameter is defined without a value, a value is expected in the syntax
+            - `Param()` builds a parameter that expect a value of type `string` like in syntax: `iamastring`
+            - `Param<T>()` builds a parameter that expect a value that must be convertible to type `T`. For instance, `Param<int>()` builds a parameter that expect a value of type `int`, like in syntax: `123`
+            - `Param("color")` builds a parameter that is expected and being the syntax: `color`
+            
 * the method **`Do`** chained to a **For** indicates the method that must be executed if the syntax match the command line args
 ```csharp
 // with no parameter and void result delegate
