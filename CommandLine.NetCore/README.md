@@ -34,7 +34,7 @@ The library provides functionalities needed to build console applications runnin
 
 # Howto
 
-## 1. Run the command line
+## 1. Running the command line
 
 download the nuget from command line or add it from Visual Studio
 
