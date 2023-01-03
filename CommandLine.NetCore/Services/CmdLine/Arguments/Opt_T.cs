@@ -23,7 +23,7 @@ public class Opt<T> : Arg, IOpt
     private bool _isSetted;
 
     /// <inheritdoc/>
-    public bool IsSetted
+    public bool IsSet
     {
         get => !IsOptional || _isSetted;
 
@@ -76,7 +76,7 @@ public class Opt<T> : Arg, IOpt
         }
 
         var isSetted = !IsOptional ? string.Empty :
-            IsSetted ? "+" : string.Empty;
+            IsSet ? "+" : string.Empty;
 
         return $"Opt{(IsOptional ? "?" : string.Empty)}<{typeof(T).Name}>{PrefixedName}{isSetted}{values}";
     }
@@ -208,5 +208,5 @@ public class Opt<T> : Arg, IOpt
 
     /// <inheritdoc/>
     public void SetIsSetted(bool isSetted)
-        => IsSetted = isSetted;
+        => IsSet = isSetted;
 }

@@ -47,7 +47,7 @@ public interface IOpt : IArg
     /// <summary>
     /// true if option is optional and present in the parsed syntax
     /// </summary>
-    bool IsSetted { get; }
+    bool IsSet { get; }
 
     /// <summary>
     /// change the is optional value

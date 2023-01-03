@@ -15,9 +15,9 @@ ___
 
 The library provides functionalities needed to build console applications running in a terminal (WSL/WSL2, cmd.exe, ConEmu, bash, ...) with text interface. That includes:
 
-- parsing of command line arguments
+- parsing command line arguments
 
-- command pattern helps implementing commands invokable from command line in a simple and regular way
+- command pattern helps implementing commands binded to mthods from command line in a simple and regular way
 
 - multi-language commands help configuration files
 
@@ -59,13 +59,18 @@ from your main method, transfer control to the library **CommandLine.NetCore** :
 /// <param name="args">arguments</param>
 /// <returns>status code</returns>
 public static int Main(string[] args)
-    => CommandLineInterface.Run(args);
+    => new CommandLineInterfaceBuilder()
+        .Build(args)
+        .Run();
 ```
+
+That leads to the loading of any command line components like global arguments, commands and help settings
+from both the library core and your own console app.
 
 ## 2. Test the integrated **help** command:
 
 Any console application built with the library **ComandLine.NetCore** implements by 
-default a command named **help** that dump any available help about commands that are 
+default a command named **`help`** that dump any available help about commands that are 
 implemented in the software that uses the library and in the library itself. 
 
 As an example, you can build the example application console, provided in the project `CommandLine.NetCore.Example`, 
@@ -137,6 +142,11 @@ The settings must conform with the following conventions:
             "{Syntax 1}" : "Description of the functionality provided by the syntax 1",
             ...
             "{Syntax n}" : "Description of the functionality provided by the syntax n",
+        },
+        "Options": {
+            "{Option 1}" : "Description of the command option 1",
+            ...
+            "{Option n}" : "Description of the command option n",
         }
     }
   }
@@ -146,15 +156,31 @@ example of the command **`help`** :
 
 ``` json
 "Commands": {
-    "Help": {
-        "Description": "output a of list of all commands and global arguments or output help about a command",
-        "Syntax": {
-            "help" : "output a of list of all commands and global arguments",
-            "help commandName" : "output help for the command with the name 'commandName'"
-        }
+    "help": {
+      "Description": "output a of list commands and global arguments or output help about a command",
+      "Syntax": {
+        "": "list all commands",
+        "commandName": "help about the command with name commandName"
+      },
+      "Options": {
+        "-v": "enable verbose: add details to normal output",
+        "--info" : "output additional informations about the command line context"
+      }
     }
-  }
+  },
 ```
+
+These settings are describing the following syntaxes for the command `help`:
+
+``` dos
+; help for a command
+help {commandName} [-v] [--info]
+; global help (all commands)
+help [-v] [--info]
+```
+
+Command options are optionals and are available for any syntax of the command (here -v and --info). They can appears from
+the position they are declared in the command syntax
 
 **Description of the global arguments**
 
@@ -165,6 +191,8 @@ example of the command **`help`** :
     }
   }
 ```
+
+Global arguments are optional and available for any command. They must appears from the end of the command arguments
 
 example of the global argument **s** :
 
@@ -181,7 +209,124 @@ several letters are prefixed by `--`
 
 ## 4. Implement a command
 
+A command specification and implementation is definied is a class that inherits from `CommandLine.NetCore.Services.CmdLine.Commands.Command`.
 
+* the name of the command is `kebab case` from the name of the class (in this case **GetInfo** declares the **get-info** command)
+* the command class msut have a constructor with parameter `Dependencies`. These classes are instantiated by the **dependency injector**,
+thus any registered dependency can be added as a constructor parameter
+* the command class must implements the method 
+```csharp
+CommandResult Execute(ArgSet args)
+```
+* the method `Execute` declares the syntaxes of the command and the related implementations
+* the method **`For`** declares a command syntax:
+```csharp
+For(params Arg[] syntax)
+```
+- the list of args are specifing the command syntax
+    - an `Arg` is either an `option` either a `parameter`. The grammar is defined as this:
+        - `Option ::= [-|--]{optionName}[value0..valuen]`
+        - `Parameter ::= parameterValue+`
+
+* the method **`Do`** chained to a **For** indicates the method that must be executed if the syntax match the command line args
+```csharp
+// with no parameter and void result delegate
+Do(Action @delegate)
+// with no parameter and void result delegate
+Do(Func<OperationResult> @delegate)
+// with parameter operation context and void delegate
+Do(Action<OperationContext> @delegate)
+// with parameter operation context and OperationResult result delegate
+Do(Func<OperationContext, OperationResult> @delegate)
+// takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
+// Allows to map command arguments to method parameters and operation context
+Do(LambdaExpression expression)
+```
+* methods **For** can be chained
+* the method **`Options`** can be chained to a **For**. This method allows to declares the command options
+```csharp
+Options(params IOpt[] options)
+```
+* the method **`With`** launch the command executing process. First command line parsing, then syntax matching, then operation dispatch
+```csharp
+With(ArgSet args)
+```
+
+### Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`:
+
+```csharp
+// command syntax: help [commandName] [-v] [--info]
+internal sealed class Help : Command
+{
+    protected override CommandResult Execute(ArgSet args) =>
+
+        // syntax: help
+        For()
+            .Do(() => DumpHelpForAllCommands)
+
+        // syntax: help {commandName}
+        .For(Param())
+            .Do(() => DumpCommandHelp)
+
+        // any syntax accepts -v and/or --info
+        .Options(Opt("v"), Opt("info"))
+
+        // parse and run
+        .With(args);
+}
+
+private void DumpCommandHelp(Param comandName, Opt v, Opt info)
+{
+// ...
+}
+
+private void DumpHelpForAllCommands(Opt v, Opt info)
+{
+// ...
+}
+
+```
+
+### Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`:
+
+```csharp
+// syntax: get-info (env -l) | (env {varName}) | console | system | --all
+internal sealed class GetInfo : Command
+{
+    protected override CommandResult Execute(ArgSet args) =>
+
+        // syntax: get-info env -l
+        For(
+            Param("env"),
+            Opt("l")
+            )
+                .Do(DumpAllVars)
+
+        // syntax: get-info env {varName}
+        .For(
+            Param("env"),
+            Param())
+                .Do(() => DumpEnvVar)
+
+        // syntax: get-info console
+        .For(
+            Param("console"))
+                .Do(DumpConsole)
+
+        // syntax: get-info system
+        .For(
+            Param("system"))
+                .Do(DumpSystem)
+
+        // syntax: get-info --all
+        .For(
+            Opt("all"))
+                .Do(DumpAll)
+
+        // parse and run
+        .With(args);
+}
+```
 
 # Version history
 

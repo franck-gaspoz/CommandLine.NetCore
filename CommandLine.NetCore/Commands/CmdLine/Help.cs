@@ -23,6 +23,7 @@ internal sealed class Help : Command
     private const string TitleColor = "(bon,f=cyan)";
     private const string SectionTitleColor = "(uon,f=yellow,bon)";
     private const string CommandNameColor = "(bon,f=green)";
+    private const string CommandNamespaceColor = "(f=blue)";
     private const string ArgNameColor = "(f=darkyellow)";
     private const string InformationalDataMessage = "(f=darkgreen)";
     private const string ArgValueColor = "(bon,f=cyan)";
@@ -63,13 +64,13 @@ internal sealed class Help : Command
         Console.Out.WriteLine();
 
         OutputSectionTitle(Texts._("Commands"));
-        DumpCommandList();
+        DumpCommandList(v);
         Console.Out.WriteLine();
 
         OutputSectionTitle(Texts._("GlobalOptions"));
         DumpGlobalOptList();
 
-        CommandEnd(info.IsSetted);
+        CommandEnd(info.IsSet);
     }
 
     private void DumpCommandHelp(Param comandName, Opt v, Opt info)
@@ -84,11 +85,20 @@ internal sealed class Help : Command
         else
             Console.Out.WriteLine(command.Name + StOff);
 
+        if (v.IsSet)
+            DumpCommandNamespace(command, Br);
+
         if (command.GetOptionsDescriptions(out var optDescs))
             DumpCommandOptions(optDescs);
 
-        CommandEnd(info.IsSetted);
+        CommandEnd(info.IsSet);
     }
+
+    private void DumpCommandNamespace(Command command, string prefix = "")
+        => Console.Out.WriteLine(
+            prefix
+            + "(f=darkgray)namespace: "
+            + CommandNamespaceColor + command.GetType().Namespace + StOff);
 
     private void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
     {
@@ -135,13 +145,15 @@ internal sealed class Help : Command
             + isError + optDesc.Value + StOff);
     }
 
-    private void DumpCommandList()
+    private void DumpCommandList(Opt v)
     {
         foreach (var kvp in _commandsSet.Commands)
         {
             var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
             command.GetDescription(out var description);
             Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + description + StOff);
+            if (v.IsSet)
+                DumpCommandNamespace(command, "".PadLeft(command.Name.Length + 3));
         }
     }
 
