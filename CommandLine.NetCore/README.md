@@ -52,7 +52,7 @@ using CommandLine.NetCore;
 from your main method, transfer control to the library **CommandLine.NetCore** :
 
 ``` csharp
-// <summary>
+/// <summary>
 /// command line input
 /// <para>commandName (commandArgs|globalArg)*</para>
 /// </summary>
