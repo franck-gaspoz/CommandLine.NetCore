@@ -1,6 +1,6 @@
 ___
 
-# ![CommandLine.NetCore](https://raw.githubusercontent.com/franck-gaspoz/AnsiVtConsole.NetCore/main/AnsiVtConsole.NetCore/assets/ascii-icon.png "AnsiVtConsole.NetCore") CommandLine.NetCore
+# ![CommandLine.NetCore](https://raw.githubusercontent.com/franck-gaspoz/CommandLine.NetCore/main/CommandLine.NetCore/assets/ascii-icon.png "CommandLine.NetCore") CommandLine.NetCore
 
 ___
 
