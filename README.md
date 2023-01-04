@@ -23,7 +23,7 @@ The library provides functionalities needed to build console applications runnin
 
 - automatic **help** command
 
-- compatibile with [**AnsiVtConsole.NetCore**](https://github.com/franck-gaspoz/AnsiVtConsole.NetCore) :
+- compatible with [**AnsiVtConsole.NetCore**](https://github.com/franck-gaspoz/AnsiVtConsole.NetCore) :
 
     - **a text printer engine** that supports **print directives** allowing to manage console functionalities from text itself, as html would do but with a simplest syntax (that can be configured). That makes possible colored outputs, cursor control, text scrolling and also dynamic C# execution (scripting), based on **System.Console** and **ANSI VT100 / VT52 (VT100 type Fp or 3Fp, Fs, CSI, SGR)** 
 
@@ -39,9 +39,21 @@ The library provides functionalities needed to build console applications runnin
 download the nuget from command line or add it from Visual Studio
 
 ``` dos
-@rem version 1.0.2 or any new one
-dotnet add package CommandLine.NetCore --version 1.0.2
+@rem version 1.0.5 or any new one
+dotnet add package CommandLine.NetCore --version 1.0.5
 ```
+
+> **Warning**
+>
+> When installing the package, the following files are copied into your project:
+> - Config/appSettings.core.json
+> - LICENSE.md
+> - README.md
+> - assets/ascii-icon.png
+>
+> you can delete any of these files **EXCEPT Config/appSettings.core.json** wich is mandatory since it contains the CommandLine.NetCore parser root configuration
+>
+> these files are set as `Content` and are copied to output folder on build
 
 link to the library in your console application main class (example: Program.cs):
 
@@ -192,9 +204,9 @@ the position they are declared in the command syntax
   }
 ```
 
-Global arguments are optional and available for any command. They must appears from the end of the command arguments
+Global arguments are optional and availables for any command. They must appear from the end of the command arguments
 
-example of the global argument **s** :
+example of the global argument **`s`** :
 
 ``` json
 "GlobalOptions": {
@@ -276,7 +288,7 @@ thus any registered dependency can be added as a constructor parameter
     void MyOperation(...,OperationContext context,..)
     ```
 
-* methods **For** can be chained
+* methods **`For`** can be chained
 * the method **`Options`** can be chained to a **For**. This method allows to declare the command options:
     ```csharp
     Options(params IOpt[] options)
@@ -368,6 +380,11 @@ internal sealed class GetInfo : Command
 ```
 
 # Versions history
+
+`1.0.5` - 05/01/2023
+- fix nupkg: the add package in VS now deploy files Config/appSettings.core.json, LICENSE.md, README.md, assets/ascii-icon.png in your project. These files are configured as 'Content' and are deployed in the `bin` folder. 
+You can remove any of these files **EXCEPT** Config/appSettings.core.json wich is mandatory since it contains the CommandLine.NetCore parser root configuration
+- fix doc
 
 `1.0.4` - 04/01/2023
 - fix nupkg
