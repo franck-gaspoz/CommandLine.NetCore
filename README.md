@@ -39,8 +39,8 @@ The library provides functionalities needed to build console applications runnin
 download the nuget from command line or add it from Visual Studio
 
 ``` dos
-@rem version 1.0.0 or any new one
-dotnet add package CommandLine.NetCore --version 1.0.0
+@rem version 1.0.2 or any new one
+dotnet add package CommandLine.NetCore --version 1.0.2
 ```
 
 link to the library in your console application main class (example: Program.cs):
@@ -369,10 +369,15 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
+`1.0.2` - 04/01/2023
+- fix doc
+
 `1.0.1` - 04/01/2023
 - add CommandContext to lambda operations method
-- add OperationResult possible return type to lambda operations methods
+- add support of abstract classes that inherits from command
 - rename OperationContext by CommandContext
+- fix bug command options were always set in delegate for -h
+
 `1.0.0` - 03/01/2023
 - init
 

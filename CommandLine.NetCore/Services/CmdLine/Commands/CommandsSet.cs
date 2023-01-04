@@ -36,7 +36,8 @@ internal sealed class CommandsSet
                 .AddRange(
                     assembly
                         .GetTypes()
-                        .Where(x => x.InheritsFrom(typeof(Command))));
+                        .Where(x => !x.IsAbstract
+                            && x.InheritsFrom(typeof(Command))));
         }
 
         return commandTypes;
