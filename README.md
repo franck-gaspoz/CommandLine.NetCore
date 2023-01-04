@@ -54,7 +54,7 @@ from your main method, transfer control to the library **CommandLine.NetCore** :
 ``` csharp
 /// <summary>
 /// command line input
-/// <para>commandName (commandArgs|globalArg)*</para>
+/// <para>commandName ( option (optionValue)* | parameter )* globalOption*</para>
 /// </summary>
 /// <param name="args">arguments</param>
 /// <returns>status code</returns>
@@ -65,7 +65,7 @@ public static int Main(string[] args)
 ```
 
 That leads to the loading of any command line components like global arguments, commands and help settings
-from both the library core and your own console app.
+from both the library core and your own console app and parsing of the declared syntaxes and eventualy execution of the mdthod corresponding to the matching syntax.
 
 ## 2. Testing the integrated **help** command:
 
@@ -257,8 +257,27 @@ thus any registered dependency can be added as a constructor parameter
     // Allows to map command arguments to method parameters and operation context
     Do(LambdaExpression expression)
     ```
+
+    the lambda expression in the method style `Do(LambdaExpression expression)` can have these profiles:
+
+    ```csharp
+    // no parameter and no result
+    void MyOperation()
+
+    // explicit mapping of argument and no result
+    void MyOperation([MapArg(1) Param<string> arg0,[MapArg(5)] Opt<bool> arg1)
+
+    // implicit mapping of arguments and no result
+    // expected arguments (arguments having expected valie(s)) are mapped according to their declaring order
+    void MyOperation(Param<string> arg0,Opt<bool> arg1)
+
+    // can also have an auto-mapped parameter to the operation context:
+    // a parameter of type OperationContext can be placed anywhere in the parameters list
+    void MyOperation(...,OperationContext context,..)
+    ```
+
 * methods **For** can be chained
-* the method **`Options`** can be chained to a **For**. This method allows to declares the command options:
+* the method **`Options`** can be chained to a **For**. This method allows to declare the command options:
     ```csharp
     Options(params IOpt[] options)
     ```
@@ -348,9 +367,14 @@ internal sealed class GetInfo : Command
 }
 ```
 
-# Version history
+# Versions history
 
-1.0.0 init
+`1.0.1` - 04/01/2023
+- add CommandContext to lambda operations method
+- add OperationResult possible return type to lambda operations methods
+- rename OperationContext by CommandContext
+`1.0.0` - 03/01/2023
+- init
 
 ___
 

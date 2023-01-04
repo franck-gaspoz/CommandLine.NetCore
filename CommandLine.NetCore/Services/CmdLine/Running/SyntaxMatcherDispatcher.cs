@@ -190,7 +190,7 @@ public sealed class SyntaxMatcherDispatcher
             .SyntaxExecutionDispatchMapItem
             .Delegate!
             .Invoke(
-                new OperationContext(
+                new CommandContext(
                     selectedSyntaxExecutionDispatchMapItem
                         .SyntaxExecutionDispatchMapItem
                         .Syntax,

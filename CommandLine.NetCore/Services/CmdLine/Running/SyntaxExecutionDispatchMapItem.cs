@@ -27,7 +27,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// <summary>
     /// execute action delegate
     /// </summary>
-    public Func<OperationContext, OperationResult>? Delegate { get; private set; }
+    public Func<CommandContext, OperationResult>? Delegate { get; private set; }
 
     /// <summary>
     /// the syntax matcher dispatcher owner of this
@@ -50,7 +50,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate">with parameter operation context and OperationResult result delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    public SyntaxMatcherDispatcher Do(Func<OperationContext, OperationResult> @delegate)
+    public SyntaxMatcherDispatcher Do(Func<CommandContext, OperationResult> @delegate)
     {
         Delegate = @delegate;
         Name = Delegate.Method.Name;
@@ -64,10 +64,10 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate">with parameter operation context and void delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    public SyntaxMatcherDispatcher Do(Action<OperationContext> @delegate)
+    public SyntaxMatcherDispatcher Do(Action<CommandContext> @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (OperationContext context) =>
+        Delegate = (CommandContext context) =>
         {
             @delegate.Invoke(context);
             return new();
@@ -86,7 +86,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     public SyntaxMatcherDispatcher Do(Action @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (OperationContext context) =>
+        Delegate = (CommandContext context) =>
         {
             @delegate.Invoke();
             return new();
@@ -104,7 +104,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     public SyntaxMatcherDispatcher Do(Func<OperationResult> @delegate)
     {
         Name = @delegate.Method.Name;
-        Delegate = (OperationContext context) =>
+        Delegate = (CommandContext context) =>
         {
             return @delegate.Invoke();
         };
@@ -143,7 +143,7 @@ public sealed class SyntaxExecutionDispatchMapItem
 
         Name = methodInfo.Name;
         Syntax.SetName(Name);
-        Delegate = (OperationContext context) =>
+        Delegate = (CommandContext context) =>
         {
             var callParameters = new List<object?>();
             int argIndex;
@@ -151,22 +151,34 @@ public sealed class SyntaxExecutionDispatchMapItem
 
             foreach (var parameter in methodInfo.GetParameters())
             {
-                if (parameter
-                    .GetCustomAttributes(false)
-                    .Where(x => x.GetType() == typeof(MapArgAttribute))
-                    .FirstOrDefault() is not MapArgAttribute mapArg)
+                if (parameter.ParameterType == typeof(CommandContext))
                 {
-                    currentParamIndex = argIndex =
-                        Syntax.GetIndexOfArgWithExpectedValueFromIndex(
-                            currentParamIndex + 1);
+                    callParameters.Add(
+                        new CommandContext(
+                            Syntax,
+                            SyntaxMatcherDispatcher.OptSet,
+                            SyntaxMatcherDispatcher
+                            ));
                 }
                 else
                 {
-                    currentParamIndex = argIndex = mapArg.ArgIndex;
-                }
+                    if (parameter
+                        .GetCustomAttributes(false)
+                        .Where(x => x.GetType() == typeof(MapArgAttribute))
+                        .FirstOrDefault() is not MapArgAttribute mapArg)
+                    {
+                        currentParamIndex = argIndex =
+                            Syntax.GetIndexOfArgWithExpectedValueFromIndex(
+                                currentParamIndex + 1);
+                    }
+                    else
+                    {
+                        currentParamIndex = argIndex = mapArg.ArgIndex;
+                    }
 
-                var argValue = Syntax[argIndex];
-                callParameters.Add(argValue);
+                    var argValue = Syntax[argIndex];
+                    callParameters.Add(argValue);
+                }
             }
 
             methodInfo.Invoke(target, callParameters.ToArray());

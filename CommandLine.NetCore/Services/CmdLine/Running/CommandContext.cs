@@ -3,9 +3,9 @@
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
-/// operation running context
+/// commmand running context
 /// </summary>
-public sealed class OperationContext
+public sealed class CommandContext
 {
     /// <summary>
     /// running syntac
@@ -28,7 +28,7 @@ public sealed class OperationContext
     /// <param name="syntax">running syntax</param>
     /// <param name="optSet">command options set</param>
     /// <param name="syntaxMatcherDispatcher">syntax matcher dispatcher</param>
-    public OperationContext(
+    public CommandContext(
         Syntax syntax,
         OptSet? optSet,
         SyntaxMatcherDispatcher syntaxMatcherDispatcher)

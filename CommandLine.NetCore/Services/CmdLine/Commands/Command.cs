@@ -271,10 +271,9 @@ public abstract class Command
         => syntaxMatcherDispatcher
             .For(
                 Opt("h"))
-                    .Do(HelpAboutCommandSyntax)
-                    .Options(syntaxMatcherDispatcher.OptSet);
+                    .Do(HelpAboutCommandSyntax);
 
-    private OperationResult HelpAboutCommandSyntax(OperationContext context)
+    private OperationResult HelpAboutCommandSyntax(CommandContext context)
     {
         var args =
             new List<string>{
@@ -284,7 +283,10 @@ public abstract class Command
         if (context.OptSet is not null)
         {
             foreach (var opt in context.OptSet.Opts)
-                args.AddRange(opt.ToArgs());
+            {
+                if (opt.IsSet)
+                    args.AddRange(opt.ToArgs());
+            }
         }
 
         return RunCommand(args.ToArray());

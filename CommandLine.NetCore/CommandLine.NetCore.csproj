@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -16,7 +16,7 @@
 		<IsPackable>true</IsPackable>
 		<Authors>Franck Gaspoz</Authors>
 		<Company>Franck Gaspoz</Company>
-		<Product>AnsiVtConsole.NetCore</Product>
+		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
 		<Copyright>(c) Franck Gaspoz 2022 Licence MIT</Copyright>
 		<Version>1.0.1</Version>
@@ -32,13 +32,9 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
 		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-
 		<Platforms>AnyCPU</Platforms>
-
 		<PackageReadmeFile>content\README.md</PackageReadmeFile>
-
 		<PackageLicenseFile>content\LICENSE.md</PackageLicenseFile>
-
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 
 	</PropertyGroup>
@@ -55,7 +51,10 @@
 
 	<ItemGroup>
 		<None Update="Config\appSettings.core.json">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		    <Pack>True</Pack>
+		    <PackagePath>contentFiles/any/;content/</PackagePath>
+		    <PackageCopyToOutput>true</PackageCopyToOutput>
 		</None>
 		<None Update="LICENSE.md">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -183,7 +183,9 @@ public sealed class Parser
                     parseBreaked = true;
                 }
                 else
+                {
                     opt.SetIsSetted(true);
+                }
 
                 position += 1 + opt.ExpectedValuesCount;
                 if (!isRemainingOptional)
@@ -246,7 +248,7 @@ public sealed class Parser
     /// <param name="arguments">arguments to be checked</param>
     /// <param name="syntax">syntax reference</param>
     /// <param name="options">command options</param>
-    /// <param name="settedOptions">coomand options that have been setttd in command line args</param>
+    /// <param name="settedOptions">command options that have been setttd in command line args</param>
     /// <returns>true if args match the syntax, false otherwise</returns>
     internal (bool, List<string> errors) MatchSyntax(
         ArgSet arguments,
