@@ -5,8 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<AssemblyVersion>1.0.3.0</AssemblyVersion>
-		<FileVersion>1.0.3.0</FileVersion>
+		<AssemblyVersion>1.0.4.0</AssemblyVersion>
+		<FileVersion>1.0.4.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -19,8 +19,8 @@
 		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
 		<Copyright>(c) Franck Gaspoz 2022 Licence MIT</Copyright>
-		<Version>1.0.3</Version>
-		<InformationalVersion>1.0.3</InformationalVersion>
+		<Version>1.0.4</Version>
+		<InformationalVersion>1.0.4</InformationalVersion>
 
 		<PackageReleaseNotes>milestone 1</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
@@ -53,28 +53,33 @@
 	<ItemGroup>
 	  <Content Include="assets\ascii-icon.png">
 	    <Pack>True</Pack>
-	    <CopyToOuput>true</CopyToOuput>
+		<IncludeInPackage>true</IncludeInPackage>
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    <PackagePath>contentFiles/any/assets;content/assets</PackagePath>
+	    <PackagePath>contentFiles/any/any/assets;content/assets;contentFiles;content</PackagePath>
 	    <PackageCopyToOutput>true</PackageCopyToOutput>
 	  </Content>
 	  <Content Include="Config\appSettings.core.json">
-	    <CopyToOuput>true</CopyToOuput>
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<CopyToOuput>true</CopyToOuput>
+		<copyToOuput>true</copyToOuput>
+		<IncludeInPackage>true</IncludeInPackage>
+		<BuildAction>Content</BuildAction>
+		<copyToOutput>true</copyToOutput>
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 	    <Pack>True</Pack>
-	    <PackagePath>contentFiles/any/Config;content/Config;lib/$(TargetFramework)/Config/</PackagePath>
+	    <PackagePath>contentFiles/any/any/Config;content/Config;lib/$(TargetFramework)/Config/;content;contentFiles</PackagePath>
 	    <PackageCopyToOutput>true</PackageCopyToOutput>		
 	  </Content>
 	  <Content Include="LICENSE.md">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <Pack>True</Pack>
-	    <PackagePath>contentFiles/any/;content/</PackagePath>
+	    <PackagePath>contentFiles/any/any/;content/</PackagePath>
 	    <PackageCopyToOutput>true</PackageCopyToOutput>
 	  </Content>
 	  <Content Include="README.md">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <Pack>True</Pack>
-	    <PackagePath>contentFiles/any/;content/</PackagePath>
+	    <PackagePath>contentFiles/any/any/;content/</PackagePath>
 	    <PackageCopyToOutput>true</PackageCopyToOutput>
 	  </Content>
 	</ItemGroup>

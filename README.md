@@ -369,6 +369,9 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
+`1.0.4` - 04/01/2023
+- fix nupkg
+
 `1.0.3` - 04/01/2023
 - fix nupkg
 
