@@ -383,7 +383,7 @@ internal sealed class GetInfo : Command
 
 `1.0.5` - 05/01/2023
 - fix nupkg: the add package in VS now deploy files Config/appSettings.core.json, LICENSE.md, README.md, assets/ascii-icon.png in your project. These files are configured as 'Content' and are deployed in the `bin` folder. 
-You can remove any of these files **EXCEPT** Config/appSettings.core.json wich is mandatory since it contains the CommandLine.NetCore parser root configuration
+You can remove any of these files **EXCEPT Config/appSettings.core.json** wich is mandatory since it contains the CommandLine.NetCore parser root configuration
 - fix doc
 
 `1.0.4` - 04/01/2023
