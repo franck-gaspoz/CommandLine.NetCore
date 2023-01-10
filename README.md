@@ -43,7 +43,7 @@ download the nuget from command line or add it from Visual Studio
 dotnet add package CommandLine.NetCore --version 1.0.5
 ```
 
-> **Warning**
+> **Notice**
 >
 > When installing the package, the following files are copied into your project:
 > - Config/appSettings.core.json
@@ -381,21 +381,24 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
-`1.0.5` - 05/01/2023
-- fix nupkg: the add package in VS now deploy files Config/appSettings.core.json, LICENSE.md, README.md, assets/ascii-icon.png in your project. These files are configured as 'Content' and are deployed in the `bin` folder. 
+`1.0.6` - 01/11/2023
+- fix MAJOR buf in command options parsing. Were not recongnized correctly
+
+`1.0.5` - 01/05/2023
+- fix nupkg: adding the package to a project now deploy files Config/appSettings.core.json, LICENSE.md, README.md, assets/ascii-icon.png in your project. These files are configured as 'Content' and are deployed in the `bin` folder. 
 You can remove any of these files **EXCEPT Config/appSettings.core.json** wich is mandatory since it contains the CommandLine.NetCore parser root configuration
 - fix doc
 
-`1.0.4` - 04/01/2023
+`1.0.4` - 01/04/2023
 - fix nupkg
 
-`1.0.3` - 04/01/2023
+`1.0.3` - 01/04/2023
 - fix nupkg
 
-`1.0.2` - 04/01/2023
+`1.0.2` - 01/04/2023
 - fix doc
 
-`1.0.1` - 04/01/2023
+`1.0.1` - 01/04/2023
 - add CommandContext to lambda operations method
 - add support of abstract classes that inherits from command
 - rename OperationContext by CommandContext

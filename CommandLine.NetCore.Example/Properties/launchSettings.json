@@ -48,6 +48,10 @@
     "help help": {
       "commandName": "Project",
       "commandLineArgs": "help help --parser-logging Debug"
+    },
+    "test-command -a 1,2,3,4 -d": {
+      "commandName": "Project",
+      "commandLineArgs": "test-command -a 1,2,3,4 -d --parser-logging Debug"
     }
   }
 }

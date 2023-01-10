@@ -5,8 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<AssemblyVersion>1.0.5.0</AssemblyVersion>
-		<FileVersion>1.0.5.0</FileVersion>
+		<AssemblyVersion>1.0.6.0</AssemblyVersion>
+		<FileVersion>1.0.6.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -19,8 +19,8 @@
 		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
 		<Copyright>(c) Franck Gaspoz 2022 Licence MIT</Copyright>
-		<Version>1.0.5</Version>
-		<InformationalVersion>1.0.5</InformationalVersion>
+		<Version>1.0.6</Version>
+		<InformationalVersion>1.0.6</InformationalVersion>
 
 		<PackageReleaseNotes>milestone 1</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
@@ -45,6 +45,14 @@
 		<Optimize>false</Optimize>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example1.png" />
+	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example2.png" />
+	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example3.png" />
+	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example4.png" />
+	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\output.png" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <None Remove="assets\ascii-icon.png" />
@@ -85,7 +93,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.15" />
+	  <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.17" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
