@@ -1,4 +1,5 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Services.AppHost;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 using Microsoft.Extensions.Configuration;
@@ -40,22 +41,32 @@ public sealed class GlobalSettings
     public IConfiguration Configuration { get; private set; }
 
     /// <summary>
+    /// configuration
+    /// </summary>
+    public AppHostConfiguration AppHostConfiguration { get; private set; }
+
+    /// <summary>
     /// global settings of the command line engine
     /// <para>provides access to:
     /// - global options set
     /// - setted global options set
-    /// - command line args and assembly set</para>
+    /// - command line args and assembly set
+    /// - app host configuration
+    /// </para>
     /// </summary>
     /// <param name="configuration">configuration</param>
     /// <param name="commandLineArgs">command line args</param>
     /// <param name="globalOptsSet">global options set</param>
     /// <param name="assemblySet">assembly set</param>
+    /// <param name="appHostConfiguration">app host configuration</param>
     public GlobalSettings(
         IConfiguration configuration,
         CommandLineArgs commandLineArgs,
         GlobalOptsSet globalOptsSet,
-        AssemblySet assemblySet)
+        AssemblySet assemblySet,
+        AppHostConfiguration appHostConfiguration)
     {
+        AppHostConfiguration = appHostConfiguration;
         Configuration = configuration;
         AssemblySet = assemblySet;
         CommandLineArgs = commandLineArgs;

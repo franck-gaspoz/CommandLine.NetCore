@@ -18,13 +18,15 @@
 		<Company>Franck Gaspoz</Company>
 		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
-		<Copyright>(c) Franck Gaspoz 2022 Licence MIT</Copyright>
+		<Copyright>(c) Franck Gaspoz 2023 Licence MIT</Copyright>
 		<Version>1.0.6</Version>
 		<InformationalVersion>1.0.6</InformationalVersion>
 
 		<PackageReleaseNotes>
-`1.0.6` - 01/12/2023
+1.0.6 - 01/12/2023
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
+- AppHostBuilder moved to namespace CommandLine.NetCore.Services.AppHost
+- fix auto command -h (Command.RunCommand) didn't call back configure and build delegates
 - doc update
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>

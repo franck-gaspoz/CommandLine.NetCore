@@ -389,6 +389,8 @@ internal sealed class GetInfo : Command
 
 `1.0.6` - 01/11/2023
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
+- `AppHostBuilder` moved to namespace `CommandLine.NetCore.Services.AppHost`
+- fix auto command -h (Command.RunCommand) didn't call back configure and build delegates
 - doc update
 
 `1.0.5` - 01/05/2023

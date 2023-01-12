@@ -1,4 +1,4 @@
-﻿//#define Enable_h_Arg
+﻿#define Enable_h_Arg
 
 using AnsiVtConsole.NetCore;
 
@@ -303,6 +303,12 @@ public abstract class Command
         new(
             new CommandLineInterfaceBuilder()
                 .UseAssemblySet(GlobalSettings.AssemblySet)
+                .UseConfigureDelegate(GlobalSettings
+                    .AppHostConfiguration
+                    .ConfigureDelegate)
+                .UseBuildDelegate(GlobalSettings
+                    .AppHostConfiguration
+                    .BuildDelegate)
                 .Build(args)
                 .Run());
 

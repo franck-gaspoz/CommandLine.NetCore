@@ -2,6 +2,7 @@
 
 using AnsiVtConsole.NetCore;
 
+using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
@@ -70,8 +71,10 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     /// <param name="configureDelegate">configure delegate</param>
     /// <returns>this</returns>
-    public CommandLineInterfaceBuilder UseConfigureDelegate(Action<IConfigurationBuilder> configureDelegate)
+    public CommandLineInterfaceBuilder UseConfigureDelegate(Action<IConfigurationBuilder>? configureDelegate)
     {
+        if (configureDelegate is null)
+            return this;
         _configureDelegate = configureDelegate;
         return this;
     }
@@ -81,8 +84,10 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     /// <param name="buildDelegate">build delegate</param>
     /// <returns>this</returns>
-    public CommandLineInterfaceBuilder UseBuildDelegate(Action<IHostBuilder> buildDelegate)
+    public CommandLineInterfaceBuilder UseBuildDelegate(Action<IHostBuilder>? buildDelegate)
     {
+        if (buildDelegate is null)
+            return this;
         _buildDelegate = buildDelegate;
         return this;
     }

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 
 using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
-namespace CommandLine.NetCore.Services;
+namespace CommandLine.NetCore.Services.AppHost;
 
 internal sealed class AppHostBuilder
 {
@@ -32,6 +32,10 @@ internal sealed class AppHostBuilder
         Action<IHostBuilder>? buildDelegate = null)
     {
         var hostBuilder = Host.CreateDefaultBuilder();
+        var hostConfiguration = new AppHostConfiguration(
+            configureDelegate,
+            buildDelegate
+            );
 
         hostBuilder
             .ConfigureAppConfiguration(
@@ -65,6 +69,7 @@ internal sealed class AppHostBuilder
                     .AddSingleton<ValueConverter>()
                     .AddSingleton<Parser>()
                     .AddSingleton<Dependencies>()
+                    .AddSingleton(hostConfiguration)
                     .AddSingleton(assemblySet)
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)
