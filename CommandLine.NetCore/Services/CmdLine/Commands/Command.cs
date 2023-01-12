@@ -273,7 +273,8 @@ public abstract class Command
         => syntaxMatcherDispatcher
             .For(
                 Opt("h"))
-                    .Do(HelpAboutCommandSyntax);
+                    .Do(HelpAboutCommandSyntax)
+            .Options(Opt("v"), Opt("info"));
 
     private OperationResult HelpAboutCommandSyntax(CommandContext context)
     {

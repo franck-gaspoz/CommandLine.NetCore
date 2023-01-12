@@ -229,6 +229,7 @@ public sealed class Parser
                 {
                     founded = true;
                     position++;
+                    syntax_index++;
                 }
             }
             else

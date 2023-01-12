@@ -70,7 +70,10 @@ public sealed class SyntaxMatcherDispatcher
     /// <returns>this</returns>
     public SyntaxMatcherDispatcher Options(params IOpt[] options)
     {
-        OptSet = new OptSet(options);
+        OptSet =
+            OptSet is null ?
+                new OptSet(options)
+                : new OptSet(OptSet, options);
         return this;
     }
 

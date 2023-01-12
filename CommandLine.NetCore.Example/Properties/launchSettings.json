@@ -56,6 +56,10 @@
     "test-command -a 1,2,3,4 -e -b -c  -z --parser-logging Trace": {
       "commandName": "Project",
       "commandLineArgs": "test-command -a 1,2,3,4 -e -b -c  -z --parser-logging Trace"
+    },
+    "test-command -h --info -v --parser-logging Trace": {
+      "commandName": "Project",
+      "commandLineArgs": "test-command -h --info -v --parser-logging Trace"
     }
   }
 }
