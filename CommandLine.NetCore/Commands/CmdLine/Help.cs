@@ -162,9 +162,9 @@ internal sealed class Help : Command
         Sep();
         var date =
             DateOnly.ParseExact(
-            Config.GetValue<string>("App:ReleaseDate")!,
-            Globals.SettingsDateFormat,
-            null);
+                Config.GetValue<string>("App:ReleaseDate")!,
+                Globals.SettingsDateFormat,
+                null);
         Console.Out.WriteLine(TitleColor + Config.GetValue<string>("App:Title")!
             + $" ({Assembly.GetExecutingAssembly().GetName().Version} {date})");
         Sep();

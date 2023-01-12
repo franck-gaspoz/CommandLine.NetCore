@@ -77,6 +77,10 @@ internal static class IServiceCollectionExt
                 console.Out.IsMute = globalSettings
                     .SettedGlobalOptsSet
                     .Contains<S>();
+                console.Settings.IsMarkupDisabled
+                    = globalSettings
+                        .SettedGlobalOptsSet
+                        .Contains<NoColor>();
                 return console;
             });
         return services;

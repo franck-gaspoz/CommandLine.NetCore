@@ -43,7 +43,7 @@ public static class Globals
     /// <summary>
     /// date format of dates in settings
     /// </summary>
-    public const string SettingsDateFormat = "dd/MM/yyyy";
+    public const string SettingsDateFormat = "MM/dd/yyyy";
 
     /// <summary>
     /// values separarator in parameter of type list/collection
