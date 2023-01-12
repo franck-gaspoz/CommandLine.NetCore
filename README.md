@@ -41,8 +41,8 @@ The library provides functionalities needed to build console applications runnin
 download the nuget from command line or add it from Visual Studio
 
 ``` dos
-@rem version 1.0.6 or any new one
-dotnet add package CommandLine.NetCore --version 1.0.6
+@rem version 1.0.7 or any new one
+dotnet add package CommandLine.NetCore --version 1.0.7
 ```
 
 > **Notice**
@@ -386,6 +386,9 @@ internal sealed class GetInfo : Command
 ```
 
 # Versions history
+
+`1.0.7` - 01/12/2023
+- add global option `--no-color` that turn off ansi/vt outputs
 
 `1.0.6` - 01/11/2023
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
