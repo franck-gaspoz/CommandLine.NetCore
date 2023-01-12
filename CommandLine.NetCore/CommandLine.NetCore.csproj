@@ -26,6 +26,7 @@
 1.0.7 - 01/12/2023
 - add global option --no-color that turn off ansi/vt outputs
 - fix auto syntax -h was not passing global arguments
+- improve help output
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>

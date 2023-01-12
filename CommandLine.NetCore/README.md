@@ -390,6 +390,7 @@ internal sealed class GetInfo : Command
 `1.0.7` - 01/12/2023
 - add global option `--no-color` that turn off ansi/vt outputs
 - fix auto syntax -h was not passing global arguments
+- improve help output
 
 `1.0.6` - 01/11/2023
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
