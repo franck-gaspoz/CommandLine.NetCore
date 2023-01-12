@@ -17,7 +17,7 @@ The library provides functionalities needed to build console applications runnin
 
 - parsing command line arguments
 
-- command pattern helps implementing commands binded to mthods from command line in a simple and regular way
+- command pattern helps implementing commands binded to methods from command line in a simple and regular way
 
 - multi-language commands help configuration files
 
@@ -25,7 +25,9 @@ The library provides functionalities needed to build console applications runnin
 
 - compatible with [**AnsiVtConsole.NetCore**](https://github.com/franck-gaspoz/AnsiVtConsole.NetCore) :
 
-    - **a text printer engine** that supports **print directives** allowing to manage console functionalities from text itself, as html would do but with a simplest syntax (that can be configured). That makes possible colored outputs, cursor control, text scrolling and also dynamic C# execution (scripting), based on **System.Console** and **ANSI VT100 / VT52 (VT100 type Fp or 3Fp, Fs, CSI, SGR)** 
+    - **a text printer engine** that supports **print directives** (markup) allowing to manage console functionalities from text itself, as html would do but with a simplest syntax (that can be configured). That makes possible colored outputs, cursor control, text scrolling and also dynamic C# execution (scripting), based on **System.Console** and **ANSI VT100 / VT52 (VT100 type Fp or 3Fp, Fs, CSI, SGR)** 
+
+    - A Ansi Parser that can identify/remove escape sequences in a text
 
     - The console output can be controlled by:
         - tokens in a string (print directives)
@@ -77,7 +79,7 @@ public static int Main(string[] args)
 ```
 
 That leads to the loading of any command line components like global arguments, commands and help settings
-from both the library core and your own console app and parsing of the declared syntaxes and eventualy execution of the mdthod corresponding to the matching syntax.
+from both the library core and your own console app and parsing of the declared syntaxes and eventualy execution of the method corresponding to the matching syntax.
 
 ## 2. Testing the integrated **help** command:
 
@@ -259,12 +261,16 @@ thus any registered dependency can be added as a constructor parameter
     ```csharp
     // with no parameter and void result delegate
     Do(Action @delegate)
+
     // with no parameter and void result delegate
     Do(Func<OperationResult> @delegate)
+
     // with parameter operation context and void delegate
     Do(Action<OperationContext> @delegate)
+
     // with parameter operation context and OperationResult result delegate
     Do(Func<OperationContext, OperationResult> @delegate)
+
     // takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
     // Allows to map command arguments to method parameters and operation context
     Do(LambdaExpression expression)
@@ -382,7 +388,8 @@ internal sealed class GetInfo : Command
 # Versions history
 
 `1.0.6` - 01/11/2023
-- fix MAJOR buf in command options parsing. Were not recongnized correctly
+- fix MAJOR bug in command options parsing. Were not recongnized correctly
+- doc update
 
 `1.0.5` - 01/05/2023
 - fix nupkg: adding the package to a project now deploy files Config/appSettings.core.json, LICENSE.md, README.md, assets/ascii-icon.png in your project. These files are configured as 'Content' and are deployed in the `bin` folder. 

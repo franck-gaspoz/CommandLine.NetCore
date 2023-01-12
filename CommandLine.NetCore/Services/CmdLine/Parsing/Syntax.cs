@@ -77,7 +77,7 @@ public sealed class Syntax
     public string ToSyntax()
         => ((Name == null) ? "?" : Name!) +
             ": " +
-            string.Join(' ', _args.Select(x => x.ToSyntax()));
+            string.Join(' ', _args.Select((x, n) => n + ":" + x.ToSyntax()));
 
     /// <summary>
     /// get index of next arg with expected value from an index

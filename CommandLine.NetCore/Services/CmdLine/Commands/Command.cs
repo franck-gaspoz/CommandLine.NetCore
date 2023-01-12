@@ -1,4 +1,5 @@
-﻿
+﻿//#define Enable_h_Arg
+
 using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
@@ -261,9 +262,10 @@ public abstract class Command
                 Console);
         }
 
+#if Enable_h_Arg
         if (_syntaxMatcherDispatcher.Count == 0)
             AddHelpAboutCommandSyntax(_syntaxMatcherDispatcher);
-
+#endif
         return _syntaxMatcherDispatcher.For(syntax);
     }
 

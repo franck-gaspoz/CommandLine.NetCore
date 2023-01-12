@@ -22,7 +22,11 @@
 		<Version>1.0.6</Version>
 		<InformationalVersion>1.0.6</InformationalVersion>
 
-		<PackageReleaseNotes>milestone 1</PackageReleaseNotes>
+		<PackageReleaseNotes>
+`1.0.6` - 01/12/2023
+- fix MAJOR bug in command options parsing. Were not recongnized correctly
+- doc update
+		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -45,6 +49,10 @@
 		<Optimize>false</Optimize>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Services\CmdLine\Parsing\CheckableSyntaxWord.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example1.png" />

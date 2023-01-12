@@ -159,16 +159,15 @@ public sealed class Parser
         ref int position,
         List<string> args,
         List<IOpt> optionals,
+        bool isParsingRemainingOptions,
         string arg,
-        CheckableSyntaxWord checkableSyntaxWords,
+        IArg gram,
         List<string> errors,
         out bool founded)
     {
         founded = false;
         var parseBreaked = false;
         var currentPosition = position;
-
-        var (isRemainingOptional, gram) = checkableSyntaxWords;
 
         if (gram is IOpt opt)
         {
@@ -188,12 +187,11 @@ public sealed class Parser
                 {
                     opt.SetIsSetted(true);
                     position += 1 + opt.ExpectedValuesCount;
+                    if (!isParsingRemainingOptions)
+                        syntax_index++;
                     optionals.Remove(opt);
                     founded = true;
                 }
-
-                /*if (!isRemainingOptional)
-                    syntax_index++;*/
             }
             else
             {
@@ -207,7 +205,6 @@ public sealed class Parser
                 {
                     if (!optionals.Contains(opt))
                         optionals.Add(opt);
-                    //syntax_index++;
                 }
             }
         }
@@ -228,9 +225,11 @@ public sealed class Parser
                 {
                     parseBreaked = true;
                 }
-
-                position++;
-                syntax_index++;
+                else
+                {
+                    founded = true;
+                    position++;
+                }
             }
             else
             {
@@ -262,11 +261,11 @@ public sealed class Parser
         var syntax_index = 0;
         var position = 0;
         var args = arguments.Args.ToList();
-        var optionals = new List<IOpt>();
+        var remainingOptionals = new List<IOpt>();
         var parseBreaked = false;
         var errors = new List<string>();
         var isParsingRemainingOptions = false;
-        var toBeCheckedSyntaxWords = new List<CheckableSyntaxWord>();
+        var toBeCheckedSyntaxWords = new List<IArg>();
         var cmdOptions = options?.Opts.ToList() ?? new List<IOpt>();
         settedOptions = new OptSet();
 
@@ -284,60 +283,74 @@ public sealed class Parser
             toBeCheckedSyntaxWords.Clear();
             if (!isParsingRemainingOptions)
             {
-                toBeCheckedSyntaxWords.Add(
-                    new(false, currentSyntax()));
+                toBeCheckedSyntaxWords.Add(currentSyntax());
             }
 
-            foreach (var optional in optionals)
+            foreach (var optional in remainingOptionals.Where(x => !x.IsSet))
             {
                 if (!toBeCheckedSyntaxWords.
-                        Where(x => x.Arg == optional)
-                        .Any())
+                        Any(x => x == optional))
                 {
-                    toBeCheckedSyntaxWords.Add(
-                        new CheckableSyntaxWord(true, optional));
+                    toBeCheckedSyntaxWords.Add(optional);
                 }
             }
 
             var hasError = false;
-            var cumul_founded = false;
+            var founded = false;
+            var remainingOptionalsHasChanged = false;
+
             foreach (var gram in toBeCheckedSyntaxWords)
             {
                 if (args.Count > 0)
                 {
+                    var remainingOptionalCount = remainingOptionals.Count;
+
                     hasError |= ParseArg(
                         ref syntax_index,
                         ref position,
                         args,
-                        optionals,
+                        remainingOptionals,
+                        isParsingRemainingOptions,
                         currentArg(),
                         gram,
                         errors,
-                        out var founed);
+                        out founded);
 
-                    cumul_founded |= founed;
+                    remainingOptionalsHasChanged |= remainingOptionals.Count != remainingOptionalCount;
 
-                    if (cumul_founded)
-                        toBeCheckedSyntaxWords.Remove(gram);
-
-                    if (cumul_founded &&
+                    if (founded &&
                         options is not null
                         && !hasError
-                        && gram.Arg is IOpt opt
+                        && gram is IOpt opt
                         && options.Opts.Contains(opt))
                     {
                         settedOptions.Add(opt);
                     }
 
-                    if (cumul_founded)
+                    if (founded)
                         break;
                 }
             }
 
-            syntax_index++;
+            if (!founded)
+            {
+                if (!remainingOptionalsHasChanged && isParsingRemainingOptions)
+                {
+                    foreach (var opt in remainingOptionals)
+                    {
+                        errors.Add(
+                            _texts._("ExpectedOption", opt.PrefixedName, position, currentArg()));
+                    }
+                    hasError = true;
+                }
+                else
+                {
+                    syntax_index++;
+                }
+            }
 
-            isParsingRemainingOptions = syntax_index == syntax.Count
-                && optionals.Any();
+            isParsingRemainingOptions = syntax_index >= syntax.Count
+                && remainingOptionals.Any();
 
             parseBreaked = hasError;
         }
