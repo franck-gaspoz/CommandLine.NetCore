@@ -27,6 +27,7 @@
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
 - AppHostBuilder moved to namespace CommandLine.NetCore.Services.AppHost
 - fix auto command -h (Command.RunCommand) didn't call back configure and build delegates
+- fix support of -v and --info in -h auto syntax
 - doc update
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>

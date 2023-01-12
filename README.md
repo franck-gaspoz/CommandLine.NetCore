@@ -391,6 +391,7 @@ internal sealed class GetInfo : Command
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
 - `AppHostBuilder` moved to namespace `CommandLine.NetCore.Services.AppHost`
 - fix auto command -h (Command.RunCommand) didn't call back configure and build delegates
+- fix support of -v and --info in -h auto syntax
 - doc update
 
 `1.0.5` - 01/05/2023
