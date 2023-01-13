@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
@@ -20,7 +21,7 @@ internal sealed class Help : Command
     private readonly GlobalOptsSet _globalOptsSet;
     private readonly IServiceProvider _serviceProvider;
 
-    private const string TitleColor = "(bon,f=cyan)";
+    private const string SepColor = "(uon,f=cyan,bon)";
     private const string SectionTitleColor = "(uon,f=yellow,bon)";
     private const string CommandNameColor = "(bon,f=green)";
     private const string CommandNamespaceColor = "(f=blue)";
@@ -80,10 +81,12 @@ internal sealed class Help : Command
         var command = _commandsSet.GetCommand(
             comandName.Value!);
 
+        DumpCommandDescription(command, false, false);
+
+        Console.Out.WriteLine();
+
         if (command.GetLongDescriptions(out var longDescs))
             DumpSyntaxes(command, longDescs);
-        else
-            Console.Out.WriteLine(command.Name + StOff);
 
         if (v.IsSet)
             DumpCommandNamespace(command, Br);
@@ -92,6 +95,36 @@ internal sealed class Help : Command
             DumpCommandOptions(optDescs);
 
         CommandEnd(info.IsSet);
+    }
+
+    private string TextBox(List<string> lines)
+    {
+        var length = lines.Select(line => Console.Out.GetText(line).Length).Max();
+        var textColor = "(bon,f=white)";
+        var barColor = "(f=white)";
+        var boxBackgroundColor = "(b=darkblue)";
+
+        var hBar = string.Empty;
+        hBar = string.Empty.PadLeft(length + 2, '─');
+        var topBar =
+            barColor + boxBackgroundColor
+            + "┌" + hBar + "┐";
+        var bottomBar =
+            barColor + boxBackgroundColor +
+            "└" + hBar + "┘";
+
+        var sb = new StringBuilder();
+        sb.AppendLine(topBar);
+        foreach (var line in lines)
+        {
+            sb.AppendLine(
+                barColor + "│ "
+                + "(bkf)" + textColor + line + "(rsf)"
+                + barColor + " │");
+        }
+
+        sb.Append(bottomBar);
+        return sb.ToString();
     }
 
     private void DumpCommandNamespace(Command command, string prefix = "")
@@ -150,24 +183,33 @@ internal sealed class Help : Command
         foreach (var kvp in _commandsSet.Commands)
         {
             var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
-            command.GetDescription(out var description);
-            Console.Out.WriteLine(CommandNameColor + kvp.Key + $"{StOff} : " + description + StOff);
-            if (v.IsSet)
-                DumpCommandNamespace(command, "".PadLeft(command.Name.Length + 3));
+            DumpCommandDescription(command, true, v.IsSet);
         }
+    }
+
+    private void DumpCommandDescription(Command command, bool withName, bool dumpNamespace)
+    {
+        command.GetDescription(out var description);
+        if (withName)
+            Console.Out.Write(CommandNameColor + command.Name + $"{StOff} : ");
+        Console.Out.WriteLine(description + StOff);
+        if (dumpNamespace)
+            DumpCommandNamespace(command, "".PadLeft(command.Name.Length + 3));
     }
 
     private void OutputAppTitle()
     {
-        Sep();
         var date =
             DateOnly.ParseExact(
                 Config.GetValue<string>("App:ReleaseDate")!,
                 Globals.SettingsDateFormat,
                 null);
-        Console.Out.WriteLine(TitleColor + Config.GetValue<string>("App:Title")!
-            + $" ({Assembly.GetExecutingAssembly().GetName().Version} {date})");
-        Sep();
+        var lines = new List<string>
+        {
+            Config.GetValue<string>("App:Title")!
+            + $" ({Assembly.GetExecutingAssembly().GetName().Version} {date})"
+        };
+        Console.Out.WriteLine(TextBox(lines));
         Console.Out.WriteLine();
     }
 
@@ -225,7 +267,7 @@ internal sealed class Help : Command
         Console.Out.WriteLine();
     }
 
-    private void Sep() => Console.Out.WriteLine(TitleColor + "".PadLeft(50, '-'));
+    private void Sep() => Console.Out.WriteLine(SepColor + "".PadLeft(50, ' '));
 
     private static string StringAt(int i, ref string[] t)
         => i <= t.Length ? t[i] : "";

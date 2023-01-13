@@ -57,9 +57,9 @@
       "commandName": "Project",
       "commandLineArgs": "test-command -a 1,2,3,4 -e -b -c  -z --parser-logging Trace"
     },
-    "test-command -h --info -v --parser-logging Trace": {
+    "help -h -v --info --no-color --parser-logging Trace": {
       "commandName": "Project",
-      "commandLineArgs": "test-command -h --info -v --parser-logging Trace"
+      "commandLineArgs": "help -h -v --info --no-color --parser-logging Trace"
     }
   }
 }

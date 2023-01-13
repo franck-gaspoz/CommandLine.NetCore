@@ -23,7 +23,7 @@
 		<InformationalVersion>1.0.7</InformationalVersion>
 
 		<PackageReleaseNotes>
-1.0.7 - 01/12/2023
+1.0.7 - 01/13/2023
 - add global option --no-color that turn off ansi/vt outputs
 - fix auto syntax -h was not passing global arguments
 - new RunCommand in current host
@@ -51,10 +51,6 @@
 		<Optimize>false</Optimize>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Services\CmdLine\Parsing\CheckableSyntaxWord.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example1.png" />
