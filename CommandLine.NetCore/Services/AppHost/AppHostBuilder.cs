@@ -74,7 +74,7 @@ internal sealed class AppHostBuilder
                     .AddCommandLineArgs(args)
                     .AddCommands(assemblySet)
                     .AddGlobalArguments(assemblySet)
-                    .AddSettedGlobalArguments()
+                    .AddGlobalSettings()
                     .ConfigureOutput());
 
         buildDelegate?.Invoke(hostBuilder);

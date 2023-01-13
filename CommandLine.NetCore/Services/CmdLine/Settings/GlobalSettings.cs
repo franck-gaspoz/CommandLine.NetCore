@@ -46,6 +46,11 @@ public sealed class GlobalSettings
     public AppHostConfiguration AppHostConfiguration { get; private set; }
 
     /// <summary>
+    /// command line builder
+    /// </summary>
+    internal CommandLineInterfaceBuilder? CommandLineInterfaceBuilder { get; private set; }
+
+    /// <summary>
     /// global settings of the command line engine
     /// <para>provides access to:
     /// - global options set
@@ -73,5 +78,7 @@ public sealed class GlobalSettings
         GlobalOptsSet = globalOptsSet;
         SettedGlobalOptsSet = new(globalOptsSet, commandLineArgs);
     }
+
+    internal void SetCommandLineBuilder(CommandLineInterfaceBuilder commandLineInterfaceBuilder) => CommandLineInterfaceBuilder = commandLineInterfaceBuilder;
 }
 

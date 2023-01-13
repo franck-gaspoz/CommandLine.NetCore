@@ -21,13 +21,20 @@ public sealed class CommandLineArgs
     /// <returns>true if count > 0</returns>
     public bool Any() => Count > 0;
 
-    private readonly List<string> _args;
+    private List<string> _args;
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="args">list of args</param>
     public CommandLineArgs(List<string> args)
+        => _args = new List<string>(args);
+
+    /// <summary>
+    /// configure
+    /// </summary>
+    /// <param name="args">args</param>
+    public void Configure(List<string> args)
         => _args = new List<string>(args);
 
     /// <summary>

@@ -1,13 +1,9 @@
-﻿
-using CommandLine.NetCore.GlobalOpts;
-using CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 
 using Microsoft.Extensions.DependencyInjection;
-
-using cons = AnsiVtConsole.NetCore;
 
 namespace CommandLine.NetCore.Services.CmdLine;
 
@@ -67,31 +63,29 @@ internal static class IServiceCollectionExt
         return services;
     }
 
+    /// <summary>
+    /// configure output. creates and configure a console
+    /// </summary>
+    /// <param name="services">services</param>
+    /// <returns>services</returns>
     public static IServiceCollection ConfigureOutput(this IServiceCollection services)
     {
-        services.AddSingleton<cons.IAnsiVtConsole>(
+        services.AddSingleton(
             serviceProvider =>
             {
-                var globalSettings = serviceProvider.GetRequiredService<GlobalSettings>();
-                var console = new cons.AnsiVtConsole();
-                console.Out.IsMute = globalSettings
-                    .SettedGlobalOptsSet
-                    .Contains<S>();
-                console.Settings.IsMarkupDisabled
-                    = globalSettings
-                        .SettedGlobalOptsSet
-                        .Contains<NoColor>();
-                return console;
+                return new ConsoleFactory(serviceProvider)
+                    .Create();
             });
         return services;
     }
 
     /// <summary>
-    /// add global arguments founded in command line arguments as injectable dependencies
+    /// <para>initialize global settings</para>
+    /// <para>add global arguments founded in command line arguments as injectable dependencies</para>
     /// </summary>
     /// <param name="services">service collection</param>
     /// <returns>service collection</returns>
-    public static IServiceCollection AddSettedGlobalArguments(
+    public static IServiceCollection AddGlobalSettings(
         this IServiceCollection services)
     {
         services.AddSingleton<GlobalSettings>();

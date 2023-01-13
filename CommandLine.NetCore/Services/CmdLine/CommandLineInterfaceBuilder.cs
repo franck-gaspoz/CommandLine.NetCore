@@ -32,6 +32,13 @@ public sealed class CommandLineInterfaceBuilder
 
     private AppHostBuilder? _appHostBuilder;
 
+    private bool _isRunning;
+
+    /// <summary>
+    /// app host
+    /// </summary>
+    internal IHost? AppHost => _appHostBuilder?.AppHost;
+
     /// <summary>
     /// creates a new instance builder
     /// </summary>
@@ -97,6 +104,7 @@ public sealed class CommandLineInterfaceBuilder
     /// <para>run the command according to the command line arguments</para>
     /// <para>handle errors</para>
     /// <para>output to console command results and any error</para>
+    /// <para>run the host</para>
     /// </summary>
     /// <returns>return code of the command</returns>
     /// <exception cref="ArgumentException">argument error</exception>
@@ -105,13 +113,19 @@ public sealed class CommandLineInterfaceBuilder
         try
         {
             var host = _appHostBuilder!.AppHost;
-            host.RunAsync();
+            if (!_isRunning)
+            {
+                host.RunAsync();
+                _isRunning = true;
+            }
 
             var texts = host.Services.GetRequiredService<Texts>();
             var console = host.Services.GetRequiredService<IAnsiVtConsole>();
             var commandSet = host.Services.GetRequiredService<CommandsSet>();
             var args = host.Services.GetRequiredService<CommandLineArgs>();
             var parser = host.Services.GetRequiredService<Parser>();
+            var globalSettings = host.Services.GetRequiredService<GlobalSettings>();
+            globalSettings.SetCommandLineBuilder(this);
             var lineBreak = false;
 
             try

@@ -29,6 +29,19 @@ public class SettedGlobalOptsSet
     }
 
     /// <summary>
+    /// configure
+    /// </summary>
+    /// <param name="globalOptsSet">global opts set</param>
+    /// <param name="commandLineArgs">command line args</param>
+    public void Configure(GlobalOptsSet globalOptsSet,
+        CommandLineArgs commandLineArgs)
+    {
+        _opts.Clear();
+        foreach (var kvp in globalOptsSet.Parse(commandLineArgs))
+            Add(kvp.Value);
+    }
+
+    /// <summary>
     /// add an option to the set
     /// </summary>
     /// <param name="opt">option</param>
