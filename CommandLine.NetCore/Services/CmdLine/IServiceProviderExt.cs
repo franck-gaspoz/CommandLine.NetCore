@@ -1,5 +1,5 @@
 ﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
+using CommandLine.NetCore.Services.CmdLine.Settings;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,13 +27,13 @@ internal static class IServiceProviderExt
     /// </summary>
     /// <param name="serviceProvider">service provider</param>
     /// <returns>this</returns>
-    public static IServiceProvider ConfigureSettedGlobalArguments(
+    public static IServiceProvider ConfigureGlobalSettings(
         this IServiceProvider serviceProvider)
     {
-        var settedGlobalOptsSet = serviceProvider.GetRequiredService<SettedGlobalOptsSet>();
-        var globalOptsSet = serviceProvider.GetRequiredService<GlobalOptsSet>();
-        var cmdArgs = serviceProvider.GetRequiredService<CommandLineArgs>();
-        settedGlobalOptsSet.Configure(globalOptsSet, cmdArgs);
+        var globalSettings = serviceProvider.GetRequiredService<GlobalSettings>();
+        globalSettings
+            .SettedGlobalOptsSet
+            .Configure(globalSettings);
         return serviceProvider;
     }
 

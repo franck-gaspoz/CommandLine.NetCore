@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using CommandLine.NetCore.Services.CmdLine.Settings;
+
 namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 
 /// <summary>
@@ -29,14 +31,14 @@ public class SettedGlobalOptsSet
     }
 
     /// <summary>
-    /// configure
+    /// configure from global settings
     /// </summary>
-    /// <param name="globalOptsSet">global opts set</param>
-    /// <param name="commandLineArgs">command line args</param>
-    public void Configure(GlobalOptsSet globalOptsSet,
-        CommandLineArgs commandLineArgs)
+    /// <param name="globalSettings">global settings</param>
+    public void Configure(GlobalSettings globalSettings)
     {
         _opts.Clear();
+        var globalOptsSet = globalSettings.GlobalOptsSet;
+        var commandLineArgs = globalSettings.CommandLineArgs;
         foreach (var kvp in globalOptsSet.Parse(commandLineArgs))
             Add(kvp.Value);
     }

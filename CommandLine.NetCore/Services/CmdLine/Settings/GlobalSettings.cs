@@ -79,6 +79,7 @@ public sealed class GlobalSettings
         SettedGlobalOptsSet = new(globalOptsSet, commandLineArgs);
     }
 
-    internal void SetCommandLineBuilder(CommandLineInterfaceBuilder commandLineInterfaceBuilder) => CommandLineInterfaceBuilder = commandLineInterfaceBuilder;
+    internal void SetCommandLineBuilder(CommandLineInterfaceBuilder commandLineInterfaceBuilder)
+        => CommandLineInterfaceBuilder = commandLineInterfaceBuilder;
 }
 

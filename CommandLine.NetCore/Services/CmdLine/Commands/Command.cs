@@ -312,9 +312,8 @@ public abstract class Command
 
         serviceProvider
             .ConfigureCommandLineArgs(args)
-            .ConfigureSettedGlobalArguments()
-            .ConfigureOutput()
-            ;
+            .ConfigureGlobalSettings()
+            .ConfigureOutput();
 
         return new(
             commandLineInterfaceBuilder.Run()
