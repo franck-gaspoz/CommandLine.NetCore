@@ -44,6 +44,7 @@ public class SettedGlobalOptsSet
     public void Configure(GlobalSettings globalSettings)
     {
         _opts.Clear();
+        _optSpecs.Clear();
         var globalOptsSet = globalSettings.GlobalOptsSet;
         var commandLineArgs = globalSettings.CommandLineArgs;
         foreach (var kvp in globalOptsSet.Parse(commandLineArgs))
@@ -54,9 +55,16 @@ public class SettedGlobalOptsSet
     /// add an option to the set
     /// </summary>
     /// <param name="optSpec">option spec</param>
-    private void Add((IOpt opt, List<string> optArgs) optSpec) => _opts.Add(
+    private void Add((IOpt opt, List<string> optArgs) optSpec)
+    {
+        _opts.Add(
             optSpec.opt.Name,
             optSpec.opt);
+        _optSpecs.Add(
+            optSpec.opt,
+            optSpec.optArgs
+            );
+    }
 
     /// <summary>
     /// try get an option from its type

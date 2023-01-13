@@ -292,6 +292,13 @@ public abstract class Command
             }
         }
 
+        foreach (var (_, globalArgSyntax) in GlobalSettings
+            .SettedGlobalOptsSet
+            .OptSpecs)
+        {
+            args.AddRange(globalArgSyntax);
+        }
+
         return RunCommand(args.ToArray());
     }
 
