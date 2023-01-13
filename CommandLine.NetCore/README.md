@@ -387,9 +387,10 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
-`1.0.7` - 01/12/2023
+`1.0.7` - 01/13/2023
 - add global option `--no-color` that turn off ansi/vt outputs
 - fix auto syntax -h was not passing global arguments
+- new RunCommand in current host
 - improve help output
 
 `1.0.6` - 01/11/2023
