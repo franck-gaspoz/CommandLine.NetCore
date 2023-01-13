@@ -21,13 +21,17 @@
 		<Copyright>(c) Franck Gaspoz 2023 Licence MIT</Copyright>
 		<Version>1.0.7</Version>
 		<InformationalVersion>1.0.7</InformationalVersion>
-
+		<DebugType>embedded</DebugType>
+		<EmbedAllSources>True</EmbedAllSources>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		
 		<PackageReleaseNotes>
 1.0.7 - 01/13/2023
 - add global option --no-color that turn off ansi/vt outputs
 - fix auto syntax -h was not passing global arguments
 - new RunCommand in current host
 - improve help output
+- embed symbols and sources
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>

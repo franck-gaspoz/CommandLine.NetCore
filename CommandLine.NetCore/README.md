@@ -392,6 +392,7 @@ internal sealed class GetInfo : Command
 - fix auto syntax -h was not passing global arguments
 - new RunCommand in current host
 - improve help output
+- embed symbols and sources
 
 `1.0.6` - 01/11/2023
 - fix MAJOR bug in command options parsing. Were not recongnized correctly
