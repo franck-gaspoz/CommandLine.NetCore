@@ -70,14 +70,18 @@ public sealed class Parser
     /// <param name="args">arg list. the list is consumed (elements are removed)</param>
     /// <param name="index">begin index</param>
     /// <param name="position">actual begin index in arguments list</param>
+    /// <param name="optArgs">returns the original string of the opt argument</param>
     /// <exception cref="ArgumentException">missing argument value</exception>
     public void ParseOptValues(
         IOpt opt,
         List<string> args,
         int index,
-        int position)
+        int position,
+        out List<string> optArgs)
     {
+        optArgs = new List<string>();
         var expectedCount = opt.ExpectedValuesCount;
+        optArgs.Add(args[index]);
         args.RemoveAt(index);
         while (expectedCount > 0)
         {
@@ -102,6 +106,7 @@ public sealed class Parser
                         ex.Message,
                         opt.ToSyntax()));
             }
+            optArgs.Add(args[index]);
             args.RemoveAt(index);
             expectedCount--;
         }
@@ -175,7 +180,7 @@ public sealed class Parser
             if (arg == opt.PrefixedName)
             {
                 if (!TryCatch(
-                    () => ParseOptValues(opt, args, 0, currentPosition),
+                    () => ParseOptValues(opt, args, 0, currentPosition, out _),
                     (ex) => errors.Add(
                         BuildError(
                             ex, SyntaxMismatch(opt)))

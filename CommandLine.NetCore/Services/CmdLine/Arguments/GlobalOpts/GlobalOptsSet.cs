@@ -93,10 +93,10 @@ public sealed class GlobalOptsSet
         return false;
     }
 
-    internal Dictionary<string, IOpt> Parse(
+    internal Dictionary<string, (IOpt, List<string>)> Parse(
         CommandLineArgs commandLineArgs)
     {
-        Dictionary<string, IOpt> res = new();
+        Dictionary<string, (IOpt, List<string>)> res = new();
         var index = 0;
         var position = 0;
         var args = commandLineArgs.Args.ToList();
@@ -111,13 +111,14 @@ public sealed class GlobalOptsSet
                 if (res.ContainsKey(str))
                     throw new ArgumentException(_texts._("DuplicatedOption", str));
 
-                res.Add(str, opt);
                 _parser.ParseOptValues(
                     opt,
                     args,
                     index,
-                    position
+                    position,
+                    out var optArgs
                     );
+                res.Add(str, (opt, optArgs));
             }
             else
             {

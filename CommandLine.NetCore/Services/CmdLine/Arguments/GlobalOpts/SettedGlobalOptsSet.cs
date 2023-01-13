@@ -9,13 +9,20 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 /// </summary>
 public class SettedGlobalOptsSet
 {
-    private readonly Dictionary<string, IOpt> _opts = new();
-
     /// <summary>
     /// setted global options
     /// </summary>
     public IReadOnlyDictionary<string, IOpt> Opts
         => _opts;
+
+    /// <summary>
+    /// setted global options syntaxes
+    /// </summary>
+    public IReadOnlyDictionary<IOpt, List<string>> OptSpecs
+        => _optSpecs;
+
+    private readonly Dictionary<string, IOpt> _opts = new();
+    private readonly Dictionary<IOpt, List<string>> _optSpecs = new();
 
     /// <summary>
     /// setted global arguments set
@@ -46,9 +53,10 @@ public class SettedGlobalOptsSet
     /// <summary>
     /// add an option to the set
     /// </summary>
-    /// <param name="opt">option</param>
-    public void Add(IOpt opt)
-        => _opts.Add(opt.Name, opt);
+    /// <param name="optSpec">option spec</param>
+    private void Add((IOpt opt, List<string> optArgs) optSpec) => _opts.Add(
+            optSpec.opt.Name,
+            optSpec.opt);
 
     /// <summary>
     /// try get an option from its type
