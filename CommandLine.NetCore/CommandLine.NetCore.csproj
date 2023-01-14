@@ -28,6 +28,7 @@
 		<PackageReleaseNotes>
 1.0.8 - 01/14/2023
 - add single command mode to produce an executable for only one command and eventually without the global help
+- change editor config and code cleanup
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>
