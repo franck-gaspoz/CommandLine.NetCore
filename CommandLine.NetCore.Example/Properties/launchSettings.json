@@ -60,6 +60,18 @@
     "help -h -v --info --no-color --parser-logging Trace": {
       "commandName": "Project",
       "commandLineArgs": "help -h -v --info --no-color --parser-logging Trace"
+    },
+    "help": {
+      "commandName": "Project",
+      "commandLineArgs": "help"
+    },
+    "empty": {
+      "commandName": "Project",
+      "commandLineArgs": "--parser-logging Trace"
+    },
+    "-h": {
+      "commandName": "Project",
+      "commandLineArgs": "-h --parser-logging Trace"
     }
   }
 }

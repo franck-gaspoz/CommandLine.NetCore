@@ -2,6 +2,7 @@
 
 using AnsiVtConsole.NetCore;
 
+using CommandLine.NetCore.Commands.CmdLine;
 using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
@@ -158,16 +159,46 @@ public sealed class CommandLineInterfaceBuilder
 
             try
             {
-                if (!args.Any())
+                var helpCommand = host.Services.GetRequiredService<Help>();
+                var anyArg = args.Args.Any();
+                var isNotHelpCommand = anyArg && args.Args.First() != helpCommand.Name;
+
+                if (!args.Any() && (_forCommandType is null || !isNotHelpCommand))
                     throw new ArgumentException(texts._("MissingArguments"));
 
                 console.Out.WriteLine();
                 lineBreak = true;
 
-                var command = commandSet.GetCommand(args.Args.ToArray()[0]);
+                var filteredArgs = (_forCommandType is null && anyArg || !isNotHelpCommand) ?
+                    args.Args.ToArray()[1..]
+                    : args.Args.ToArray();
+
+                Command command;
+
+                if (args.Count == 1
+                    && args.Args.First() == helpCommand.Name
+                    && !_isGlobalHelpEnabled)
+                    throw new ArgumentException(
+                        texts._("UnknownCommand", helpCommand.Name));
+
+                var secondArg = args.Args.Count > 1 ? args.Args.ElementAt(1) : null;
+                var forCommand = _forCommandType is not null ?
+                    (Command)host.Services.GetRequiredService(_forCommandType)
+                    : null;
+
+                if (_forCommandType is not null
+                    && (isNotHelpCommand || !_isGlobalHelpEnabled)
+                        && (!(!isNotHelpCommand
+                            && (secondArg is not null
+                                && secondArg == forCommand!.Name))))
+                {
+                    command = forCommand!;
+                }
+                else
+                    command = commandSet.GetCommand(args.Args.ToArray()[0]);
+
                 var commandResult = command.Run(
-                    new ArgSet(
-                        args.Args.ToArray()[1..]));
+                    new ArgSet(filteredArgs));
 
                 console.Out.WriteLine();
 

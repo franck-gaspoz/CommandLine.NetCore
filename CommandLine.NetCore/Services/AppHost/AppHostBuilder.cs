@@ -74,7 +74,9 @@ sealed class AppHostBuilder
                     .AddSingleton(hostConfiguration)
                     .AddSingleton(hostConfiguration.AssemblySet)
                     .AddCommandLineArgs(args)
-                    .AddCommands(hostConfiguration.AssemblySet)
+                    .AddCommands(
+                        hostConfiguration.AssemblySet,
+                        AppHostConfiguration)
                     .AddGlobalArguments(hostConfiguration.AssemblySet)
                     .AddGlobalSettings()
                     .ConfigureOutput());

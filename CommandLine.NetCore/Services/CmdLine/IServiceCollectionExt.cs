@@ -1,4 +1,5 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Services.AppHost;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Settings;
@@ -14,15 +15,17 @@ static class IServiceCollectionExt
     /// </summary>
     /// <param name="services">service collection</param>
     /// <param name="assemblySet">assembly set where lookup for commands and arguments</param>
+    /// <param name="appHostConfiguration">app host configuration</param>
     /// <returns>service collection</returns>
     public static IServiceCollection AddCommands(
         this IServiceCollection services,
-        AssemblySet assemblySet
+        AssemblySet assemblySet,
+        AppHostConfiguration appHostConfiguration
         )
     {
         services.AddSingleton<CommandsSet>();
 
-        foreach (var classType in CommandsSet.GetCommandTypes(assemblySet))
+        foreach (var classType in CommandsSet.GetCommandTypes(assemblySet, appHostConfiguration))
             services.AddTransient(classType);
 
         return services;

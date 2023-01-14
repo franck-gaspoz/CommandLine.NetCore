@@ -1,4 +1,6 @@
-﻿using CommandLine.NetCore.Extensions;
+﻿using CommandLine.NetCore.Commands.CmdLine;
+using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
@@ -14,12 +16,13 @@ sealed class CommandsSet
     public CommandsSet(
         Texts texts,
         IServiceProvider serviceProvider,
-        AssemblySet assemblySet)
+        AssemblySet assemblySet,
+        AppHostConfiguration appHostConfiguration)
     {
         _texts = texts;
         _serviceProvider = serviceProvider;
 
-        foreach (var classType in GetCommandTypes(assemblySet))
+        foreach (var classType in GetCommandTypes(assemblySet, appHostConfiguration))
         {
             Add(
                 Command.ClassNameToCommandName(classType.Name),
@@ -27,7 +30,9 @@ sealed class CommandsSet
         }
     }
 
-    public static IEnumerable<Type> GetCommandTypes(AssemblySet assemblySet)
+    public static IEnumerable<Type> GetCommandTypes(
+        AssemblySet assemblySet,
+        AppHostConfiguration appHostConfiguration)
     {
         var commandTypes = new List<Type>();
         foreach (var assembly in assemblySet.Assemblies)
@@ -40,7 +45,18 @@ sealed class CommandsSet
                             && x.InheritsFrom(typeof(Command))));
         }
 
-        return commandTypes;
+        var selectedTypes = new List<Type>();
+
+        foreach (var type in commandTypes)
+        {
+            if ((appHostConfiguration.ForCommandType is null
+                || (appHostConfiguration.ForCommandType is not null
+                    && appHostConfiguration.ForCommandType == type)
+                || type == typeof(Help)))
+                selectedTypes.Add(type);
+        }
+
+        return selectedTypes;
     }
 
     readonly Dictionary<string, Type> _commands = new();

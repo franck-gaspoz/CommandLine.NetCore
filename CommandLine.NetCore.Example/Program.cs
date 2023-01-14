@@ -14,6 +14,7 @@ public class Program
     public static int Main(string[] args)
         => new CommandLineInterfaceBuilder()
             .ForCommand<GetInfo>()
+            .DisableGlobalHelp()
             .Build(args)
             .Run();
 }
