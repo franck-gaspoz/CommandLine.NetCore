@@ -36,6 +36,8 @@ public sealed class CommandLineInterfaceBuilder
 
     Type? _forCommandType;
 
+    bool _isGlobalHelpEnabled = true;
+
     /// <summary>
     /// app host
     /// </summary>
@@ -52,6 +54,8 @@ public sealed class CommandLineInterfaceBuilder
 
     /// <summary>
     /// configure the command line to work for an unique command
+    /// <para>only the command of the specified type is available</para>
+    /// <para>the name of the command is not required in the command line, because it is implicit</para>
     /// </summary>
     /// <typeparam name="CommandType">type of the command</typeparam>
     /// <returns>this</returns>
@@ -59,6 +63,16 @@ public sealed class CommandLineInterfaceBuilder
         where CommandType : Command
     {
         _forCommandType = typeof(CommandType);
+        return this;
+    }
+
+    /// <summary>
+    /// disable global help - often associated with ForCommand
+    /// </summary>
+    /// <returns></returns>
+    public CommandLineInterfaceBuilder DisableGlobalHelp()
+    {
+        _isGlobalHelpEnabled = false;
         return this;
     }
 
@@ -195,9 +209,12 @@ public sealed class CommandLineInterfaceBuilder
         {
             _appHostBuilder = new AppHostBuilder(
                 args.ToList(),
-                _assemblySet,
-                _configureDelegate,
-                _buildDelegate);
+                new AppHostConfiguration(
+                    _assemblySet,
+                    _isGlobalHelpEnabled,
+                    _forCommandType,
+                    _configureDelegate,
+                    _buildDelegate));
         }
         catch (Exception hostBuilderException)
         {

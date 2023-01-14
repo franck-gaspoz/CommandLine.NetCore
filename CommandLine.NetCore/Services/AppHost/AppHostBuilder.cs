@@ -3,7 +3,6 @@ using CommandLine.NetCore.Services.CmdLine;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
-using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -16,26 +15,27 @@ namespace CommandLine.NetCore.Services.AppHost;
 
 sealed class AppHostBuilder
 {
+    /// <summary>
+    /// app host
+    /// </summary>
     public IHost AppHost { get; private set; }
+
+    /// <summary>
+    /// app host configuration
+    /// </summary>
+    public AppHostConfiguration AppHostConfiguration { get; private set; }
 
     /// <summary>
     /// build the app host and run it async
     /// </summary>
-    /// <param name="args">command line args</param>
-    /// <param name="assemblySet">assembly set where lookup for commands and arguments</param>
-    /// <param name="configureDelegate">optional configure delegate</param>
-    /// <param name="buildDelegate">optional build delegate</param>
+    /// <param name="args">command line arguments</param>
+    /// <param name="hostConfiguration">app host configuration</param> 
     public AppHostBuilder(
         List<string> args,
-        AssemblySet assemblySet,
-        Action<IConfigurationBuilder>? configureDelegate = null,
-        Action<IHostBuilder>? buildDelegate = null)
+        AppHostConfiguration hostConfiguration)
     {
+        AppHostConfiguration = hostConfiguration;
         var hostBuilder = Host.CreateDefaultBuilder();
-        var hostConfiguration = new AppHostConfiguration(
-            configureDelegate,
-            buildDelegate
-            );
 
         hostBuilder
             .ConfigureAppConfiguration(
@@ -58,26 +58,29 @@ sealed class AppHostBuilder
                         optional: true);
                 });
 
-        if (configureDelegate is not null)
-            hostBuilder.ConfigureAppConfiguration(configureDelegate);
+        if (hostConfiguration.ConfigureDelegate is not null)
+            hostBuilder.ConfigureAppConfiguration(
+                hostConfiguration.ConfigureDelegate);
 
         hostBuilder
             .ConfigureServices(
                 services => services
+                    .AddSingleton<AppHostConfiguration>()
                     .AddSingleton<Texts>()
                     .AddSingleton<ArgBuilder>()
                     .AddSingleton<ValueConverter>()
                     .AddSingleton<Parser>()
                     .AddSingleton<Dependencies>()
                     .AddSingleton(hostConfiguration)
-                    .AddSingleton(assemblySet)
+                    .AddSingleton(hostConfiguration.AssemblySet)
                     .AddCommandLineArgs(args)
-                    .AddCommands(assemblySet)
-                    .AddGlobalArguments(assemblySet)
+                    .AddCommands(hostConfiguration.AssemblySet)
+                    .AddGlobalArguments(hostConfiguration.AssemblySet)
                     .AddGlobalSettings()
                     .ConfigureOutput());
 
-        buildDelegate?.Invoke(hostBuilder);
+        hostConfiguration.BuildDelegate?
+            .Invoke(hostBuilder);
 
         AppHost = hostBuilder.Build();
     }

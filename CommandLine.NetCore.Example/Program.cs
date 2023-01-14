@@ -1,4 +1,5 @@
-﻿using CommandLine.NetCore.Services.CmdLine;
+﻿using CommandLine.NetCore.Example.Commands;
+using CommandLine.NetCore.Services.CmdLine;
 
 namespace CommandLine.NetCore.Example;
 
@@ -12,6 +13,7 @@ public class Program
     /// <returns>status code</returns>
     public static int Main(string[] args)
         => new CommandLineInterfaceBuilder()
+            .ForCommand<GetInfo>()
             .Build(args)
             .Run();
 }
