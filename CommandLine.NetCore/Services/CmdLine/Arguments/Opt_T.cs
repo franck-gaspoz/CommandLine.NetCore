@@ -12,15 +12,15 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// a command line option : -name [value1 [.. value n], --name [value1 [.. value n] of values of generic type T
 /// </summary>
 /// <typeparam name="T">option type of values</typeparam>
-[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{_debuggerDisplay}")]
 public class Opt<T> : Arg, IOpt
 {
-    private string DebuggerDisplay => ToSyntax();
+    string _debuggerDisplay => ToSyntax();
 
     /// <inheritdoc/>
     public bool IsOptional { get; private set; }
 
-    private bool _isSetted;
+    bool _isSetted;
 
     /// <inheritdoc/>
     public bool IsSet

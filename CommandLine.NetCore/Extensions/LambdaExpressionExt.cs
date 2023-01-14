@@ -7,7 +7,7 @@ namespace CommandLine.NetCore.Extensions;
 /// <summary>
 /// lambda expression extensions
 /// </summary>
-internal static class LambdaExpressionExt
+static class LambdaExpressionExt
 {
     /// <summary>
     /// get a method info and the target object of a method call from a lambda unary call expression:

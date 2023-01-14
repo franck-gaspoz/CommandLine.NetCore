@@ -10,10 +10,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// <summary>
 /// a single value parameter argument : value
 /// </summary>
-[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{_debuggerDisplay}")]
 public class Param<T> : Arg, IParam
 {
-    private string DebuggerDisplay => ToSyntax();
+    string _debuggerDisplay => ToSyntax();
 
     /// <inheritdoc/>
     public override string ToSyntax()
@@ -22,7 +22,7 @@ public class Param<T> : Arg, IParam
         return $"Param<{typeof(T).Name}>{val}";
     }
 
-    private T? _value;
+    T? _value;
 
     /// <summary>
     /// value

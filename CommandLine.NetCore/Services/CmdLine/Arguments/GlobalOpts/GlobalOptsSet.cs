@@ -14,10 +14,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 /// </summary>
 public sealed class GlobalOptsSet
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly Dictionary<string, Type> _opts = new();
-    private readonly Texts _texts;
-    private readonly Parser _parser;
+    readonly IServiceProvider _serviceProvider;
+    readonly Dictionary<string, Type> _opts = new();
+    readonly Texts _texts;
+    readonly Parser _parser;
 
     /// <summary>
     /// options
@@ -70,12 +70,12 @@ public sealed class GlobalOptsSet
         return globalOptTypes;
     }
 
-    private void Add(
+    void Add(
         string name,
         Type optType)
         => _opts.Add(name, optType);
 
-    private bool TryBuild(
+    bool TryBuild(
         IServiceProvider serviceProvider,
         string str,
         [NotNullWhen(true)]

@@ -7,7 +7,7 @@ namespace CommandLine.NetCore.Services.Text;
 /// </summary>
 public sealed class Texts
 {
-    private readonly IConfiguration _config;
+    readonly IConfiguration _config;
 
     /// <summary>
     /// build a new instance
@@ -35,7 +35,7 @@ public sealed class Texts
     /// <param name="noRecurse">if false do not perform a search of unknown text</param>
     /// <param name="parameters">parmetrized text parameters (like string.Format)</param>
     /// <returns>text from settings</returns>
-    private string T(
+    string T(
         string textId,
         bool noRecurse,
         params object?[] parameters)

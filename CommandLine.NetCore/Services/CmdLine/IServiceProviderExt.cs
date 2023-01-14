@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandLine.NetCore.Services.CmdLine;
 
-internal static class IServiceProviderExt
+static class IServiceProviderExt
 {
     /// <summary>
     /// configure command line args

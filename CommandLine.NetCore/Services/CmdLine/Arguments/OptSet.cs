@@ -5,10 +5,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 /// <summary>
 /// a command options set
 /// </summary>
-[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{_debuggerDisplay}")]
 public sealed class OptSet
 {
-    private string DebuggerDisplay => ToSyntax();
+    string _debuggerDisplay => ToSyntax();
 
     /// <summary>
     /// name of the syntax
@@ -20,7 +20,7 @@ public sealed class OptSet
     /// </summary>
     public IReadOnlyCollection<IOpt> Opts => _opts;
 
-    private readonly List<IOpt> _opts;
+    readonly List<IOpt> _opts;
 
     /// <summary>
     /// build a new instance

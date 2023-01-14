@@ -15,21 +15,21 @@ namespace CommandLine.NetCore.Commands.CmdLine;
 /// <summary>
 /// command line help
 /// </summary>
-internal sealed class Help : Command
+sealed class Help : Command
 {
-    private readonly CommandsSet _commandsSet;
-    private readonly GlobalOptsSet _globalOptsSet;
-    private readonly IServiceProvider _serviceProvider;
+    readonly CommandsSet _commandsSet;
+    readonly GlobalOptsSet _globalOptsSet;
+    readonly IServiceProvider _serviceProvider;
 
-    private const string SepColor = "(uon,f=cyan,bon)";
-    private const string SectionTitleColor = "(uon,f=yellow,bon)";
-    private const string CommandNameColor = "(bon,f=green)";
-    private const string CommandNamespaceColor = "(f=blue)";
-    private const string ArgNameColor = "(f=darkyellow)";
-    private const string InformationalDataMessage = "(f=darkgreen)";
-    private const string ArgValueColor = "(bon,f=cyan)";
-    private const string StOff = "(tdoff)";
-    private const string Br = "(br)";
+    const string SepColor = "(uon,f=cyan,bon)";
+    const string SectionTitleColor = "(uon,f=yellow,bon)";
+    const string CommandNameColor = "(bon,f=green)";
+    const string CommandNamespaceColor = "(f=blue)";
+    const string ArgNameColor = "(f=darkyellow)";
+    const string InformationalDataMessage = "(f=darkgreen)";
+    const string ArgValueColor = "(bon,f=cyan)";
+    const string StOff = "(tdoff)";
+    const string Br = "(br)";
 
     public Help(
         Dependencies dependencies,
@@ -54,7 +54,7 @@ internal sealed class Help : Command
 
         .With(args);
 
-    private void DumpHelpForAllCommands(Opt v, Opt info)
+    void DumpHelpForAllCommands(Opt v, Opt info)
     {
         OutputAppTitle();
 
@@ -74,7 +74,7 @@ internal sealed class Help : Command
         CommandEnd(info.IsSet);
     }
 
-    private void DumpCommandHelp(Param comandName, Opt v, Opt info)
+    void DumpCommandHelp(Param comandName, Opt v, Opt info)
     {
         OutputAppTitle();
 
@@ -97,7 +97,7 @@ internal sealed class Help : Command
         CommandEnd(info.IsSet);
     }
 
-    private string TextBox(List<string> lines)
+    string TextBox(List<string> lines)
     {
         var length = lines.Select(line => Console.Out.GetText(line).Length).Max();
         var textColor = "(bon,f=white)";
@@ -127,13 +127,13 @@ internal sealed class Help : Command
         return sb.ToString();
     }
 
-    private void DumpCommandNamespace(Command command, string prefix = "")
+    void DumpCommandNamespace(Command command, string prefix = "")
         => Console.Out.WriteLine(
             prefix
             + "(f=darkgray)namespace: "
             + CommandNamespaceColor + command.GetType().Namespace + StOff);
 
-    private void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
+    void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
     {
         Console.Out.WriteLine();
         OutputSectionTitle(Texts._("CommandOptions"));
@@ -141,7 +141,7 @@ internal sealed class Help : Command
             DumpOpt(optDesc, true);
     }
 
-    private void CommandEnd(bool info)
+    void CommandEnd(bool info)
     {
         if (!info) return;
         Console.Out.WriteLine();
@@ -149,12 +149,12 @@ internal sealed class Help : Command
         Sep();
     }
 
-    private void DumpInformationalData()
+    void DumpInformationalData()
         => Console.Out.WriteLine(
             InformationalDataMessage +
             Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
 
-    private void DumpGlobalOptList()
+    void DumpGlobalOptList()
     {
         foreach (var kvp in _globalOptsSet.Opts)
         {
@@ -167,7 +167,7 @@ internal sealed class Help : Command
         }
     }
 
-    private void DumpOpt(
+    void DumpOpt(
         KeyValuePair<string, string> optDesc,
         bool descriptionAvailable)
     {
@@ -178,7 +178,7 @@ internal sealed class Help : Command
             + isError + optDesc.Value + StOff);
     }
 
-    private void DumpCommandList(Opt v)
+    void DumpCommandList(Opt v)
     {
         foreach (var kvp in _commandsSet.Commands)
         {
@@ -187,7 +187,7 @@ internal sealed class Help : Command
         }
     }
 
-    private void DumpCommandDescription(Command command, bool withName, bool dumpNamespace)
+    void DumpCommandDescription(Command command, bool withName, bool dumpNamespace)
     {
         command.GetDescription(out var description);
         if (withName)
@@ -197,7 +197,7 @@ internal sealed class Help : Command
             DumpCommandNamespace(command, "".PadLeft(command.Name.Length + 3));
     }
 
-    private void OutputAppTitle()
+    void OutputAppTitle()
     {
         var date =
             DateOnly.ParseExact(
@@ -213,10 +213,10 @@ internal sealed class Help : Command
         Console.Out.WriteLine();
     }
 
-    private void OutputSectionTitle(string text)
+    void OutputSectionTitle(string text)
         => Console.Out.WriteLine(SectionTitleColor + text + StOff + Br);
 
-    private void DumpCommandSyntax(string text)
+    void DumpCommandSyntax(string text)
     {
         var args = text.Split(' ');
         var cmdName = StringAt(0, ref args);
@@ -236,7 +236,7 @@ internal sealed class Help : Command
         Console.Out.Write(StOff);
     }
 
-    private void DumpSyntaxes(
+    void DumpSyntaxes(
         Command command,
         List<KeyValuePair<string, string>> longDescriptions)
     {
@@ -250,7 +250,7 @@ internal sealed class Help : Command
             DumpSyntax(command, kvp);
     }
 
-    private void DumpSyntax(
+    void DumpSyntax(
         Command command,
         KeyValuePair<string, string> longDescription)
     {
@@ -267,8 +267,8 @@ internal sealed class Help : Command
         Console.Out.WriteLine();
     }
 
-    private void Sep() => Console.Out.WriteLine(SepColor + "".PadLeft(50, ' '));
+    void Sep() => Console.Out.WriteLine(SepColor + "".PadLeft(50, ' '));
 
-    private static string StringAt(int i, ref string[] t)
+    static string StringAt(int i, ref string[] t)
         => i <= t.Length ? t[i] : "";
 }

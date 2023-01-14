@@ -5,7 +5,7 @@ namespace CommandLine.NetCore.Extensions;
 /// <summary>
 /// Type extensions
 /// </summary>
-internal static class TypeExt
+static class TypeExt
 {
     /// <summary>
     /// indicates if a type inherits from another type. returns false if type is base type

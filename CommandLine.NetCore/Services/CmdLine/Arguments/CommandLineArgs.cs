@@ -21,7 +21,7 @@ public sealed class CommandLineArgs
     /// <returns>true if count > 0</returns>
     public bool Any() => Count > 0;
 
-    private List<string> _args;
+    List<string> _args;
 
     /// <summary>
     /// build a new instance

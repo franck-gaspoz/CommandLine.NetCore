@@ -5,10 +5,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 /// <summary>
 /// a command line syntax
 /// </summary>
-[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{_debuggerDisplay}")]
 public sealed class Syntax
 {
-    private string DebuggerDisplay => ToSyntax();
+    string _debuggerDisplay => ToSyntax();
 
     /// <summary>
     /// name of the syntax
@@ -25,7 +25,7 @@ public sealed class Syntax
     /// </summary>
     public IReadOnlyCollection<IArg> Args => _args;
 
-    private readonly List<IArg> _args;
+    readonly List<IArg> _args;
 
     /// <summary>
     /// build a new instance

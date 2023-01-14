@@ -3,7 +3,7 @@ using CommandLine.NetCore.Services.CmdLine.Running;
 
 namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 
-internal class MatchingSyntax
+class MatchingSyntax
 {
     public SyntaxExecutionDispatchMapItem SyntaxExecutionDispatchMapItem { get; private set; }
 

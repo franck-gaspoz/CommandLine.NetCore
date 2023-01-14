@@ -9,9 +9,9 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// </summary>
 public sealed class ArgBuilder
 {
-    private readonly IConfiguration _config;
-    private readonly Texts _texts;
-    private readonly ValueConverter _valueConverter;
+    readonly IConfiguration _config;
+    readonly Texts _texts;
+    readonly ValueConverter _valueConverter;
 
     /// <summary>
     /// arg builder

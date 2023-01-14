@@ -6,10 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
-internal sealed class CommandsSet
+sealed class CommandsSet
 {
-    private readonly Texts _texts;
-    private readonly IServiceProvider _serviceProvider;
+    readonly Texts _texts;
+    readonly IServiceProvider _serviceProvider;
 
     public CommandsSet(
         Texts texts,
@@ -43,12 +43,12 @@ internal sealed class CommandsSet
         return commandTypes;
     }
 
-    private readonly Dictionary<string, Type> _commands = new();
+    readonly Dictionary<string, Type> _commands = new();
 
     public IReadOnlyDictionary<string, Type> Commands
         => _commands;
 
-    private void Add(
+    void Add(
         string name,
         Type commandType)
         => _commands.Add(name, commandType);

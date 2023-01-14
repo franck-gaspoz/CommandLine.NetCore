@@ -6,7 +6,7 @@ using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Example.Commands;
 
-internal sealed class GetInfo : Command
+sealed class GetInfo : Command
 {
     /*
      * syntax list:
@@ -57,7 +57,7 @@ internal sealed class GetInfo : Command
 
         .With(args);
 
-    private void DumpAll()
+    void DumpAll()
     {
         DumpSystem();
 
@@ -70,7 +70,7 @@ internal sealed class GetInfo : Command
         DumpAllVars();
     }
 
-    private void DumpSystem()
+    void DumpSystem()
     {
         OutputSectionTitle(Texts._("SystemInformations"));
 
@@ -135,13 +135,13 @@ internal sealed class GetInfo : Command
             OutputKeyValue(kvp.Key, kvp.Value);
     }
 
-    private void DumpConsole()
+    void DumpConsole()
     {
         OutputSectionTitle(Texts._("ConsoleInformations"));
         Console.Infos();
     }
 
-    private void DumpEnvVar(Param envVarName)
+    void DumpEnvVar(Param envVarName)
     {
         var value = Environment.GetEnvironmentVariable(
             envVarName.Value!);
@@ -154,7 +154,7 @@ internal sealed class GetInfo : Command
         OutputKeyValue(envVarName.Value!, value);
     }
 
-    private void DumpAllVars()
+    void DumpAllVars()
     {
         OutputSectionTitle(Texts._("EnvironmentVariables"));
         var vars = Environment.GetEnvironmentVariables();
@@ -171,17 +171,17 @@ internal sealed class GetInfo : Command
 
     #region utils
 
-    private void OutputKeyValue(string key, string value)
+    void OutputKeyValue(string key, string value)
         => Console.Out.WriteLine($"(f=cyan){key} (f=gray)= (f=green){value}");
 
     public static string ToText(object? obj, string ifNullText = "?")
         => obj is null ? ifNullText : obj.ToString()!;
 
-    private void OutputSectionTitle(string text)
+    void OutputSectionTitle(string text)
         => Console.Out.WriteLine(SectionTitleColor + text + ":" + StOff + "(br)");
 
-    private const string SectionTitleColor = "(uon,f=yellow,bon)";
-    private const string StOff = "(tdoff)";
+    const string SectionTitleColor = "(uon,f=yellow,bon)";
+    const string StOff = "(tdoff)";
 
     #endregion
 }

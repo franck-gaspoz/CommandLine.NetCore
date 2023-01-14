@@ -14,7 +14,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// </summary>
 public sealed class ValueConverter
 {
-    private readonly Texts _texts;
+    readonly Texts _texts;
 
     /// <summary>
     /// value converter

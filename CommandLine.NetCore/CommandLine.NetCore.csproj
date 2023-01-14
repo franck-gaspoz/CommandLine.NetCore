@@ -5,8 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<AssemblyVersion>1.0.7.0</AssemblyVersion>
-		<FileVersion>1.0.7.0</FileVersion>
+		<AssemblyVersion>1.0.8.0</AssemblyVersion>
+		<FileVersion>1.0.8.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -19,19 +19,15 @@
 		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
 		<Copyright>(c) Franck Gaspoz 2023 Licence MIT</Copyright>
-		<Version>1.0.7</Version>
-		<InformationalVersion>1.0.7</InformationalVersion>
+		<Version>1.0.8</Version>
+		<InformationalVersion>1.0.8</InformationalVersion>
 		<DebugType>embedded</DebugType>
 		<EmbedAllSources>True</EmbedAllSources>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
-1.0.7 - 01/13/2023
-- add global option --no-color that turn off ansi/vt outputs
-- fix auto syntax -h was not passing global arguments
-- new RunCommand in current host
-- improve help output
-- embed symbols and sources
+1.0.8 - 01/14/2023
+- add single command mode to produce an executable for only one command and eventually without the global help
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>

@@ -14,7 +14,7 @@ using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 namespace CommandLine.NetCore.Services.AppHost;
 
-internal sealed class AppHostBuilder
+sealed class AppHostBuilder
 {
     public IHost AppHost { get; private set; }
 

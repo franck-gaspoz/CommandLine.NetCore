@@ -24,15 +24,17 @@ namespace CommandLine.NetCore.Services.CmdLine;
 /// </summary>
 public sealed class CommandLineInterfaceBuilder
 {
-    private readonly AssemblySet _assemblySet;
+    readonly AssemblySet _assemblySet;
 
-    private Action<IConfigurationBuilder>? _configureDelegate;
+    Action<IConfigurationBuilder>? _configureDelegate;
 
-    private Action<IHostBuilder>? _buildDelegate;
+    Action<IHostBuilder>? _buildDelegate;
 
-    private AppHostBuilder? _appHostBuilder;
+    AppHostBuilder? _appHostBuilder;
 
-    private bool _isRunning;
+    bool _isRunning;
+
+    Type? _forCommandType;
 
     /// <summary>
     /// app host
@@ -46,6 +48,18 @@ public sealed class CommandLineInterfaceBuilder
     {
         _assemblySet = new AssemblySet(Assembly.GetCallingAssembly());
         UseAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    /// <summary>
+    /// configure the command line to work for an unique command
+    /// </summary>
+    /// <typeparam name="CommandType">type of the command</typeparam>
+    /// <returns>this</returns>
+    public CommandLineInterfaceBuilder ForCommand<CommandType>()
+        where CommandType : Command
+    {
+        _forCommandType = typeof(CommandType);
+        return this;
     }
 
     /// <summary>
@@ -196,7 +210,7 @@ public sealed class CommandLineInterfaceBuilder
         return this;
     }
 
-    private static int ExitWithError(
+    static int ExitWithError(
         Exception ex,
         IAnsiVtConsole console,
         bool lineBreak)

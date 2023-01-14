@@ -3,7 +3,7 @@
 /// <summary>
 /// String extensions
 /// </summary>
-internal static class StringExt
+static class StringExt
 {
     /// <summary>
     /// indicates if the string contains at least one of the characters

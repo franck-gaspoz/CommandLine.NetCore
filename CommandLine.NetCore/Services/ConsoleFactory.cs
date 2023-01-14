@@ -7,9 +7,9 @@ using cons = AnsiVtConsole.NetCore;
 
 namespace CommandLine.NetCore.Services;
 
-internal sealed class ConsoleFactory
+sealed class ConsoleFactory
 {
-    private readonly IServiceProvider _serviceProvider;
+    readonly IServiceProvider _serviceProvider;
 
     public ConsoleFactory(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
@@ -31,7 +31,7 @@ internal sealed class ConsoleFactory
         return console;
     }
 
-    private static void Configure(GlobalSettings globalSettings, cons.IAnsiVtConsole console)
+    static void Configure(GlobalSettings globalSettings, cons.IAnsiVtConsole console)
     {
         console.Out.IsMute = globalSettings
                     .SettedGlobalOptsSet

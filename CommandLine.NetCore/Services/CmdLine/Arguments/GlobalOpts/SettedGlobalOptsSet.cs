@@ -21,8 +21,8 @@ public class SettedGlobalOptsSet
     public IReadOnlyDictionary<IOpt, List<string>> OptSpecs
         => _optSpecs;
 
-    private readonly Dictionary<string, IOpt> _opts = new();
-    private readonly Dictionary<IOpt, List<string>> _optSpecs = new();
+    readonly Dictionary<string, IOpt> _opts = new();
+    readonly Dictionary<IOpt, List<string>> _optSpecs = new();
 
     /// <summary>
     /// setted global arguments set
@@ -55,7 +55,7 @@ public class SettedGlobalOptsSet
     /// add an option to the set
     /// </summary>
     /// <param name="optSpec">option spec</param>
-    private void Add((IOpt opt, List<string> optArgs) optSpec)
+    void Add((IOpt opt, List<string> optArgs) optSpec)
     {
         _opts.Add(
             optSpec.opt.Name,

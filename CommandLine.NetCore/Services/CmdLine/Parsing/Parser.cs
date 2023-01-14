@@ -13,7 +13,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Parsing;
 /// </summary>
 public sealed class Parser
 {
-    private readonly Texts _texts;
+    readonly Texts _texts;
 
     /// <summary>
     /// build a new arguments parser
@@ -159,7 +159,7 @@ public sealed class Parser
         args.RemoveAt(index);
     }
 
-    private bool ParseArg(
+    bool ParseArg(
         ref int syntax_index,
         ref int position,
         List<string> args,
@@ -406,7 +406,7 @@ public sealed class Parser
         return (!string.IsNullOrWhiteSpace(error), errors);
     }
 
-    private static bool TryCatch(Action tryDelegate, Action<Exception> elseDelegate)
+    static bool TryCatch(Action tryDelegate, Action<Exception> elseDelegate)
     {
         try
         {
@@ -422,7 +422,7 @@ public sealed class Parser
 
     #region errors texts
 
-    private string UnexpectedArguments(List<string> args, int atIndex)
+    string UnexpectedArguments(List<string> args, int atIndex)
         => _texts._(
                 args.Count == 1 ?
                     "UnexpectedArgument"
@@ -430,26 +430,26 @@ public sealed class Parser
             string.Join(' ', args),
             atIndex);
 
-    private string MissingArguments(IArg[] args, int atIndex)
+    string MissingArguments(IArg[] args, int atIndex)
         => _texts._("MissingArgumentsAtPosition",
             string.Join(' ', args.Select(x => x.ToSyntax())),
             atIndex);
 
-    private string SyntaxMismatch(IArg expectedSyntax)
+    string SyntaxMismatch(IArg expectedSyntax)
         => _texts._("SyntaxMismatch", expectedSyntax.ToSyntax());
 
-    private string ParamValueError(IArg expectedSyntax, int atIndex, string foundSyntax)
+    string ParamValueError(IArg expectedSyntax, int atIndex, string foundSyntax)
         => _texts._("ParamValueError",
             expectedSyntax.ToSyntax(),
             atIndex,
             foundSyntax);
 
-    private string UnknownSyntax(IArg arg, int atIndex)
+    string UnknownSyntax(IArg arg, int atIndex)
         => _texts._("UnknownSyntax",
             arg.ToSyntax(),
             atIndex);
 
-    private static string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
+    static string BuildError(Exception ex, string message) => ex.Message + Environment.NewLine + message;
 
     #endregion
 

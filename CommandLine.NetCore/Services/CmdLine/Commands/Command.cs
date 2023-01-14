@@ -49,9 +49,9 @@ public abstract class Command
     /// </summary>
     public string Name => ClassNameToCommandName();
 
-    private readonly ArgBuilder _argBuilder;
+    readonly ArgBuilder _argBuilder;
 
-    private SyntaxMatcherDispatcher? _syntaxMatcherDispatcher;
+    SyntaxMatcherDispatcher? _syntaxMatcherDispatcher;
 
     /// <summary>
     /// construit une instance de commande
@@ -269,14 +269,14 @@ public abstract class Command
         return _syntaxMatcherDispatcher.For(syntax);
     }
 
-    private void AddHelpAboutCommandSyntax(SyntaxMatcherDispatcher syntaxMatcherDispatcher)
+    void AddHelpAboutCommandSyntax(SyntaxMatcherDispatcher syntaxMatcherDispatcher)
         => syntaxMatcherDispatcher
             .For(
                 Opt("h"))
                     .Do(HelpAboutCommandSyntax)
             .Options(Opt("v"), Opt("info"));
 
-    private OperationResult HelpAboutCommandSyntax(CommandContext context)
+    OperationResult HelpAboutCommandSyntax(CommandContext context)
     {
         var args =
             new List<string>{

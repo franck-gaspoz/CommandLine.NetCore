@@ -18,11 +18,11 @@ namespace CommandLine.NetCore.Services.CmdLine.Running;
 /// </summary>
 public sealed class SyntaxMatcherDispatcher
 {
-    private readonly List<SyntaxExecutionDispatchMapItem> _maps = new();
-    private readonly Texts _texts;
-    private readonly Parser _parser;
-    private readonly GlobalSettings _globalSettings;
-    private readonly IAnsiVtConsole _console;
+    readonly List<SyntaxExecutionDispatchMapItem> _maps = new();
+    readonly Texts _texts;
+    readonly Parser _parser;
+    readonly GlobalSettings _globalSettings;
+    readonly IAnsiVtConsole _console;
 
     /// <summary>
     /// command options

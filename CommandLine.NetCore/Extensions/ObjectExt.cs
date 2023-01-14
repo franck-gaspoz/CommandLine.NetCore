@@ -3,7 +3,7 @@
 /// <summary>
 /// object extension
 /// </summary>
-internal static class ObjectExt
+static class ObjectExt
 {
     /// <summary>
     /// returns the text representation of an object. if object if null returns "?"

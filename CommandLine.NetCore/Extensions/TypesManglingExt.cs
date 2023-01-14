@@ -12,7 +12,7 @@ namespace CommandLine.NetCore.Extensions;
 /// </summary>
 public static class TypesManglingExt
 {
-    private static readonly Dictionary<Type, string> _keywordTypes = new()
+    static readonly Dictionary<Type, string> _keywordTypes = new()
     {
         { typeof(void), "void" },
         { typeof(bool), "bool" },
@@ -66,7 +66,7 @@ public static class TypesManglingExt
         return b.ToString();
     }
 
-    private static void BuildFriendlyName(StringBuilder builder, Type type, bool useKeywords, bool showGenericArguments, bool showDeclaringType, bool compactNullable)
+    static void BuildFriendlyName(StringBuilder builder, Type type, bool useKeywords, bool showGenericArguments, bool showDeclaringType, bool compactNullable)
     {
         var isBasic = true;
         if (showDeclaringType && type.IsNested && !type.IsGenericParameter)

@@ -5,17 +5,17 @@ namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 /// <summary>
 /// set of arguments of a command invokation
 /// </summary>
-[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{_debuggerDisplay}")]
 public sealed class ArgSet
 {
-    private string DebuggerDisplay => string.Join(' ', _args);
+    string _debuggerDisplay => string.Join(' ', _args);
 
     /// <summary>
     /// arguments
     /// </summary>
     public IReadOnlyCollection<string> Args => _args;
 
-    private readonly List<string> _args;
+    readonly List<string> _args;
 
     /// <summary>
     /// build a new instance

@@ -4,7 +4,7 @@ using CommandLine.NetCore.Services.CmdLine.Commands;
 
 namespace CommandLine.NetCore.Example.Commands;
 
-internal class TestCommand : Command
+class TestCommand : Command
 {
     public TestCommand(Dependencies dependencies) : base(dependencies) { }
 
@@ -22,7 +22,7 @@ internal class TestCommand : Command
 
         .With(args);
 
-    private void TestCommandBody()
+    void TestCommandBody()
     {
 
     }

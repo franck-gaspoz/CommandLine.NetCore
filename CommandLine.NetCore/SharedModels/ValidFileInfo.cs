@@ -2,7 +2,7 @@
 
 namespace CommandLine.NetCore.SharedModels;
 
-internal sealed class ValidFileInfo
+sealed class ValidFileInfo
 {
     /// <summary>
     /// file info
