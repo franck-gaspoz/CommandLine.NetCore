@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Component\Parser\ansi-seq-patterns.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Component\Parser\ANSI\ansi-seq-patterns.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.20" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CommandLine.NetCore\CommandLine.NetCore.csproj" />
   </ItemGroup>
 

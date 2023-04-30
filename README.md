@@ -23,6 +23,8 @@ The library provides functionalities needed to build console applications runnin
 
 - automatic **help** command
 
+- can compile a .exe for a a single command command, showing only the help for a specific command, or for several commands, showing a help for all commands as a shell would do
+
 - compatible with [**AnsiVtConsole.NetCore**](https://github.com/franck-gaspoz/AnsiVtConsole.NetCore) :
 
     - **a text printer engine** that supports **print directives** (markup) allowing to manage console functionalities from text itself, as html would do but with a simplest syntax (that can be configured). That makes possible colored outputs, cursor control, text scrolling and also dynamic C# execution (scripting), based on **System.Console** and **ANSI VT100 / VT52 (VT100 type Fp or 3Fp, Fs, CSI, SGR)** 
@@ -387,9 +389,14 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
+`1.0.9` - 29/04/2023
+- fix SetIsSetted (?)
+- fix mandatory Opt IsSet not setted
+ 
 `1.0.8` - 01/14/2023
-- add single command mode to produce an executable for only one command and eventually without the global help
+- add single command mode allowing to build an executable for only one command and eventually without the global help
 - change editor config and code cleanup
+- packages update
 
 `1.0.7` - 01/13/2023
 - add global option `--no-color` that turn off ansi/vt outputs

@@ -390,8 +390,9 @@ internal sealed class GetInfo : Command
 # Versions history
 
 `1.0.8` - 01/14/2023
-- add single command mode to produce an executable for only one command and eventually without the global help
+- add single command mode allowing to build an executable for only one command and eventually without the global help
 - change editor config and code cleanup
+- packages update
 
 `1.0.7` - 01/13/2023
 - add global option `--no-color` that turn off ansi/vt outputs

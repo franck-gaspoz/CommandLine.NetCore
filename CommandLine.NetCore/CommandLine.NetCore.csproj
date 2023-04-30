@@ -29,6 +29,7 @@
 1.0.8 - 01/14/2023
 - add single command mode to produce an executable for only one command and eventually without the global help
 - change editor config and code cleanup
+- packages update
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>
@@ -100,7 +101,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.17" />
+	  <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.20" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
