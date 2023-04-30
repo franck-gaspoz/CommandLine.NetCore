@@ -46,10 +46,8 @@ public sealed class Syntax
         OptSet = optSet;
         if (optSet is null) return;
         foreach (var opt in optSet.Opts)
-        {
             if (!_args.Contains(opt))
                 _args.Add(opt);
-        }
     }
 
     /// <summary>
@@ -91,9 +89,7 @@ public sealed class Syntax
             var arg = _args[i];
             if ((arg is IOpt opt)
                 || (arg is IParam param && param.IsExpectingValue))
-            {
                 return i;
-            }
         }
         return -1;
     }

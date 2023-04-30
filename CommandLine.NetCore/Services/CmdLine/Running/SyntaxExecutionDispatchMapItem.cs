@@ -151,6 +151,7 @@ public sealed class SyntaxExecutionDispatchMapItem
 
             foreach (var parameter in methodInfo.GetParameters())
             {
+                // anywhere command context argument
                 if (parameter.ParameterType == typeof(CommandContext))
                 {
                     callParameters.Add(
@@ -162,6 +163,7 @@ public sealed class SyntaxExecutionDispatchMapItem
                 }
                 else
                 {
+                    // auto mapped arguments
                     if (parameter
                         .GetCustomAttributes(false)
                         .Where(x => x.GetType() == typeof(MapArgAttribute))
@@ -171,12 +173,19 @@ public sealed class SyntaxExecutionDispatchMapItem
                             Syntax.GetIndexOfArgWithExpectedValueFromIndex(
                                 currentParamIndex + 1);
                     }
+                    // mapped arguments
                     else
                     {
                         currentParamIndex = argIndex = mapArg.ArgIndex;
                     }
 
                     var argValue = Syntax[argIndex];
+                    if (parameter.ParameterType != argValue.GetType())
+                    {
+                        // parameters type mismatch
+                        throw new InvalidCastException(parameter.ParameterType.FriendlyName() + " -> " +
+                            argValue.GetType().FriendlyName() + " !");
+                    }
                     callParameters.Add(argValue);
                 }
             }

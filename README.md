@@ -389,11 +389,6 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
-`1.0.9` - 29/04/2023
-- fix SetIsSetted (?)
-- fix mandatory Opt IsSet not setted
-- add real types support to command lambda executing method
- 
 `1.0.8` - 01/14/2023
 - add single command mode allowing to build an executable for only one command and eventually without the global help
 - change editor config and code cleanup

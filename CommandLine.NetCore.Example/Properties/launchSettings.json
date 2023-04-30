@@ -2,12 +2,11 @@
   "profiles": {
     "WSL": {
       "commandName": "WSL2",
-      "environmentVariables": {},
       "distributionName": ""
     },
     "get-info system": {
       "commandName": "Project",
-      "commandLineArgs": "get-info system --parser-logging Trace"
+      "commandLineArgs": "test-command get-info system --parser-logging Trace"
     },
     "get-info -h": {
       "commandName": "Project",
@@ -69,9 +68,9 @@
       "commandName": "Project",
       "commandLineArgs": "--parser-logging Trace"
     },
-    "-h": {
+    "test-command com --strList str1,str2 --flag --option 1 2 --debug --parser-logging Trace": {
       "commandName": "Project",
-      "commandLineArgs": "-h --parser-logging Trace"
+      "commandLineArgs": "test-command com --strList str1,str2 --flag --option 1 2 --debug --parser-logging Trace"
     }
   }
 }
