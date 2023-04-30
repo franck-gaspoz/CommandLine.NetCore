@@ -124,6 +124,8 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// </param>
     /// <returns>syntax matcher dispatcher</returns>
     /// <exception cref="MissingMethodException">the method was not found or is not suitable</exception>
+    /// <exception cref="InvalidOperationException">the method prototype doesn't match the command</exception>
+    /// <exception cref="InvalidCastException">the method parameter type doesn't match the command argument value type</exception>
     public SyntaxMatcherDispatcher Do(LambdaExpression expression)
     {
         var (methodInfo, target) = expression.GetAnyCastDelegate();
@@ -137,9 +139,7 @@ public sealed class SyntaxExecutionDispatchMapItem
         if (methodInfo.ReturnType != typeof(void)
             || target is null
             || target is not Command)
-        {
             throw new InvalidOperationException(error());
-        }
 
         Name = methodInfo.Name;
         Syntax.SetName(Name);
@@ -181,11 +181,9 @@ public sealed class SyntaxExecutionDispatchMapItem
 
                     var argValue = Syntax[argIndex];
                     if (parameter.ParameterType != argValue.GetType())
-                    {
-                        // parameters type mismatch
-                        throw new InvalidCastException(parameter.ParameterType.FriendlyName() + " -> " +
-                            argValue.GetType().FriendlyName() + " !");
-                    }
+                        // parameter type mismatch
+                        throw new InvalidCastException(argValue.GetType().FriendlyName()
+                            + " -> " + parameter.ParameterType.FriendlyName());
                     callParameters.Add(argValue);
                 }
             }
