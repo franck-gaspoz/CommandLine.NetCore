@@ -43,8 +43,8 @@ The library provides functionalities needed to build console applications runnin
 download the nuget from command line or add it from Visual Studio
 
 ``` dos
-@rem version 1.0.8 or any new one
-dotnet add package CommandLine.NetCore --version 1.0.8
+@rem version  or any new one
+dotnet add package CommandLine.NetCore --version 
 ```
 
 > **Notice**
@@ -389,7 +389,11 @@ internal sealed class GetInfo : Command
 
 # Versions history
 
-`1.0.8` - 01/14/2023
+`1.0.9` - 05/02/2023
+- fix bug GetValue when not setted option
+- add support of mapping for parameters having arguments values types of command lambda operation
+
+`` - 01/14/2023
 - add single command mode allowing to build an executable for only one command and eventually without the global help
 - change editor config and code cleanup
 - packages update
