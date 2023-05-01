@@ -163,7 +163,7 @@ public class Opt<T> : Arg, IOpt
     /// get value if single (index 0)
     /// </summary>
     /// <returns>value at index 0</returns>
-    public T? GetValue() => this[0];
+    public T? GetValue() => IsSet ? this[0] : default;
 
     /// <summary>
     /// name with prefix

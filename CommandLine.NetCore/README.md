@@ -393,7 +393,7 @@ internal sealed class GetInfo : Command
 - fix bug GetValue when not setted option
 - add support of mapping for parameters having arguments values types of command lambda operation
 
-`` - 01/14/2023
+`1.0.8` - 01/14/2023
 - add single command mode allowing to build an executable for only one command and eventually without the global help
 - change editor config and code cleanup
 - packages update

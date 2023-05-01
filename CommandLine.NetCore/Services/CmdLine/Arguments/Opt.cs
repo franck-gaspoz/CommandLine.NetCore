@@ -44,5 +44,5 @@ public class Opt : Opt<string>
     }
 
     /// <inheritdoc/>
-    public new string? GetValue() => this[0];
+    public new string? GetValue() => IsSet ? this[0] : null;
 }
