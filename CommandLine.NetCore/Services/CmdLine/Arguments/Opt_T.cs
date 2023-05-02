@@ -18,6 +18,9 @@ public class Opt<T> : Arg, IOpt
     string _debuggerDisplay => ToSyntax();
 
     /// <inheritdoc/>
+    public override Type ValueType => typeof(T);
+
+    /// <inheritdoc/>
     public bool IsOptional { get; private set; }
 
     bool _isSetted;

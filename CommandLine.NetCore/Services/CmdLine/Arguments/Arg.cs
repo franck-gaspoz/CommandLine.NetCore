@@ -27,6 +27,11 @@ public abstract class Arg : IArg
     protected readonly ValueConverter ValueConverter;
 
     /// <summary>
+    /// type of the argument value
+    /// </summary>
+    public abstract Type ValueType { get; }
+
+    /// <summary>
     /// generic argument
     /// </summary>
     /// <param name="config">app config</param>

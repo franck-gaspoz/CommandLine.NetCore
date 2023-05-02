@@ -140,7 +140,7 @@ public sealed class SyntaxExecutionDispatchMapItem
         if (methodInfo.ReturnType != typeof(void)
             || target is null
             || target is not Command)
-            throw new InvalidOperationException(error());
+            throw new InvalidCommandOperationException(error());
 
         Name = methodInfo.Name;
         Syntax.SetName(Name);

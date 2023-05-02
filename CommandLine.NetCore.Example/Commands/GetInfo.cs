@@ -74,34 +74,45 @@ sealed class GetInfo : Command
     {
         OutputSectionTitle(Texts._("SystemInformations"));
 
-        Dictionary<string, string> keyvalues = new();
-
-        keyvalues.Add(
-            Texts._("OS"),
-            Environment.OSVersion.ToString());
-        keyvalues.Add("ProcArch",
-            ToText(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE")));
-        keyvalues.Add(
-            Texts._("ProcModel"),
-            ToText(Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")));
-        keyvalues.Add(
-            Texts._("ProcLevel"),
-            ToText(Environment.GetEnvironmentVariable("PROCESSOR_LEVEL")));
-        keyvalues.Add(
-            Texts._("SysDir"),
-            Environment.SystemDirectory);
-        keyvalues.Add(
-            Texts._("ProcCount"),
-            Environment.ProcessorCount.ToString());
-        keyvalues.Add(
-            Texts._("UserDomainName"),
-            Environment.UserDomainName);
-        keyvalues.Add(
-            Texts._("UserName"),
-            Environment.UserName);
-        keyvalues.Add(
-            Texts._("OSVersion"),
-            Environment.Version.ToString());
+        Dictionary<string, string> keyvalues = new()
+        {
+            {
+                Texts._("OS"),
+                Environment.OSVersion.ToString()
+            },
+            {
+                "ProcArch",
+                ToText(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"))
+            },
+            {
+                Texts._("ProcModel"),
+                ToText(Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER"))
+            },
+            {
+                Texts._("ProcLevel"),
+                ToText(Environment.GetEnvironmentVariable("PROCESSOR_LEVEL"))
+            },
+            {
+                Texts._("SysDir"),
+                Environment.SystemDirectory
+            },
+            {
+                Texts._("ProcCount"),
+                Environment.ProcessorCount.ToString()
+            },
+            {
+                Texts._("UserDomainName"),
+                Environment.UserDomainName
+            },
+            {
+                Texts._("UserName"),
+                Environment.UserName
+            },
+            {
+                Texts._("OSVersion"),
+                Environment.Version.ToString()
+            }
+        };
 
         foreach (var driveInfo in DriveInfo.GetDrives())
         {
@@ -144,13 +155,8 @@ sealed class GetInfo : Command
     void DumpEnvVar(Param envVarName)
     {
         var value = Environment.GetEnvironmentVariable(
-            envVarName.Value!);
-        if (value is null)
-        {
-            throw new ArgumentException(
+            envVarName.Value!) ?? throw new ArgumentException(
                 Texts._("VariableIsNotDefined"));
-        }
-
         OutputKeyValue(envVarName.Value!, value);
     }
 

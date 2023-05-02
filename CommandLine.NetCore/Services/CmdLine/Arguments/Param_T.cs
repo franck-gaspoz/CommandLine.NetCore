@@ -22,6 +22,9 @@ public class Param<T> : Arg, IParam
         return $"Param<{typeof(T).Name}>{val}";
     }
 
+    /// <inheritdoc/>
+    public override Type ValueType => typeof(T);
+
     T? _value;
 
     /// <summary>

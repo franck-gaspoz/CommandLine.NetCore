@@ -1,12 +1,14 @@
 ﻿using System.Reflection;
 
 using AnsiVtConsole.NetCore;
+using AnsiVtConsole.NetCore.Lib;
 
 using CommandLine.NetCore.Commands.CmdLine;
 using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
@@ -59,7 +61,7 @@ public sealed class CommandLineInterfaceBuilder
     /// <para>the name of the command is not required in the command line, because it is implicit</para>
     /// </summary>
     /// <typeparam name="CommandType">type of the command</typeparam>
-    /// <returns>this</returns>
+    /// <returns>this object</returns>
     public CommandLineInterfaceBuilder ForCommand<CommandType>()
         where CommandType : Command
     {
@@ -70,7 +72,7 @@ public sealed class CommandLineInterfaceBuilder
     /// <summary>
     /// disable global help - often associated with ForCommand
     /// </summary>
-    /// <returns></returns>
+    /// <returns>this object</returns>
     public CommandLineInterfaceBuilder DisableGlobalHelp()
     {
         _isGlobalHelpEnabled = false;
@@ -204,7 +206,33 @@ public sealed class CommandLineInterfaceBuilder
 
                 return commandResult.ExitCode;
             }
-            //catch ()
+            catch (MissingOrNotFoundCommandOperationException missingOrNotFoundCommandOperationException)
+            {
+                return ExitWithError(
+                    texts._("MissingOrNotFoundCommandOperation",
+                        missingOrNotFoundCommandOperationException.Details),
+                    console,
+                    lineBreak);
+            }
+            catch (InvalidCommandOperationException invalidCommandOperation)
+            {
+                return ExitWithError(
+                    texts._("InvalidCommandOperation",
+                        invalidCommandOperation.Details),
+                    console,
+                    lineBreak);
+            }
+            catch (InvalidCommandOperationParameterCastException invalidCommandOperationParameterCastException)
+            {
+                return ExitWithError(
+                    texts._("InvalidCommandOperationParameterCast",
+                        invalidCommandOperationParameterCastException.Index,
+                        invalidCommandOperationParameterCastException.SourceArgumentType.FriendlyName(),
+                        invalidCommandOperationParameterCastException.TargetParameterType.FriendlyName(),
+                        invalidCommandOperationParameterCastException.Details),
+                    console,
+                    lineBreak);
+            }
             catch (TargetInvocationException invokeCommandOperationExecutionException)
             {
                 return ExitWithError(
@@ -263,10 +291,16 @@ public sealed class CommandLineInterfaceBuilder
         Exception ex,
         IAnsiVtConsole console,
         bool lineBreak)
+            => ExitWithError(ex.Message, console, lineBreak);
+
+    static int ExitWithError(
+        string error,
+        IAnsiVtConsole console,
+        bool lineBreak)
     {
         if (!lineBreak)
             console.Logger.LogError();
-        console.Logger.LogError(ex.Message);
+        console.Logger.LogError(error);
         console.Logger.LogError();
         return ExitFail;
     }

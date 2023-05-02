@@ -10,4 +10,9 @@ public interface IArg
     /// </summary>
     /// <returns></returns>
     string ToSyntax();
+
+    /// <summary>
+    /// type of the argument value
+    /// </summary>
+    Type ValueType { get; }
 }

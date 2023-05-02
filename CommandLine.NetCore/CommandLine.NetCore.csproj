@@ -29,6 +29,7 @@
 05/02/2023
 - fix bug GetValue when not setted option
 - add support of mapping for parameters having arguments values types of command lambda operation
+- add SyntaxMatcherDispatcherException and subclasses
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>
