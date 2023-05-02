@@ -204,6 +204,7 @@ public sealed class CommandLineInterfaceBuilder
 
                 return commandResult.ExitCode;
             }
+            //catch ()
             catch (TargetInvocationException invokeCommandOperationExecutionException)
             {
                 return ExitWithError(

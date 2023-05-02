@@ -5,6 +5,7 @@ using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
@@ -134,7 +135,7 @@ public sealed class SyntaxExecutionDispatchMapItem
                 + expression.ToString();
 
         if (methodInfo is null)
-            throw new MissingMethodException(error());
+            throw new MissingOrNotFoundCommandOperationException(error());
 
         if (methodInfo.ReturnType != typeof(void)
             || target is null
@@ -163,7 +164,8 @@ public sealed class SyntaxExecutionDispatchMapItem
                 }
                 else
                 {
-                    // auto mapped arguments
+                    // mapped arguments
+                    // auto mapped arguments (index mapping)
                     if (parameter
                         .GetCustomAttributes(false)
                         .Where(x => x.GetType() == typeof(MapArgAttribute))
@@ -173,17 +175,20 @@ public sealed class SyntaxExecutionDispatchMapItem
                             Syntax.GetIndexOfArgWithExpectedValueFromIndex(
                                 currentParamIndex + 1);
                     }
-                    // mapped arguments
                     else
                     {
+                        // mapped explicitly
                         currentParamIndex = argIndex = mapArg.ArgIndex;
                     }
 
                     var argValue = Syntax[argIndex];
                     if (parameter.ParameterType != argValue.GetType())
                         // parameter type mismatch
-                        throw new InvalidCastException(argValue.GetType().FriendlyName()
-                            + " -> " + parameter.ParameterType.FriendlyName());
+                        throw new InvalidCommandOperationParameterCastException(
+                            currentParamIndex,
+                            argValue.GetType(),
+                            parameter.ParameterType,
+                            error());
                     callParameters.Add(argValue);
                 }
             }
