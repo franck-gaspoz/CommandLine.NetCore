@@ -5,44 +5,42 @@ using Microsoft.Extensions.Configuration;
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
-/// a command line option : -name [value1 [.. value n], --name [value1 [.. value n] of values of type string
+/// a command line flag (optional with no value) : -name | --name
 /// </summary>
-public class Opt : Opt<string>
+public class Flag : Opt<bool>
 {
     /// <summary>
     /// build a new option
     /// <para>corresponds to the syntax:</para>
-    /// <para>-optName | --optName [value1 [.. valuen]]</para>
+    /// <para>-optName | --optName</para>
     /// </summary>
     /// <param name="name">argument name</param>
     /// <param name="config">app config</param>
     /// <param name="texts">texts</param>
     /// <param name="valueConverter">value converter</param>
     /// <param name="isOptional">true if optional</param>
-    /// <param name="valuesCount">number of expected values</param>
-    public Opt(
+    public Flag(
         string name,
         IConfiguration config,
         Texts texts,
         ValueConverter valueConverter,
-        bool isOptional,
-        int valuesCount = 0)
-        : base(name, config, texts, valueConverter, isOptional, valuesCount)
+        bool isOptional)
+        : base(name, config, texts, valueConverter, isOptional, 0)
     {
     }
 
     /// <inheritdoc/>
-    public new string? this[int index]
+    public new bool this[int index]
     {
         get
         {
-            if (ExpectedValuesCount != 0 && index > ExpectedValuesCount)
+            if (index > ExpectedValuesCount)
                 throw ValueIndexNotAvailaible(index);
             return
-                Values[index];
+                IsSet;
         }
     }
 
     /// <inheritdoc/>
-    public new string? GetValue() => IsSet ? this[0] : null;
+    public new bool GetValue() => IsSet;
 }

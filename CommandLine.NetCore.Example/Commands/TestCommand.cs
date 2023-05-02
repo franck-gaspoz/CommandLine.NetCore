@@ -15,13 +15,13 @@ class TestCommand : Command
         For(
             Param("com"),
             Opt<List<string>>("strList"),
-            Opt<bool>("flag", true),
+            Flag("flag", true),
             Opt("option", false, 2))
 
         .Do(() => TestCommandBody)
 
         .Options(
-            Opt("debug", true)
+            Flag("debug", true)
             )
 
         .With(args);

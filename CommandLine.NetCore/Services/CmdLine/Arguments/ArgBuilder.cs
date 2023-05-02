@@ -44,6 +44,17 @@ public sealed class ArgBuilder
         => new(name, _config, _texts, _valueConverter, isOptional, valueCount);
 
     /// <summary>
+    /// build a new flag
+    /// </summary>
+    /// <param name="name">name</param>
+    /// <param name="isOptional">is optional</param>
+    /// <returns>Opt</returns>
+    public Flag Flag(
+        string name,
+        bool isOptional)
+        => new(name, _config, _texts, _valueConverter, isOptional);
+
+    /// <summary>
     /// build a new generic option
     /// </summary>
     /// <typeparam name="T">type of options values</typeparam>

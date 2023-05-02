@@ -186,7 +186,7 @@ public sealed class SyntaxExecutionDispatchMapItem
                         // parameter type mismatch
                         throw new InvalidCommandOperationParameterCastException(
                             currentParamIndex,
-                            argValue.GetType(),
+                            argValue.ValueType,
                             parameter.ParameterType,
                             error());
                     callParameters.Add(argValue);

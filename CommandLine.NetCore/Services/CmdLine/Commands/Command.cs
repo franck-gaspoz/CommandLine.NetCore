@@ -208,6 +208,15 @@ public abstract class Command
         => _argBuilder.Opt(name, isOptional, valueCount);
 
     /// <summary>
+    /// build a new flag (option with no possibilty of values)
+    /// </summary>
+    /// <param name="name">name</param>
+    /// <param name="isOptional">is optional</param>
+    /// <returns>Flag</returns>
+    protected Flag Flag(string name, bool isOptional = false)
+        => _argBuilder.Flag(name, isOptional);
+
+    /// <summary>
     /// build a new generic option
     /// </summary>
     /// <typeparam name="T">type of options values</typeparam>
