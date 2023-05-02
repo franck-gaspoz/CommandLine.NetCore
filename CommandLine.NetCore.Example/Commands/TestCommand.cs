@@ -15,7 +15,7 @@ class TestCommand : Command
         For(
             Param("com"),
             Opt<List<string>>("strList"),
-            Opt("flag", true),
+            Opt<bool>("flag", true),
             Opt("option", false, 2))
 
         .Do(() => TestCommandBody)
