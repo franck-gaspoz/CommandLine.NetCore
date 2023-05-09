@@ -28,7 +28,7 @@ public class Opt<T> : Arg, IOpt
     /// <inheritdoc/>
     public bool IsSet
     {
-        get => IsOptional && _isSetted;
+        get => _isSetted;
 
         private set => _isSetted = value;
     }

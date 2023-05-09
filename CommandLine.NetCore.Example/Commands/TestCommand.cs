@@ -36,19 +36,20 @@ class TestCommand : Command
         
         run method arguments:
         
-        notice: arguments without expected values doesn't belongs to the list of parmeters
+        notice: arguments without expected values doesn't belong to the list of parmeters
 
         TestCommandBody(
             List<string> strList,
             bool flag,
             string?[] option,
-            bool debug) { ...
+            bool debug) 
+        { ...
      */
 
     void TestCommandBody(
         List<string> strList,
         bool flag,
-        string?[] option,
+        string?[] option,   // pb ici: l'arg est string!
         bool debug)
     {
 
