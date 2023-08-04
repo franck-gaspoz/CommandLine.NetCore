@@ -11,6 +11,21 @@ ___
 ![version](https://img.shields.io/github/v/tag/franck-gaspoz/CommandLine.NetCore?style=plastic)
 ___
 
+# Index
+
+- [Features](#features)
+- [How to](#howto)
+    - [1. Running the command line](#)
+    - [2. Testing the integrated **help** command](#)
+    - [3. Configuring the library and a console application built with it](#)
+    - [4. Implementing a command]
+        - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#)
+        - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#)
+    - [5. Setup an unique command console app (without command argument)](#)
+    - [6. Debug and troobleshoot](#)
+
+- [Versions history]
+
 # Features
 
 The library provides functionalities needed to build console applications running in a terminal (WSL/WSL2, cmd.exe, ConEmu, bash, ...) with text interface. That includes:
@@ -293,6 +308,10 @@ thus any registered dependency can be added as a constructor parameter
     // can also have an auto-mapped parameter to the operation context:
     // a parameter of type OperationContext can be placed anywhere in the parameters list
     void MyOperation(...,OperationContext context,..)
+
+    // arguments mapping by parameters and options types
+    // avoid repeating the command arguments declarations (Param, Opt)
+    void MyOperation( string arg0, bool arg1 , ..)
     ```
 
 * methods **`For`** can be chained
@@ -385,6 +404,55 @@ internal sealed class GetInfo : Command
     }
 }
 ```
+
+## 5. Setup an unique command console app (without command argument)
+
+You can prepare a console application that run immediately a specific command at launch and that doesn't requires a command name argument,
+by activating this option in the main:
+
+```csharp
+// <summary>
+/// command line input
+/// <para>commandName (commandArgs|globalArg)*</para>
+/// </summary>
+/// <param name="args">arguments</param>
+/// <returns>status code</returns>
+public static int Main(string[] args)
+    => new CommandLineInterfaceBuilder()
+        
+        // enable the single command mode (here: only get-info, no global help)
+        .ForCommand<GetInfo>()
+
+        // remove the command line parser global help information about the command line parser
+        .DisableGlobalHelp()
+        
+        .Build(args)
+        .Run();
+```
+
+## 6. Debug and troobleshoot
+
+### Integrated options
+
+Integrated command line parser options may help the command developer to fix issues:
+
+#### parser traces
+
+`--parser-logging logLevel` enable display of parser syntaxes analysis detailed informations. Possibles values from Microsoft.Extensions.Logging.LogLevel. 
+If `Trace` or `Debug` the parser add detailed informations about the parsed syntaxes
+
+```dos
+CommandLine.NetCore.Example.exe help --parser-logging Debug
+
+HelpAboutCommandSyntax: 0:Opt<String>-h 1:Opt?<String>-v 2:Opt?<String>--info 3:Opt?<String>-v 4:Opt?<String>--info : match=False
+DumpHelpForAllCommands: 0:Opt?<String>-v 1:Opt?<String>--info 2:Opt?<String>-v 3:Opt?<String>--info : match=True
+DumpCommandHelp: 0:Param<String>? 1:Opt?<String>-v 2:Opt?<String>--info 3:Opt?<String>-v 4:Opt?<String>--info : match=False
+```
+
+#### parser setup
+
+`--exclude-ambiguous-syntax` exclude any ambiguous syntax when parsing command line arguments. By default, the first matching syntax is selected in the command line arguments parser. 
+If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
