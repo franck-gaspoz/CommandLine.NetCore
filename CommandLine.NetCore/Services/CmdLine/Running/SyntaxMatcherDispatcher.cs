@@ -116,11 +116,9 @@ public sealed class SyntaxMatcherDispatcher
         foreach (var syntaxMatcherDispatcher in _maps)
         {
             if (syntaxMatcherDispatcher.Delegate is null)
-            {
                 throw new InvalidOperationException(
                     _texts._("SyntaxExecutionDispatchMapItemDelegateNotDefined",
                         syntaxMatcherDispatcher.Syntax.ToSyntax()));
-            }
 
             var (hasErrors, errors) = _parser.MatchSyntax(
                 args,
@@ -130,20 +128,16 @@ public sealed class SyntaxMatcherDispatcher
                 );
 
             if (logTrace)
-            {
                 Trace(
                     syntaxMatcherDispatcher
                     .Syntax
                     .ToSyntax() +
                     $" : match={!hasErrors}"
                     );
-            }
 
             if (!hasErrors)
-            {
                 matchingSyntaxes.Add(
                     new(syntaxMatcherDispatcher, settedOptions));
-            }
             else
             {
                 if (parseErrors.Any())
@@ -155,12 +149,10 @@ public sealed class SyntaxMatcherDispatcher
         if (logTrace) Trace();
 
         if (!matchingSyntaxes.Any())
-        {
             return new CommandResult(
                 Globals.ExitFail,
                 parseErrors,
                 null);
-        }
 
         if (matchingSyntaxes.Count > 1
             && _globalSettings
@@ -173,12 +165,10 @@ public sealed class SyntaxMatcherDispatcher
                     args.ToText()));
 
             foreach (var syntaxExecutionDispatchMapItem in matchingSyntaxes)
-            {
                 parseErrors.Add(syntaxExecutionDispatchMapItem
                     .SyntaxExecutionDispatchMapItem
                     .Syntax
                     .ToSyntax());
-            }
 
             return new CommandResult(
                 Globals.ExitFail,

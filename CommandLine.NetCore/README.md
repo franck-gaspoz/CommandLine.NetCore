@@ -18,7 +18,7 @@ ___
     - [1. Running the command line](#)
     - [2. Testing the integrated **help** command](#)
     - [3. Configuring the library and a console application built with it](#)
-    - [4. Implementing a command]
+    - [4. Implementing a command](#)
         - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#)
         - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#)
     - [5. Setup an unique command console app (without command argument)](#)
