@@ -182,7 +182,7 @@ public sealed class SyntaxExecutionDispatchMapItem
                     }
 
                     var argValue = Syntax[argIndex];
-                    if (parameter.ParameterType != argValue.GetType()) //argValue.ValueType)
+                    if (parameter.ParameterType != argValue.GetType())
                         // parameter type mismatch
                         throw new InvalidCommandOperationParameterCastException(
                             currentParamIndex,
