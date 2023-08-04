@@ -43,8 +43,7 @@ The library provides functionalities needed to build console applications runnin
 download the nuget from command line or add it from Visual Studio
 
 ``` dos
-@rem version  or any new one
-dotnet add package CommandLine.NetCore --version 
+dotnet add package CommandLine.NetCore
 ```
 
 > **Notice**
