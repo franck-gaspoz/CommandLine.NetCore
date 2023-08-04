@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<AssemblyVersion>1.0.9.0</AssemblyVersion>
+		<InformationalVersion>1.0.9.0</InformationalVersion>
 		<FileVersion>1.0.9.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
@@ -26,10 +27,10 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
-05/02/2023
+05/09/2023 - 1.0.9
 - fix bug GetValue when not setted option
 - add support of mapping for parameters having arguments values types of command lambda operation
-- add SyntaxMatcherDispatcherException and subclasses
+- add parser/binder exceptions SyntaxMatcherDispatcherException and subclasses
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>
@@ -44,7 +45,7 @@
 		<PackageReadmeFile>content\README.md</PackageReadmeFile>
 		<PackageLicenseFile>content\LICENSE.md</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<PackageFlatten>false</PackageFlatten>
+		<PackageFlatten>true</PackageFlatten>
 		
 	</PropertyGroup>
 
@@ -53,14 +54,6 @@
 		<Optimize>false</Optimize>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example1.png" />
-	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example2.png" />
-	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example3.png" />
-	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\example4.png" />
-	  <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.17\contentFiles\any\any\assets\output.png" />
-	</ItemGroup>
 
 	<ItemGroup>
 	  <None Remove="assets\ascii-icon.png" />
@@ -75,13 +68,12 @@
 	    <PackageCopyToOutput>true</PackageCopyToOutput>
 	  </Content>
 	  <Content Include="Config\appSettings.core.json">
-		<CopyToOuput>true</CopyToOuput>
 		<copyToOuput>true</copyToOuput>
 		<IncludeInPackage>true</IncludeInPackage>
 		<BuildAction>Content</BuildAction>
 		<copyToOutput>true</copyToOutput>
-		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 	    <Pack>True</Pack>
 	    <PackagePath>contentFiles/any/any/Config;content/Config;lib/$(TargetFramework)/Config/;content;contentFiles</PackagePath>
 	    <PackageCopyToOutput>true</PackageCopyToOutput>		
@@ -90,13 +82,13 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <Pack>True</Pack>
 	    <PackagePath>contentFiles/any/any/;content/</PackagePath>
-	    <PackageCopyToOutput>true</PackageCopyToOutput>
+	    <PackageCopyToOutput>false</PackageCopyToOutput>
 	  </Content>
 	  <Content Include="README.md">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <Pack>True</Pack>
 	    <PackagePath>contentFiles/any/any/;content/</PackagePath>
-	    <PackageCopyToOutput>true</PackageCopyToOutput>
+	    <PackageCopyToOutput>false</PackageCopyToOutput>
 	  </Content>
 	</ItemGroup>
 

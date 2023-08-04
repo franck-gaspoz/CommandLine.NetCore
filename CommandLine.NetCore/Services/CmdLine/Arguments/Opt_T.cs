@@ -163,7 +163,7 @@ public class Opt<T> : Arg, IOpt
             Texts._("NoArgumentValueAtIndex", index));
 
     /// <summary>
-    /// get value if single (index 0)
+    /// get value if single (index 0) and already set, else returns default
     /// </summary>
     /// <returns>value at index 0</returns>
     public T? GetValue() => IsSet ? this[0] : default;
