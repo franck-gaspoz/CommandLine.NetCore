@@ -21,4 +21,16 @@ public interface IArg
     /// </summary>
     /// <returns>the value of the argument as it is stored after parsing</returns>
     object? GetValue();
+
+    /// <summary>
+    /// indicates if argument is optional or not
+    /// </summary>
+    /// <returns>true if optional, false otherwise</returns>
+    bool GetIsOptional();
+
+    /// <summary>
+    /// indicates if argument is set or not
+    /// </summary>
+    /// <returns>true if set, false otherwise</returns>
+    bool GetIsSet();
 }

@@ -182,39 +182,47 @@ public sealed class SyntaxExecutionDispatchMapItem
                         currentParamIndex = argIndex = mapArg.ArgIndex;
                     }
 
-                    var argValue = Syntax[argIndex];
+                    var arg = Syntax[argIndex];
 
                     void ThrowInvalidCommandOperationParameterCastException()
                         => throw new InvalidCommandOperationParameterCastException(
                                 currentParamIndex,
-                                argValue!.ValueType,
+                                arg!.ValueType,
                                 parameter!.ParameterType,
                                 error!());
 
-                    bool TargetIsArg() => parameter!.ParameterType.HasInterface(typeof(IArg));
+                    var argType = arg.GetType();
+                    var targetIsArg = parameter!.ParameterType.HasInterface(typeof(IArg));
+                    var isOptional = arg.GetIsOptional();
+                    var isTargetNullable = parameter.ParameterType.IsNullable();
+                    var isTargetNullableRequired = isOptional && (
+                        argType == typeof(Opt<>) || argType == typeof(Opt));
 
-                    if (TargetIsArg() && parameter.ParameterType == argValue.GetType())
+                    if (targetIsArg && parameter.ParameterType == arg.GetType())
                     {
                         // argument type == specification type (Opt,Param,..)
-                        callParameters.Add(argValue);
+                        callParameters.Add(arg);
                     }
                     else
                     {
-                        if (TargetIsArg())
+                        // concrete argument type mappings
+
+                        if (targetIsArg)
                             ThrowInvalidCommandOperationParameterCastException();
 
-                        if (parameter.ParameterType == argValue.ValueType)
+                        if (parameter.ParameterType == arg.ValueType)
                         {
                             // argument type == value type (direct type mapping: string,bool,...)
-                            callParameters.Add(argValue.GetValue());
+                            callParameters.Add(arg.GetValue());
                         }
                         else
                         {
                             if (parameter.ParameterType.GenericTypeArguments.Length == 1 &&
-                                parameter.ParameterType.GenericTypeArguments[0] == argValue.ValueType)
+                                parameter.ParameterType.GenericTypeArguments[0] == arg.ValueType)
                             {
                                 // generic argument type == value type (direct type mapping for collection)
-                                callParameters.Add(argValue.GetValue());
+                                // and Nullable types
+                                callParameters.Add(arg.GetValue());
                             }
                             else
                                 // parameter type mismatch

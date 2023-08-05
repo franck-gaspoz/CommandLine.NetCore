@@ -70,7 +70,7 @@
     },
     "test-command com --strList str1,str2 --flag --option 1 2 --debug --parser-logging Trace": {
       "commandName": "Project",
-      "commandLineArgs": "test-command com strValue --strList str1,str2 --flag --option 1 2 --debug --parser-logging Trace"
+      "commandLineArgs": "test-command com strValue --strList str1,str2 --option 1 2 --debug --parser-logging Trace"
     }
   }
 }

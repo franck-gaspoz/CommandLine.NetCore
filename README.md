@@ -327,15 +327,30 @@ thus any registered dependency can be added as a constructor parameter
 
 ### Arguments to concrete type mapping of expression parameters in `Do(LambdaExpression expression)`:
 
+#### Flags
+
 | argument constructor | possible corresponding type(s) |
 |---|---|
 | `Flag("argName")` | `bool` |
 | `Flag("argName",isOptional: true)` | `bool` |
+
+#### Options
+
+| argument constructor | possible corresponding type(s) |
+|---|---|
 | `Opt("argName")` | `List<string>` having Count=0 |
 | `Opt("argName",isOptional: true)` | `List<string>` having Count=0 |
 | `Opt("argName",valueCount:1)` | `List<string>` |
-| `Opt<T>("argName")` | `List<T>` |
-| `Opt<T>("argName",isOptional: true)` | `List<T>` |
+| `Opt("argName",isOptional: true,valueCount:1)` | `List<string>` |
+| `Opt<T>("argName")` | `List<T>` having Count=0 |
+| `Opt<T>("argName",isOptional: true)` | `List<T>` having Count=0 |
+| `Opt<T>("argName",valueCount:1)` | `List<T>` |
+| `Opt<T>("argName",isOptional: true,valueCount:1)` | `List<T>` |
+
+#### Parameters
+
+| argument constructor | possible corresponding type(s) |
+|---|---|
 | `Param()` | `string` |
 | `Param("keyWord")` | as it is expected to exactly match the syntax **keyWord**, this arg must not be mapped |
 

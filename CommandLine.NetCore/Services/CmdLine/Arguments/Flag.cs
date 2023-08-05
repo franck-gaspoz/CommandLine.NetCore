@@ -43,4 +43,8 @@ public class Flag : Opt<bool>
 
     /// <inheritdoc/>
     public override object GetValue() => IsSet;
+
+    /// <inheritdoc/>
+    public override string ToSyntax()
+        => $"Flag{(IsOptional ? "?" : string.Empty)}{PrefixedName}{IsSettedSyntax()}";
 }

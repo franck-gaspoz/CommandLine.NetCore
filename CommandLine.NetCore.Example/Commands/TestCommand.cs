@@ -13,10 +13,10 @@ class TestCommand : Command
     protected override CommandResult Execute(ArgSet args) =>
         For(
             Param("com"),
+            Flag("flag", isOptional: true),
             Opt("opts", isOptional: true, valueCount: 1),
             Param(),
             Opt<List<string>>("strList"),
-            Flag("flag", isOptional: true),
             Opt("option", valueCount: 2))
 
         .Do(() => TestCommandBody)
@@ -48,10 +48,10 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
+        bool? flag,
         List<string> opts,
-        string str,
+        string param,
         List<string> strList,
-        bool flag,
         List<string> option,   // pb ici: l'arg est string!
         bool debug)
     {

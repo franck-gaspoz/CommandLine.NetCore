@@ -94,4 +94,10 @@ public abstract class Arg : IArg
 
     /// <inheritdoc/>
     public abstract object? GetValue();
+
+    /// <inheritdoc/>
+    public abstract bool GetIsOptional();
+
+    /// <inheritdoc/>
+    public abstract bool GetIsSet();
 }

@@ -47,6 +47,12 @@ public class Param<T> : Arg, IParam
     public bool IsExpectingValue { get; private set; }
 
     /// <inheritdoc/>
+    public override bool GetIsOptional() => false;
+
+    /// <inheritdoc/>
+    public override bool GetIsSet() => _value is not null;
+
+    /// <inheritdoc/>
     public override object? GetValue()
         => _value;
 

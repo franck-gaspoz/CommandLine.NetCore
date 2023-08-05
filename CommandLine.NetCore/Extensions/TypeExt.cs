@@ -7,6 +7,8 @@ namespace CommandLine.NetCore.Extensions;
 /// </summary>
 static class TypeExt
 {
+    const string NullableTypeFullNamePrefix = "System.Nullable`";
+
     /// <summary>
     /// indicates if a type inherits from another type. returns false if type is base type
     /// </summary>
@@ -30,30 +32,24 @@ static class TypeExt
     }
 
     /// <summary>
-    /// surface clone
+    /// unmangled name of a type
     /// </summary>
-    /// <typeparam name="T">object type</typeparam>
-    /// <param name="obj">object to clone</param>
-    /// <returns>the clone</returns>
-    public static T Clone<T>(this T obj) where T : new()
-    {
-        var cloneObj = new T();
-        foreach (var member in typeof(T).GetMembers())
-        {
-            if (member is FieldInfo field && !field.IsInitOnly)
-                field.SetValue(cloneObj, field.GetValue(obj));
-            if (member is PropertyInfo prop && prop.CanWrite)
-                prop.SetValue(cloneObj, prop.GetValue(obj));
-        }
-        return cloneObj;
-    }
-
+    /// <param name="type">type</param>
+    /// <returns>unmangled name of the type</returns>
     public static string UnmangledName(this Type type) => TypesManglingExt.FriendlyName(type);
 
     public static bool IsOrInheritsFrom(this Type type, Type refType)
         => type == refType || type.InheritsFrom(refType);
 
-    public static List<Type> GetInheritanceChain(this Type? type, bool includeRoot = true)
+    /// <summary>
+    /// types an type inherits from
+    /// </summary>
+    /// <param name="type">type</param>
+    /// <param name="includeRoot">if true, root type (should be 'object') is also included in results</param>
+    /// <returns>list of types the given type inherits from</returns>
+    public static List<Type> GetInheritanceChain(
+        this Type? type,
+        bool includeRoot = true)
     {
         var r = new List<Type>();
         if (type is null)
@@ -80,6 +76,19 @@ static class TypeExt
     public static bool HasInterface(this Type type, Type interfaceType)
         => type.GetInterface(interfaceType.FullName!) != null;
 
+    /// <summary>
+    /// indicates if a type is specifed to be nullable
+    /// </summary>
+    /// <param name="type">type</param>
+    /// <returns>true if nullable, false otherwise</returns>
+    public static bool IsNullable(this Type type)
+        => type.FullName?.StartsWith(NullableTypeFullNamePrefix) ?? false;
+
+    /// <summary>
+    /// fields and properties of an object
+    /// </summary>
+    /// <param name="o">object</param>
+    /// <returns>list of MemberInfo</returns>
     public static List<MemberInfo> GetFieldsAndProperties(this object o)
     {
         var t = o.GetType();
@@ -116,7 +125,14 @@ static class TypeExt
         return null;
     }
 
-    public static List<(string name, object? value, MemberInfo memberInfo)> GetMemberValues(this object o)
+    /// <summary>
+    /// values of object members
+    /// </summary>
+    /// <param name="o">object</param>
+    /// <returns>list of members names,value and MemberInfo</returns>
+    public static
+        List<(string name, object? value, MemberInfo memberInfo)>
+        GetMemberValues(this object o)
     {
         var t = o.GetType();
         var array = new List<(string, object?, MemberInfo)>();
@@ -141,6 +157,11 @@ static class TypeExt
         return array;
     }
 
+    /// <summary>
+    /// type of a member value
+    /// </summary>
+    /// <param name="memberInfo">member info</param>
+    /// <returns>type of the member value</returns>
     public static Type GetMemberValueType(this MemberInfo memberInfo)
     {
         if (memberInfo is FieldInfo field) return field.FieldType;

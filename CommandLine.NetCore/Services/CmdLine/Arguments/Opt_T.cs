@@ -23,6 +23,9 @@ public class Opt<T> : Arg, IOpt
     /// <inheritdoc/>
     public bool IsOptional { get; private set; }
 
+    /// <inheritdoc/>
+    public override bool GetIsOptional() => IsOptional;
+
     bool _isSetted;
 
     /// <inheritdoc/>
@@ -32,6 +35,9 @@ public class Opt<T> : Arg, IOpt
 
         private set => _isSetted = value;
     }
+
+    /// <inheritdoc/>
+    public override bool GetIsSet() => _isSetted;
 
     /// <inheritdoc/>
     public string ToText()
@@ -78,11 +84,16 @@ public class Opt<T> : Arg, IOpt
             values = $"{{{string.Join(',', valueSet)}}}";
         }
 
-        var isSetted = !IsOptional ? string.Empty :
-            IsSet ? "+" : string.Empty;
-
-        return $"Opt{(IsOptional ? "?" : string.Empty)}<{typeof(T).Name}>{PrefixedName}{isSetted}{values}";
+        return $"Opt{(IsOptional ? "?" : string.Empty)}<{typeof(T).Name}>{PrefixedName}{IsSettedSyntax()}{values}";
     }
+
+    /// <summary>
+    /// is setted syntax for ToSyntax
+    /// </summary>
+    /// <returns></returns>
+    protected string IsSettedSyntax()
+        => !IsOptional ? string.Empty :
+            IsSet ? "+" : string.Empty;
 
     /// <summary>
     /// values count (expected)
