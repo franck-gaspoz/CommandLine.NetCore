@@ -13,6 +13,7 @@ class TestCommand : Command
     protected override CommandResult Execute(ArgSet args) =>
         For(
             Param("com"),
+            Opt("0ValueOpt"),
             Flag("flag", isOptional: true),
             Opt("opts", isOptional: true, valueCount: 1),
             Param(),
@@ -48,10 +49,11 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
+        List<string> zeroValueOpt,
         bool flag,
         List<string>? opts,
         string param,
-        List<List<string>>? strList,
+        List<List<string>> strList,
         List<string> option,   // pb ici: l'arg est string!
         bool debug)
     {

@@ -19,7 +19,7 @@ ___
     - [2. Testing the integrated **help** command](#)
     - [3. Configuring the library and a console application built with it](#)
     - [4. Implementing a command](#)
-        - [Arguments to concrete type mapping of expression parameters in Do(LambdaExpression expression)](#)
+        - [Arguments to concrete types mapping of Do(LambdaExpression expression) expression parameters](#)
         - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#)
         - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#)
     - [5. Setup an unique command console app (without command argument)](#)
@@ -325,7 +325,7 @@ thus any registered dependency can be added as a constructor parameter
     With(ArgSet args)
     ```
 
-### Arguments to concrete type mapping of expression parameters in `Do(LambdaExpression expression)`:
+### Arguments to concrete types mapping of `Do(LambdaExpression expression)` expression parameters:
 
 #### Flags
 
@@ -338,14 +338,17 @@ thus any registered dependency can be added as a constructor parameter
 
 | argument constructor | possible corresponding type(s) |
 |---|---|
-| `Opt("argName")` | `List<string>` having Count=0 |
-| `Opt("argName",isOptional: true)` | `List<string>` having Count=0 or null |
+| `Opt("argName")` | `bool` having value `true` <br> `List<string>` having Count=0 |
+| `Opt("argName",isOptional: true)` | `List<string>?` having Count=0 or null |
+| | |
 | `Opt("argName",valueCount:1)` | `List<string>` |
-| `Opt("argName",isOptional: true,valueCount:1)` | `List<string>` or null |
+| `Opt("argName",isOptional: true,valueCount:1..n)` | `List<string>?` or null |
+| | |
 | `Opt<T>("argName")` | `List<T>` having Count=0 |
-| `Opt<T>("argName",isOptional: true)` | `List<T>` having Count=0 or null |
+| `Opt<T>("argName",isOptional: true)` | `List<T>?` having Count=0 or null |
+| | |
 | `Opt<T>("argName",valueCount:1)` | `List<T>` |
-| `Opt<T>("argName",isOptional: true,valueCount:1)` | `List<T>` or null |
+| `Opt<T>("argName",isOptional: true,valueCount:1..n)` | `List<T>?` or null |
 
 #### Parameters
 
