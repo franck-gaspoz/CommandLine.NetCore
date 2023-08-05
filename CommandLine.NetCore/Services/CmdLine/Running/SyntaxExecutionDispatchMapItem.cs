@@ -191,6 +191,20 @@ public sealed class SyntaxExecutionDispatchMapItem
                                 parameter!.ParameterType,
                                 error!());
 
+                    void ThrowInvalidCommandOperationParameterNullabilityExpectedException()
+                        => throw new InvalidCommandOperationParameterNullabilityExpectedException(
+                                currentParamIndex,
+                                arg!.ValueType,
+                                parameter!.ParameterType,
+                                error!());
+
+                    void ThrowInvalidCommandOperationParameterNullabilityNotExpectedException()
+                        => throw new InvalidCommandOperationParameterNullabilityNotExpectedException(
+                                currentParamIndex,
+                                arg!.ValueType,
+                                parameter!.ParameterType,
+                                error!());
+
                     var argType = arg.GetType();
                     var targetIsArg = parameter!.ParameterType.HasInterface(typeof(IArg));
                     var isOptional = arg.GetIsOptional();
@@ -209,6 +223,12 @@ public sealed class SyntaxExecutionDispatchMapItem
 
                         if (targetIsArg)
                             ThrowInvalidCommandOperationParameterCastException();
+
+                        if (!isTargetNullableRequired && isTargetNullable)
+                            ThrowInvalidCommandOperationParameterNullabilityNotExpectedException();
+
+                        if (isTargetNullableRequired && !isTargetNullable)
+                            ThrowInvalidCommandOperationParameterNullabilityExpectedException();
 
                         if (parameter.ParameterType == arg.ValueType)
                         {

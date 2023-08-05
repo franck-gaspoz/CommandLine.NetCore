@@ -3,7 +3,9 @@
 /// <summary>
 /// exception from the syntax matcher dispatcher
 /// </summary>
-class SyntaxMatcherDispatcherException : Exception
+class SyntaxMatcherDispatcherException :
+    Exception,
+    INotExplicitMessageException
 {
     /// <summary>
     /// details about error context, data

@@ -10,7 +10,8 @@ sealed class MissingOrNotFoundCommandOperationException
     /// build new instance
     /// </summary>
     /// <param name="details">details</param>
-    public MissingOrNotFoundCommandOperationException(string details) : base(details)
+    public MissingOrNotFoundCommandOperationException(string details)
+        : base(details)
     {
     }
 }

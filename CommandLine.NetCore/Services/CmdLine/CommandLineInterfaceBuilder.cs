@@ -27,6 +27,8 @@ namespace CommandLine.NetCore.Services.CmdLine;
 /// </summary>
 public sealed class CommandLineInterfaceBuilder
 {
+    const string ErrorTypeNameMessageTexteSeparator = ": ";
+
     readonly AssemblySet _assemblySet;
 
     Action<IConfigurationBuilder>? _configureDelegate;
@@ -291,7 +293,13 @@ public sealed class CommandLineInterfaceBuilder
         Exception ex,
         IAnsiVtConsole console,
         bool lineBreak)
-            => ExitWithError(ex.Message, console, lineBreak);
+            => ExitWithError(
+                (ex is INotExplicitMessageException ?
+                    ex.GetType().Name + ErrorTypeNameMessageTexteSeparator
+                : string.Empty)
+                + ex.Message,
+                console,
+                lineBreak);
 
     static int ExitWithError(
         string error,

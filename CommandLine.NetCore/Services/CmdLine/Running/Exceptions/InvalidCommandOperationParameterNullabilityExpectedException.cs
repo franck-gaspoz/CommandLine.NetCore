@@ -3,7 +3,7 @@
 /// <summary>
 /// invalid nullability of a command operation parameter
 /// </summary>
-sealed class InvalidCommandOperationParameterNullabilityException
+sealed class InvalidCommandOperationParameterNullabilityExpectedException
     : InvalidCommandOperationParameterMappingException
 {
     /// <summary>
@@ -13,7 +13,7 @@ sealed class InvalidCommandOperationParameterNullabilityException
     /// <param name="sourceArgumentType">source argument type</param>
     /// <param name="targetParameterType">target parameter type</param>
     /// <param name="details">details</param>
-    public InvalidCommandOperationParameterNullabilityException(
+    public InvalidCommandOperationParameterNullabilityExpectedException(
         int index,
         Type sourceArgumentType,
         Type targetParameterType,

@@ -54,7 +54,7 @@ public abstract class Command
     SyntaxMatcherDispatcher? _syntaxMatcherDispatcher;
 
     /// <summary>
-    /// construit une instance de commande
+    /// builds a new command
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
     public Command(Dependencies dependencies)
