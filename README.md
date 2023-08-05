@@ -19,6 +19,7 @@ ___
     - [2. Testing the integrated **help** command](#)
     - [3. Configuring the library and a console application built with it](#)
     - [4. Implementing a command](#)
+        - [Arguments to concrete type mapping of expression parameters in Do(LambdaExpression expression)](#)
         - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#)
         - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#)
     - [5. Setup an unique command console app (without command argument)](#)
@@ -292,7 +293,7 @@ thus any registered dependency can be added as a constructor parameter
     Do(LambdaExpression expression)
     ```
 
-    the lambda expression in the method style `Do(LambdaExpression expression)` can have these profiles:
+    the lambda expression in the method style `Do(LambdaExpression expression)` can have one of these profiles:
 
     ```csharp
     // no parameter and no result
@@ -309,13 +310,13 @@ thus any registered dependency can be added as a constructor parameter
     // a parameter of type OperationContext can be placed anywhere in the parameters list
     void MyOperation(...,OperationContext context,..)
 
-    // arguments mapping by parameters and options types
+    // arguments mapping to concrete types
     // avoid repeating the command arguments declarations (Param, Opt)
     void MyOperation( string arg0, bool arg1 , ..)
     ```
 
 * methods **`For`** can be chained
-* the method **`Options`** can be chained to a **For**. This method allows to declare the command options:
+* the method **`Options`** can be chained to a **For**. This method allows to declare the command global options (avalaible for any syntax of the command) :
     ```csharp
     Options(params IOpt[] options)
     ```
@@ -323,6 +324,20 @@ thus any registered dependency can be added as a constructor parameter
     ```csharp
     With(ArgSet args)
     ```
+
+### Arguments to concrete type mapping of expression parameters in `Do(LambdaExpression expression)`:
+
+| argument constructor | possible corresponding type(s) |
+|---|---|
+| `Flag("argName")` | `bool` |
+| `Flag("argName",isOptional: true)` | `bool` |
+| `Opt("argName")` | `List<string>` having Count=0 |
+| `Opt("argName",isOptional: true)` | `List<string>` having Count=0 |
+| `Opt("argName",valueCount:1)` | `List<string>` |
+| `Opt<T>("argName")` | `List<T>` |
+| `Opt<T>("argName",isOptional: true)` | `List<T>` |
+| `Param()` | `string` |
+| `Param("keyWord")` | as it is expected to exactly match the syntax **keyWord**, this arg must not be mapped |
 
 ### Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`:
 
@@ -441,7 +456,7 @@ Integrated command line parser options may help the command developer to fix iss
 `--parser-logging logLevel` enable display of parser syntaxes analysis detailed informations. Possibles values from Microsoft.Extensions.Logging.LogLevel. 
 If `Trace` or `Debug` the parser add detailed informations about the parsed syntaxes
 
-```dos
+```csharp
 CommandLine.NetCore.Example.exe help --parser-logging Debug
 
 HelpAboutCommandSyntax: 0:Opt<String>-h 1:Opt?<String>-v 2:Opt?<String>--info 3:Opt?<String>-v 4:Opt?<String>--info : match=False
@@ -458,7 +473,7 @@ If this option is set syntaxes of a command can't be ambiguous
 
 `1.0.9` - 05/02/2023
 - fix bug GetValue when not setted option
-- add support of mapping for parameters having arguments values types of command lambda operation
+- add support of mapping for parameters having arguments concrete values types in command lambda operation
 - add SyntaxMatcherDispatcherException and subclasses
 
 `1.0.8` - 01/14/2023

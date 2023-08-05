@@ -13,9 +13,10 @@ class TestCommand : Command
     protected override CommandResult Execute(ArgSet args) =>
         For(
             Param("com"),
+            Opt("opts", isOptional: true, valueCount: 1),
             Param(),
             Opt<List<string>>("strList"),
-            Flag("flag", true),
+            Flag("flag", isOptional: true),
             Opt("option", valueCount: 2))
 
         .Do(() => TestCommandBody)
@@ -47,6 +48,7 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
+        List<string> opts,
         string str,
         List<string> strList,
         bool flag,
