@@ -42,5 +42,5 @@ public class Flag : Opt<bool>
     }
 
     /// <inheritdoc/>
-    public new bool GetValue() => IsSet;
+    public override object GetValue() => IsSet;
 }

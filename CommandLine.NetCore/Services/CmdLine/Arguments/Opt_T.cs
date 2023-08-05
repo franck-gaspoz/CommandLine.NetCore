@@ -142,6 +142,11 @@ public class Opt<T> : Arg, IOpt
         }
     }
 
+    /// <inheritdoc/>
+    public override object? GetValue()
+        => Values.Select(x =>
+                ConvertValue<T>(x)).ToList();
+
     /// <summary>
     /// add a value to the option
     /// </summary>
@@ -166,7 +171,7 @@ public class Opt<T> : Arg, IOpt
     /// get value if single (index 0) and already set, else returns default
     /// </summary>
     /// <returns>value at index 0</returns>
-    public T? GetValue() => IsSet ? this[0] : default;
+    public T? Value() => IsSet ? this[0] : default;
 
     /// <summary>
     /// name with prefix

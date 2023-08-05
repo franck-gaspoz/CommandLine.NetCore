@@ -1,5 +1,4 @@
-﻿
-using CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 
 namespace CommandLine.NetCore.Example.Commands;
@@ -14,6 +13,7 @@ class TestCommand : Command
     protected override CommandResult Execute(ArgSet args) =>
         For(
             Param("com"),
+            Param(),
             Opt<List<string>>("strList"),
             Flag("flag", true),
             Opt("option", valueCount: 2))
@@ -47,9 +47,10 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
+        string str,
         List<string> strList,
         bool flag,
-        string?[] option,   // pb ici: l'arg est string!
+        List<string> option,   // pb ici: l'arg est string!
         bool debug)
     {
 

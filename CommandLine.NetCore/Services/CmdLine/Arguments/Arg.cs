@@ -91,4 +91,7 @@ public abstract class Arg : IArg
 
         return (T)convertedValue;
     }
+
+    /// <inheritdoc/>
+    public abstract object? GetValue();
 }

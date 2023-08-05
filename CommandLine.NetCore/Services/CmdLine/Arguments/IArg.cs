@@ -15,4 +15,10 @@ public interface IArg
     /// type of the argument value
     /// </summary>
     Type ValueType { get; }
+
+    /// <summary>
+    /// returns the value of the argument as it is stored after parsing
+    /// </summary>
+    /// <returns>the value of the argument as it is stored after parsing</returns>
+    object? GetValue();
 }

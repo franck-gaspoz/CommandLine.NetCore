@@ -99,7 +99,7 @@ public sealed class SyntaxMatcherDispatcher
         var logLevel = _globalSettings
             .SettedGlobalOptsSet
             .TryGetByType<ParserLogging>(out var parserLogging) ?
-                parserLogging.GetValue() : LogLevel.Error;
+                parserLogging.Value() : LogLevel.Error;
 
         var logTrace = logLevel == LogLevel.Trace
             || logLevel == LogLevel.Debug;

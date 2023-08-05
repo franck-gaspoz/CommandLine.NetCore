@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 
 using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
@@ -182,17 +183,43 @@ public sealed class SyntaxExecutionDispatchMapItem
                     }
 
                     var argValue = Syntax[argIndex];
-                    if (parameter.ParameterType == argValue.GetType())
+
+                    void ThrowInvalidCommandOperationParameterCastException()
+                        => throw new InvalidCommandOperationParameterCastException(
+                                currentParamIndex,
+                                argValue!.ValueType,
+                                parameter!.ParameterType,
+                                error!());
+
+                    bool TargetIsArg() => parameter!.ParameterType.HasInterface(typeof(IArg));
+
+                    if (TargetIsArg() && parameter.ParameterType == argValue.GetType())
+                    {
+                        // argument type == specification type (Opt,Param,..)
                         callParameters.Add(argValue);
+                    }
                     else
                     {
+                        if (TargetIsArg())
+                            ThrowInvalidCommandOperationParameterCastException();
 
-                        // parameter type mismatch
-                        throw new InvalidCommandOperationParameterCastException(
-                            currentParamIndex,
-                            argValue.ValueType,
-                            parameter.ParameterType,
-                            error());
+                        if (parameter.ParameterType == argValue.ValueType)
+                        {
+                            // argument type == value type (direct type mapping: string,bool,...)
+                            callParameters.Add(argValue.GetValue());
+                        }
+                        else
+                        {
+                            if (parameter.ParameterType.GenericTypeArguments.Length == 1 &&
+                                parameter.ParameterType.GenericTypeArguments[0] == argValue.ValueType)
+                            {
+                                // generic argument type == value type (direct type mapping for collection)
+                                callParameters.Add(argValue.GetValue());
+                            }
+                            else
+                                // parameter type mismatch
+                                ThrowInvalidCommandOperationParameterCastException();
+                        }
                     }
                 }
             }

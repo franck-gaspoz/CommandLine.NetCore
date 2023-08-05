@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 namespace CommandLine.NetCore.Services.CmdLine.Arguments;
 
 /// <summary>
-/// a single value parameter argument : value
+/// a single (mandatory) value parameter argument, that is expected to match a syntax (value provided in syntax definition) or that is free (value not provided in syntax definition)
 /// </summary>
 [DebuggerDisplay("{_debuggerDisplay}")]
 public class Param<T> : Arg, IParam
@@ -45,6 +45,10 @@ public class Param<T> : Arg, IParam
 
     /// <inheritdoc/>
     public bool IsExpectingValue { get; private set; }
+
+    /// <inheritdoc/>
+    public override object? GetValue()
+        => _value;
 
     /// <inheritdoc/>
     public void SetValue(string value) =>
