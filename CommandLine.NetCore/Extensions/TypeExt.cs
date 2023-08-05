@@ -8,6 +8,8 @@ namespace CommandLine.NetCore.Extensions;
 static class TypeExt
 {
     const string NullableTypeFullNamePrefix = "System.Nullable`";
+    const string NullableAttributePartialName = "NullableAttribute";
+    const string NullableContextAttributePartialName = "NullableContextAttribute";
 
     /// <summary>
     /// indicates if a type inherits from another type. returns false if type is base type
@@ -81,8 +83,13 @@ static class TypeExt
     /// </summary>
     /// <param name="type">type</param>
     /// <returns>true if nullable, false otherwise</returns>
-    public static bool IsNullable(this Type type)
+    public static bool IsExplicitNullable(this Type type)
         => type.FullName?.StartsWith(NullableTypeFullNamePrefix) ?? false;
+
+    /*=> (type.FullName?.StartsWith(NullableTypeFullNamePrefix) ?? false)
+    || type.CustomAttributes.Any(x =>
+        x.AttributeType.Name.Contains(NullableAttributePartialName)
+        || x.AttributeType.Name.Contains(NullableContextAttributePartialName));*/
 
     /// <summary>
     /// fields and properties of an object

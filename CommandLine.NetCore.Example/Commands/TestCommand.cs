@@ -48,10 +48,10 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
-        bool? flag,
-        List<string> opts,
+        bool flag,
+        List<string>? opts,
         string param,
-        List<string> strList,
+        List<List<string>>? strList,
         List<string> option,   // pb ici: l'arg est string!
         bool debug)
     {

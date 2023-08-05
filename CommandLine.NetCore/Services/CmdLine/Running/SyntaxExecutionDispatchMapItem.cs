@@ -208,9 +208,16 @@ public sealed class SyntaxExecutionDispatchMapItem
                     var argType = arg.GetType();
                     var targetIsArg = parameter!.ParameterType.HasInterface(typeof(IArg));
                     var isOptional = arg.GetIsOptional();
-                    var isTargetNullable = parameter.ParameterType.IsNullable();
+                    var isTargetNullable = parameter.ParameterType
+                            .IsExplicitNullable()
+                        || parameter.CustomAttributes.
+                                Any(x => x.AttributeType
+                                    .Name
+                                    .Contains("NullableAttribute"));
+
                     var isTargetNullableRequired = isOptional && (
                         argType == typeof(Opt<>) || argType == typeof(Opt));
+                    var isSet = arg.GetIsSet();
 
                     if (targetIsArg && parameter.ParameterType == arg.GetType())
                     {
@@ -242,7 +249,7 @@ public sealed class SyntaxExecutionDispatchMapItem
                             {
                                 // generic argument type == value type (direct type mapping for collection)
                                 // and Nullable types
-                                callParameters.Add(arg.GetValue());
+                                callParameters.Add(isSet ? arg.GetValue() : null);
                             }
                             else
                                 // parameter type mismatch

@@ -339,19 +339,20 @@ thus any registered dependency can be added as a constructor parameter
 | argument constructor | possible corresponding type(s) |
 |---|---|
 | `Opt("argName")` | `List<string>` having Count=0 |
-| `Opt("argName",isOptional: true)` | `List<string>` having Count=0 |
+| `Opt("argName",isOptional: true)` | `List<string>` having Count=0 or null |
 | `Opt("argName",valueCount:1)` | `List<string>` |
-| `Opt("argName",isOptional: true,valueCount:1)` | `List<string>` |
+| `Opt("argName",isOptional: true,valueCount:1)` | `List<string>` or null |
 | `Opt<T>("argName")` | `List<T>` having Count=0 |
-| `Opt<T>("argName",isOptional: true)` | `List<T>` having Count=0 |
+| `Opt<T>("argName",isOptional: true)` | `List<T>` having Count=0 or null |
 | `Opt<T>("argName",valueCount:1)` | `List<T>` |
-| `Opt<T>("argName",isOptional: true,valueCount:1)` | `List<T>` |
+| `Opt<T>("argName",isOptional: true,valueCount:1)` | `List<T>` or null |
 
 #### Parameters
 
 | argument constructor | possible corresponding type(s) |
 |---|---|
 | `Param()` | `string` |
+| `Param_T()` | `T` |
 | `Param("keyWord")` | as it is expected to exactly match the syntax **keyWord**, this arg must not be mapped |
 
 ### Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`:
