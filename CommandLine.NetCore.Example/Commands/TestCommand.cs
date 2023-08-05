@@ -49,7 +49,6 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
-        List<string> zeroValueOpt,
         bool flag,
         List<string>? opts,
         string param,

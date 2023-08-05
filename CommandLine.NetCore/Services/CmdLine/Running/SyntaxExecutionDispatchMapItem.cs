@@ -165,24 +165,38 @@ public sealed class SyntaxExecutionDispatchMapItem
                 }
                 else
                 {
-                    // mapped arguments
-                    // auto mapped arguments (index mapping)
-                    if (parameter
-                        .GetCustomAttributes(false)
-                        .Where(x => x.GetType() == typeof(MapArgAttribute))
-                        .FirstOrDefault() is not MapArgAttribute mapArg)
+                    int GetParamIndex(int currentParamIndex, int argSkipCount = 0)
                     {
-                        currentParamIndex = argIndex =
-                            Syntax.GetIndexOfArgWithExpectedValueFromIndex(
-                                currentParamIndex + 1);
-                    }
-                    else
-                    {
-                        // mapped explicitly
-                        currentParamIndex = argIndex = mapArg.ArgIndex;
+                        // mapped arguments
+                        // auto mapped arguments (index mapping)
+                        if (parameter
+                            .GetCustomAttributes(false)
+                            .Where(x => x.GetType() == typeof(MapArgAttribute))
+                            .FirstOrDefault() is not MapArgAttribute mapArg)
+                        {
+                            return
+                                Syntax.GetIndexOfArgWithExpectedValueFromIndex(
+                                    currentParamIndex + 1 + argSkipCount);
+                        }
+                        else
+                        {
+                            // mapped explicitly
+                            return mapArg.ArgIndex;
+                        }
                     }
 
+                    currentParamIndex = argIndex = GetParamIndex(currentParamIndex);
+
                     var arg = Syntax[argIndex];
+
+                    if (arg is not Flag && arg is IOpt opt && opt.ExpectedValuesCount == 0)
+                    // skip arg, parameter not required
+                    {
+                        currentParamIndex = argIndex = GetParamIndex(currentParamIndex);
+                        arg = Syntax[argIndex];
+                    }
+
+                    #region errors
 
                     void ThrowInvalidCommandOperationParameterCastException()
                         => throw new InvalidCommandOperationParameterCastException(
@@ -205,6 +219,8 @@ public sealed class SyntaxExecutionDispatchMapItem
                                 parameter!.ParameterType,
                                 error!());
 
+                    #endregion
+
                     var argType = arg.GetType();
                     var targetIsArg = parameter!.ParameterType.HasInterface(typeof(IArg));
                     var isOptional = arg.GetIsOptional();
@@ -214,6 +230,8 @@ public sealed class SyntaxExecutionDispatchMapItem
                                 Any(x => x.AttributeType
                                     .Name
                                     .Contains("NullableAttribute"));
+
+
 
                     var isTargetNullableRequired = isOptional && (
                         argType == typeof(Opt<>) || argType == typeof(Opt));
