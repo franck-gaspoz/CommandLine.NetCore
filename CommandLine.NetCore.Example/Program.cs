@@ -1,4 +1,4 @@
-﻿#define SINGLE_COMMAND
+﻿//#define SINGLE_COMMAND
 
 #if SINGLE_COMMAND
 using CommandLine.NetCore.Example.Commands;

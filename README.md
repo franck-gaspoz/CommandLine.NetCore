@@ -498,12 +498,12 @@ MyConsoleApp.exe -h
 
 sample command that output informations about system and console
 
-get-info -h : help about this command
-get-info --all : output all infos
-get-info console : dump infos about console
-get-info env -l : list of environment variables names and values
-get-info env varName : dump environment variable value with name varName
-get-info system : dump infos about system
+-h : help about this command
+--all : output all infos
+console : dump infos about console
+env -l : list of environment variables names and values
+env varName : dump environment variable value with name varName
+system : dump infos about system
 ```
 
 - run the get-info command:

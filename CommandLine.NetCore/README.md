@@ -66,13 +66,9 @@ dotnet add package CommandLine.NetCore
 >
 > When installing the package, the following files are copied into your project:
 > - Config/appSettings.core.json
-> - LICENSE.md
-> - README.md
-> - assets/ascii-icon.png
 >
-> you can delete any of these files **EXCEPT Config/appSettings.core.json** wich is mandatory since it contains the CommandLine.NetCore parser root configuration
->
-> these files are set as `Content` and are copied to output folder on build
+> the file **Config/appSettings.core.json** is mandatory since it contains the CommandLine.NetCore parser root configuration
+
 
 link to the library in your console application main class (example: Program.cs):
 
@@ -80,9 +76,13 @@ link to the library in your console application main class (example: Program.cs)
 using CommandLine.NetCore;
 ```
 
-from your main method, transfer control to the library **CommandLine.NetCore** :
+from your **main** method of your app or using **top level statements**, transfer control to the library **CommandLine.NetCore** :
 
-``` csharp
+`Program.cs`
+
+```csharp
+namespace MyConsoleApp;
+
 /// <summary>
 /// command line input
 /// <para>commandName ( option (optionValue)* | parameter )* globalOption*</para>
@@ -93,6 +93,14 @@ public static int Main(string[] args)
     => new CommandLineInterfaceBuilder()
         .Build(args)
         .Run();
+```
+
+or using a top level statement:
+
+```csharp
+new CommandLineInterfaceBuilder()
+    .Build(args)
+    .Run();
 ```
 
 That leads to the loading of any command line components like global arguments, commands and help settings
