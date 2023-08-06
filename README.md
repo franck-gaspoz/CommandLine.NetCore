@@ -453,7 +453,7 @@ internal sealed class GetInfo : Command
         // parse and run
         .With(args);
 
-    private void DumpEnvVar(Param envVarName)
+    private void DumpEnvVar(string envVarName)
     {
         // ...
     }
@@ -511,9 +511,11 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
-`1.0.9` - 05/02/2023
+`1.0.9` - 08/06/2023
+- add support of mapping for parameters having arguments concrete values types in command lambda operation (not Opt,Param,.. but the values types inside it)
 - fix bug GetValue when not setted option
-- add support of mapping for parameters having arguments concrete values types in command lambda operation
+- migrate help,test and get-info commands operations methods with concrete type mapping
+- improve mapping errors feedback
 - add SyntaxMatcherDispatcherException and subclasses
 
 `1.0.8` - 01/14/2023
