@@ -1,4 +1,4 @@
-___
+﻿___
 
 # ![CommandLine.NetCore](https://raw.githubusercontent.com/franck-gaspoz/CommandLine.NetCore/main/CommandLine.NetCore/assets/ascii-icon.png "CommandLine.NetCore") CommandLine.NetCore
 
@@ -463,26 +463,73 @@ internal sealed class GetInfo : Command
 ## 5. Setup an unique command console app (without command argument)
 
 You can prepare a console application that run immediately a specific command at launch and that doesn't requires a command name argument,
-by activating this option in the main:
+by activating this option in the **main** of your app or using **top level statements** as shown below:
+
+`Program.cs`
 
 ```csharp
-// <summary>
-/// command line input
-/// <para>commandName (commandArgs|globalArg)*</para>
-/// </summary>
-/// <param name="args">arguments</param>
-/// <returns>status code</returns>
-public static int Main(string[] args)
-    => new CommandLineInterfaceBuilder()
-        
-        // enable the single command mode (here: only get-info, no global help)
-        .ForCommand<GetInfo>()
+using CommandLine.NetCore.Services.CmdLine;
 
-        // remove the command line parser global help information about the command line parser
-        .DisableGlobalHelp()
-        
-        .Build(args)
-        .Run();
+new CommandLineInterfaceBuilder()
+
+    // add this for single command mode (here: only get-info, no global help)
+    .ForCommand<GetInfo>()
+
+    // add this to avoid global help of the command line parser
+    .DisableGlobalHelp()
+    
+    .Build(args)
+    .Run();
+```
+
+This example will produce an executable that do not accept a **`command name parameter`** neither the **`help`** global command.
+If the program is compiled as `MyConsoleApp.exe` the following command lines are accepted:
+
+- get help about the get-info command:
+
+```dos
+MyConsoleApp.exe -h
+```
+
+```dos
+┌──────────────────────────────────────────────────┐
+│ CommandLine.NetCore.Example (1.0.9.0 05/08/2023) │
+└──────────────────────────────────────────────────┘
+
+sample command that output informations about system and console
+
+-h : help about this command
+--all : output all infos
+console : dump infos about console
+env -l : list of environment variables names and values
+env varName : dump environment variable value with name varName
+system : dump infos about system
+```
+
+- run the get-info command:
+
+```dos
+MyConsoleApp.exe system
+```
+
+```dos
+system informations:
+
+Operanting System = Microsoft Windows NT 10.0.22621.0
+ProcArch = AMD64
+Processor Model = Intel64 Family 6 Model 165 Stepping 2, GenuineIntel
+Processor Level = 6
+System Directory = C:\WINDOWS\system32
+Processor Count = 12
+User Domain Name = LAPTOP-R3538U70
+User Name = franc
+Version = 6.0.20
+C:\ =
+C:\ Volume Label = Windows
+C:\ Drive Type = Fixed
+C:\ Drive Format = NTFS
+C:\ Total Size = 511280410624
+C:\ Available FreeSpace = 98612314112
 ```
 
 ## 6. Debug and troobleshoot
@@ -510,6 +557,9 @@ DumpCommandHelp: 0:Param<String>? 1:Opt?<String>-v 2:Opt?<String>--info 3:Opt?<S
 If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
+
+`1.0.10` - 08/06/2023
+- doc update
 
 `1.0.9` - 08/06/2023
 - add support of mapping for parameters having arguments concrete values types in command lambda operation (not Opt,Param,.. but the values types inside it)

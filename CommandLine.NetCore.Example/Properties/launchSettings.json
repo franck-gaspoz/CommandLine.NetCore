@@ -8,10 +8,6 @@
       "commandName": "Project",
       "commandLineArgs": "test-command get-info system --parser-logging Trace"
     },
-    "get-info -h": {
-      "commandName": "Project",
-      "commandLineArgs": "get-info -h --parser-logging Trace"
-    },
     "get-info env -l": {
       "commandName": "Project",
       "commandLineArgs": "get-info env -l --parser-logging Trace"
@@ -71,6 +67,10 @@
     "test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option opt1 opt2 --debug --parser-logging Trace": {
       "commandName": "Project",
       "commandLineArgs": "test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option opt1 opt2 --debug --parser-logging Trace"
+    },
+    "-h": {
+      "commandName": "Project",
+      "commandLineArgs": "-h --parser-logging Trace"
     }
   }
 }

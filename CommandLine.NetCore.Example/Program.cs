@@ -1,22 +1,18 @@
-﻿using CommandLine.NetCore.Services.CmdLine;
+﻿#define SINGLE_COMMAND
 
-namespace CommandLine.NetCore.Example;
+#if SINGLE_COMMAND
+using CommandLine.NetCore.Example.Commands;
+#endif
 
-public class Program
-{
-    // <summary>
-    /// command line input
-    /// <para>commandName (commandArgs|globalArg)*</para>
-    /// </summary>
-    /// <param name="args">arguments</param>
-    /// <returns>status code</returns>
-    public static int Main(string[] args)
-        => new CommandLineInterfaceBuilder()
-            /*
-            // enable this for single command mode (here: only get-info, no global help)
-            .ForCommand<GetInfo>()
-            .DisableGlobalHelp()
-            */
-            .Build(args)
-            .Run();
-}
+using CommandLine.NetCore.Services.CmdLine;
+
+new CommandLineInterfaceBuilder()
+#if SINGLE_COMMAND
+    // add this for single command mode (here: only get-info, no global help)
+    .ForCommand<GetInfo>()
+
+    // add this to avoid global help of the command line parser
+    .DisableGlobalHelp()
+#endif
+    .Build(args)
+    .Run();

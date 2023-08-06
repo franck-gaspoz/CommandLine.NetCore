@@ -4,6 +4,7 @@ using AnsiVtConsole.NetCore;
 using AnsiVtConsole.NetCore.Lib;
 
 using CommandLine.NetCore.Commands.CmdLine;
+using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
@@ -160,6 +161,18 @@ public sealed class CommandLineInterfaceBuilder
             var globalSettings = host.Services.GetRequiredService<GlobalSettings>();
             globalSettings.SetCommandLineBuilder(this);
             var lineBreak = false;
+
+            if (!_isGlobalHelpEnabled)
+                globalSettings
+                    .SettedGlobalOptsSet
+                    .Add((
+                        new DisableGlobalHelp(
+                            globalSettings.Configuration,
+                            texts,
+                            new ValueConverter(texts)),
+                        new List<string>()));
+
+            _isGlobalHelpEnabled = !globalSettings.IsGlobalOptionSet<DisableGlobalHelp>();
 
             try
             {

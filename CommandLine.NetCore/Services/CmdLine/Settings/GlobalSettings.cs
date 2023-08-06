@@ -79,6 +79,16 @@ public sealed class GlobalSettings
         SettedGlobalOptsSet = new(globalOptsSet, commandLineArgs);
     }
 
+    /// <summary>
+    /// indicates if a global option of type T is set or not
+    /// </summary>
+    /// <typeparam name="T">type of the globation option, inherited from IOpt</typeparam>
+    /// <returns>true if the global option is set</returns>
+    public bool IsGlobalOptionSet<T>()
+        where T : IOpt
+        => SettedGlobalOptsSet
+            .Contains<T>();
+
     internal void SetCommandLineBuilder(CommandLineInterfaceBuilder commandLineInterfaceBuilder)
         => CommandLineInterfaceBuilder = commandLineInterfaceBuilder;
 }

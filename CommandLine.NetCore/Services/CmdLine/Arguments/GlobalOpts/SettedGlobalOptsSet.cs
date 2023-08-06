@@ -53,10 +53,14 @@ public class SettedGlobalOptsSet
 
     /// <summary>
     /// add an option to the set
+    /// <para>does nothing if option already in the set</para>
     /// </summary>
     /// <param name="optSpec">option spec</param>
-    void Add((IOpt opt, List<string> optArgs) optSpec)
+    internal void Add((IOpt opt, List<string> optArgs) optSpec)
     {
+        if (_opts.ContainsKey(optSpec.opt.Name))
+            return;
+
         _opts.Add(
             optSpec.opt.Name,
             optSpec.opt);

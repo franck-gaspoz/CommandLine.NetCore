@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 
+using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Commands;
@@ -19,6 +20,7 @@ sealed class Help : Command
 {
     readonly CommandsSet _commandsSet;
     readonly GlobalOptsSet _globalOptsSet;
+    readonly GlobalSettings _globalSettings;
     readonly IServiceProvider _serviceProvider;
 
     const string SepColor = "(uon,f=cyan,bon)";
@@ -37,6 +39,7 @@ sealed class Help : Command
         IServiceProvider serviceProvider) : base(dependencies)
     {
         _globalOptsSet = dependencies.GlobalSettings.GlobalOptsSet;
+        _globalSettings = dependencies.GlobalSettings;
         _serviceProvider = serviceProvider;
         _commandsSet = commands;
     }
@@ -257,8 +260,10 @@ sealed class Help : Command
         var descExists = !string.IsNullOrWhiteSpace(desc);
 
         DumpCommandSyntax(
-            (command.Name + " " +
-            longDescription.Key.Trim())
+            ((_globalSettings.IsGlobalOptionSet<DisableGlobalHelp>()
+                ? string.Empty
+                : command.Name + " ")
+            + longDescription.Key.Trim())
                 .Trim());
 
         if (descExists)
