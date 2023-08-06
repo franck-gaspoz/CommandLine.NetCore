@@ -107,7 +107,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 	  <Content Include="assets\ascii-icon.png">
 	    <Pack>True</Pack>
 		<IncludeInPackage>true</IncludeInPackage>
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	    <PackagePath>contentFiles/any/any/assets;content/assets;contentFiles;content</PackagePath>
 	    <PackageCopyToOutput>false</PackageCopyToOutput>
 	  </Content>
@@ -123,7 +123,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 	    <PackageCopyToOutput>true</PackageCopyToOutput>		
 	  </Content>
 	  <Content Include="LICENSE.md">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	    <Pack>True</Pack>
 	    <PackagePath>contentFiles/any/any/;content/</PackagePath>
 	    <PackageCopyToOutput>false</PackageCopyToOutput>
@@ -132,7 +132,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <Pack>True</Pack>
 	    <PackagePath>contentFiles/any/any/;content/</PackagePath>
-	    <PackageCopyToOutput>false</PackageCopyToOutput>
+	    <PackageCopyToOutput>Never</PackageCopyToOutput>
 	  </Content>
 	</ItemGroup>
 
