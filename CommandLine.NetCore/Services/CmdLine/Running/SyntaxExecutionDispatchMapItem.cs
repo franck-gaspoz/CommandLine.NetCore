@@ -189,11 +189,36 @@ public sealed class SyntaxExecutionDispatchMapItem
 
                     var arg = Syntax[argIndex];
 
-                    if (arg is not Flag && arg is IOpt opt && opt.ExpectedValuesCount == 0)
+                    if (arg is not Flag
+                        && arg is IOpt opt
+                        && opt.ExpectedValuesCount == 0
+                        && !opt.IsOptional)
                     // skip arg, parameter not required
                     {
                         currentParamIndex = argIndex = GetParamIndex(currentParamIndex);
                         arg = Syntax[argIndex];
+                    }
+
+                    var argType = arg.GetType();
+                    var targetIsArg = parameter!.ParameterType.HasInterface(typeof(IArg));
+                    var isOptional = arg.GetIsOptional();
+                    var isTargetNullable = parameter.IsNullable();
+
+                    var isTargetNullableRequired = isOptional && (
+                        argType == typeof(Opt<>) || argType == typeof(Opt));
+                    var isSet = arg.GetIsSet();
+                    var argValueType = arg.ValueType;
+                    var useArgIsSetValue = false;
+
+                    if (arg is not Flag
+                        && arg is IOpt opt2
+                        && opt2.ExpectedValuesCount == 0
+                        && isOptional)
+                    {
+                        isOptional = false;
+                        isTargetNullableRequired = false;
+                        argValueType = typeof(bool);
+                        useArgIsSetValue = true;
                     }
 
                     #region errors
@@ -201,43 +226,27 @@ public sealed class SyntaxExecutionDispatchMapItem
                     void ThrowInvalidCommandOperationParameterCastException()
                         => throw new InvalidCommandOperationParameterCastException(
                                 currentParamIndex,
-                                arg!.ValueType,
-                                parameter!.ParameterType,
-                                error!());
+                                arg,
+                                parameter,
+                                error());
 
                     void ThrowInvalidCommandOperationParameterNullabilityExpectedException()
                         => throw new InvalidCommandOperationParameterNullabilityExpectedException(
                                 currentParamIndex,
-                                arg!.ValueType,
-                                parameter!.ParameterType,
-                                error!());
+                                arg,
+                                parameter,
+                                error());
 
                     void ThrowInvalidCommandOperationParameterNullabilityNotExpectedException()
                         => throw new InvalidCommandOperationParameterNullabilityNotExpectedException(
                                 currentParamIndex,
-                                arg!.ValueType,
-                                parameter!.ParameterType,
-                                error!());
+                                arg,
+                                parameter,
+                                error());
 
                     #endregion
 
-                    var argType = arg.GetType();
-                    var targetIsArg = parameter!.ParameterType.HasInterface(typeof(IArg));
-                    var isOptional = arg.GetIsOptional();
-                    var isTargetNullable = parameter.ParameterType
-                            .IsExplicitNullable()
-                        || parameter.CustomAttributes.
-                                Any(x => x.AttributeType
-                                    .Name
-                                    .Contains("NullableAttribute"));
-
-
-
-                    var isTargetNullableRequired = isOptional && (
-                        argType == typeof(Opt<>) || argType == typeof(Opt));
-                    var isSet = arg.GetIsSet();
-
-                    if (targetIsArg && parameter.ParameterType == arg.GetType())
+                    if (targetIsArg && parameter.ParameterType == argType)
                     {
                         // argument type == specification type (Opt,Param,..)
                         callParameters.Add(arg);
@@ -245,6 +254,8 @@ public sealed class SyntaxExecutionDispatchMapItem
                     else
                     {
                         // concrete argument type mappings
+
+                        #region unmatchable target cases
 
                         if (targetIsArg)
                             ThrowInvalidCommandOperationParameterCastException();
@@ -255,15 +266,20 @@ public sealed class SyntaxExecutionDispatchMapItem
                         if (isTargetNullableRequired && !isTargetNullable)
                             ThrowInvalidCommandOperationParameterNullabilityExpectedException();
 
-                        if (parameter.ParameterType == arg.ValueType)
+                        #endregion
+
+                        if (parameter.ParameterType == argValueType)
                         {
                             // argument type == value type (direct type mapping: string,bool,...)
-                            callParameters.Add(arg.GetValue());
+                            callParameters.Add(
+                                useArgIsSetValue ?
+                                    arg.GetIsSet()
+                                    : arg.GetValue());
                         }
                         else
                         {
                             if (parameter.ParameterType.GenericTypeArguments.Length == 1 &&
-                                parameter.ParameterType.GenericTypeArguments[0] == arg.ValueType)
+                                parameter.ParameterType.GenericTypeArguments[0] == argValueType /*arg.ValueType*/)
                             {
                                 // generic argument type == value type (direct type mapping for collection)
                                 // and Nullable types

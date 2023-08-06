@@ -219,7 +219,8 @@ public sealed class CommandLineInterfaceBuilder
             catch (InvalidCommandOperationException invalidCommandOperation)
             {
                 return ExitWithError(
-                    texts._("InvalidCommandOperation",
+                    texts._(
+                        "InvalidCommandOperation",
                         invalidCommandOperation.Details),
                     console,
                     lineBreak);
@@ -227,10 +228,11 @@ public sealed class CommandLineInterfaceBuilder
             catch (InvalidCommandOperationParameterCastException invalidCommandOperationParameterCastException)
             {
                 return ExitWithError(
-                    texts._("InvalidCommandOperationParameterCast",
+                    texts._(
+                        "InvalidCommandOperationParameterCast",
                         invalidCommandOperationParameterCastException.Index,
-                        invalidCommandOperationParameterCastException.SourceArgumentType.FriendlyName(),
-                        invalidCommandOperationParameterCastException.TargetParameterType.FriendlyName(),
+                        invalidCommandOperationParameterCastException.SourceArgument.GetType().FriendlyName(),
+                        invalidCommandOperationParameterCastException.TargetParameter.ParameterType.FriendlyName(),
                         invalidCommandOperationParameterCastException.Details),
                     console,
                     lineBreak);
@@ -295,7 +297,9 @@ public sealed class CommandLineInterfaceBuilder
         bool lineBreak)
             => ExitWithError(
                 (ex is INotExplicitMessageException ?
-                    ex.GetType().Name + ErrorTypeNameMessageTexteSeparator
+                    ex.GetType().Name
+                    + ErrorTypeNameMessageTexteSeparator
+                    + Environment.NewLine
                 : string.Empty)
                 + ex.Message,
                 console,

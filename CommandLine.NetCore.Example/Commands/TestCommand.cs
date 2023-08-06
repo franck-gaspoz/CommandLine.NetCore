@@ -12,17 +12,27 @@ class TestCommand : Command
 
     protected override CommandResult Execute(ArgSet args) =>
         For(
+            // must not be mapped
             Param("com"),
+            // must not be mapped
             Opt("0ValueOpt"),
+            // List<string>,count=0 | bool
+            Opt("0OptionalValueOpt", isOptional: true),
+            // bool
             Flag("flag", isOptional: true),
+            // List<string>?
             Opt("opts", isOptional: true, valueCount: 1),
+            // string
             Param(),
+            // List<List<string>>
             Opt<List<string>>("strList"),
+            // List<string>
             Opt("option", valueCount: 2))
 
         .Do(() => TestCommandBody)
 
         .Options(
+            // bool
             Flag("debug", true)
             )
 
@@ -49,11 +59,12 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
+        bool oOptionalValueOpt,
         bool flag,
         List<string>? opts,
         string param,
         List<List<string>> strList,
-        List<string> option,   // pb ici: l'arg est string!
+        List<string> option,
         bool debug)
     {
 

@@ -1,4 +1,8 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
+﻿using System.Reflection;
+
+using CommandLine.NetCore.Services.CmdLine.Arguments;
+
+namespace CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 
 /// <summary>
 /// invalid nullability of a command operation parameter
@@ -10,17 +14,17 @@ sealed class InvalidCommandOperationParameterNullabilityNotExpectedException
     /// build new instance
     /// </summary>
     /// <param name="index">index in syntax</param>
-    /// <param name="sourceArgumentType">source argument type</param>
-    /// <param name="targetParameterType">target parameter type</param>
+    /// <param name="sourceArgument">source argument</param>
+    /// <param name="parameter">target parameter</param>
     /// <param name="details">details</param>
     public InvalidCommandOperationParameterNullabilityNotExpectedException(
         int index,
-        Type sourceArgumentType,
-        Type targetParameterType,
+        IArg sourceArgument,
+        ParameterInfo parameter,
         string details) : base(
             index,
-            sourceArgumentType,
-            targetParameterType,
+            sourceArgument,
+            parameter,
             details)
     { }
 }

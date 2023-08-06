@@ -1,4 +1,9 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
+﻿using System.Reflection;
+
+using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.CmdLine.Arguments;
+
+namespace CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 
 /// <summary>
 /// invalid command operation parameter mapping
@@ -14,28 +19,29 @@ class InvalidCommandOperationParameterMappingException
     /// <summary>
     /// source argument type
     /// </summary>
-    public Type SourceArgumentType { get; }
+    public IArg SourceArgument { get; }
 
     /// <summary>
     /// target parameter type
     /// </summary>
-    public Type TargetParameterType { get; }
+    public ParameterInfo TargetParameter { get; }
 
     /// <summary>
     /// build new instance
     /// </summary>
     /// <param name="index">index in syntax</param>
-    /// <param name="sourceArgumentType">source argument type</param>
-    /// <param name="targetParameterType">target parameter type</param>
+    /// <param name="sourceArgument">source argument</param>
+    /// <param name="targetParameter">target parameter type</param>
     /// <param name="details">details</param>
     public InvalidCommandOperationParameterMappingException(
         int index,
-        Type sourceArgumentType,
-        Type targetParameterType,
-        string details) : base(details)
+        IArg sourceArgument,
+        ParameterInfo targetParameter,
+        string details) : base(
+            $"parameter index={index}{Environment.NewLine}argument source={sourceArgument.ToSyntax()}{Environment.NewLine}target parameter={targetParameter.ToText()}{Environment.NewLine}{details}")
     {
         Index = index;
-        SourceArgumentType = sourceArgumentType;
-        TargetParameterType = targetParameterType;
+        SourceArgument = sourceArgument;
+        TargetParameter = targetParameter;
     }
 }

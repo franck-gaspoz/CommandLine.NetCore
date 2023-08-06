@@ -3,7 +3,7 @@
 namespace CommandLine.NetCore.Extensions;
 
 /// <summary>
-/// object extension
+/// object extensions
 /// </summary>
 static class ObjectExt
 {
