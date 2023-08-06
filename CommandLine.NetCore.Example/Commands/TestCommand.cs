@@ -5,6 +5,7 @@ namespace CommandLine.NetCore.Example.Commands;
 
 /// <summary>
 /// test command for development,test and example purpose
+/// <para><code>test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option opt1 opt2 --debug --parser-logging Trace</code></para>
 /// </summary>
 class TestCommand : Command
 {
