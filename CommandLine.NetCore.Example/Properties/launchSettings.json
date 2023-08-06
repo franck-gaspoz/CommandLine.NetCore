@@ -68,9 +68,9 @@
       "commandName": "Project",
       "commandLineArgs": "--parser-logging Trace"
     },
-    "test-command com --strList str1,str2 --flag --option 1 2 --debug --parser-logging Trace": {
+    "test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option opt1 opt2 --debug --parser-logging Trace": {
       "commandName": "Project",
-      "commandLineArgs": "test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option 1 2 --debug --parser-logging Trace"
+      "commandLineArgs": "test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option opt1 opt2 --debug --parser-logging Trace"
     }
   }
 }

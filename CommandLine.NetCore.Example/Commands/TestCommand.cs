@@ -16,7 +16,7 @@ class TestCommand : Command
             Param("com"),
             // must not be mapped
             Opt("0ValueOpt"),
-            // List<string>?
+            // string? (value count = 1)
             Opt("opts", isOptional: true, valueCount: 1),
             // bool (value count = 0)
             Opt("0OptionalValueOpt", isOptional: true),
@@ -24,8 +24,8 @@ class TestCommand : Command
             Flag("flag", isOptional: true),
             // string
             Param(),
-            // List<List<string>>
-            Opt<List<string>>("strList"),
+            // List<string> (value count = 1)
+            Opt<List<string>>("strList", isOptional: true),
             // List<string>
             Opt("option", valueCount: 2))
 
@@ -59,11 +59,11 @@ class TestCommand : Command
      */
 
     void TestCommandBody(
-        List<string>? opts,
+        string? opts,
         bool oOptionalValueOpt,
         bool flag,
         string param,
-        List<List<string>> strList,
+        List<string>? strList,
         List<string> option,
         bool debug)
     {

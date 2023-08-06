@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using System.Linq.Expressions;
 
 using CommandLine.NetCore.Extensions;
@@ -204,8 +205,11 @@ public sealed class SyntaxExecutionDispatchMapItem
                     var isOptional = arg.GetIsOptional();
                     var isTargetNullable = parameter.IsNullable();
 
-                    var isTargetNullableRequired = isOptional && (
-                        argType == typeof(Opt<>) || argType == typeof(Opt));
+                    var isTargetNullableRequired =
+                        isOptional
+                        && arg is not Flag
+                        && arg is IOpt;
+
                     var isSet = arg.GetIsSet();
                     var argValueType = arg.ValueType;
                     var useArgIsSetValue = false;
@@ -220,6 +224,10 @@ public sealed class SyntaxExecutionDispatchMapItem
                         argValueType = typeof(bool);
                         useArgIsSetValue = true;
                     }
+
+                    var avoidCollection = arg is not Flag
+                        && arg is IOpt opt3
+                        && opt3.ExpectedValuesCount == 1;
 
                     #region errors
 
@@ -273,13 +281,16 @@ public sealed class SyntaxExecutionDispatchMapItem
                             // argument type == value type (direct type mapping: string,bool,...)
                             callParameters.Add(
                                 useArgIsSetValue ?
-                                    arg.GetIsSet()
-                                    : arg.GetValue());
+                                    isSet
+                                    : avoidCollection ?
+                                        isSet ? ((IList)arg.GetValue()!)[0] : null
+                                        : arg.GetValue());
                         }
                         else
                         {
-                            if (parameter.ParameterType.GenericTypeArguments.Length == 1 &&
-                                parameter.ParameterType.GenericTypeArguments[0] == argValueType /*arg.ValueType*/)
+                            if (!avoidCollection
+                                && parameter.ParameterType.GenericTypeArguments.Length == 1
+                                && parameter.ParameterType.GenericTypeArguments[0] == argValueType)
                             {
                                 // generic argument type == value type (direct type mapping for collection)
                                 // and Nullable types

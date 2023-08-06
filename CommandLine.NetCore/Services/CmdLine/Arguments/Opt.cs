@@ -42,7 +42,4 @@ public class Opt : Opt<string>
                 Values[index];
         }
     }
-
-    /// <inheritdoc/>
-    public new string? GetValue() => IsSet ? this[0] : null;
 }
