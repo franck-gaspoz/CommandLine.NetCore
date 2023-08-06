@@ -339,7 +339,7 @@ thus any registered dependency can be added as a constructor parameter
 | argument constructor | possible corresponding type(s) |
 |---|---|
 | `Opt("argName")` <br> `Opt("argName",valueCount:0)`  | as it is expected to exactly match the syntax **argName** (expected values count = 0), this arg must not be mapped |
-| `Opt("argName",isOptional: true)` <br> `Opt("argName",isOptional: true,valueCount:0)` | `bool` (because expected values count = 0, acts as `Flag` in that case) <br> `List<string>?` having Count=0 or null |
+| `Opt("argName",isOptional: true)` <br> `Opt("argName",isOptional: true,valueCount:0)` | `bool` (because expected values count = 0, acts as `Flag` in that case) |
 | | |
 | `Opt("argName",valueCount:1)` | `List<string>` |
 | `Opt("argName",isOptional: true,valueCount:1..n)` | `List<string>?` or null |
@@ -347,8 +347,10 @@ thus any registered dependency can be added as a constructor parameter
 | `Opt<T>("argName")` | `List<T>` having Count=0 |
 | `Opt<T>("argName",isOptional: true)` | `List<T>?` having Count=0 or null |
 | | |
-| `Opt<T>("argName",valueCount:1)` | `List<T>` |
-| `Opt<T>("argName",isOptional: true,valueCount:1..n)` | `List<T>?` or null |
+| `Opt<T>("argName",valueCount:1)` | `T` |
+| `Opt<T>("argName",isOptional: true,valueCount:1)` | `T?` |
+| `Opt<T>("argName",valueCount:2..n)` | `List<T>` |
+| `Opt<T>("argName",isOptional: true,valueCount:2..n)` | `List<T>?` or null |
 
 #### Parameters
 
