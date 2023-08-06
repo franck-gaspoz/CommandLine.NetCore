@@ -15,17 +15,17 @@ ___
 
 - [Features](#features)
 - [How to](#howto)
-    - [1. Running the command line](#)
-    - [2. Testing the integrated **help** command](#)
-    - [3. Configuring the library and a console application built with it](#)
-    - [4. Implementing a command](#)
-        - [Arguments to concrete types mapping of Do(LambdaExpression expression) expression parameters](#)
-        - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#)
-        - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#)
-    - [5. Setup an unique command console app (without command argument)](#)
-    - [6. Debug and troobleshoot](#)
+    - [1. Running the command line](#1-running-the-command-line)
+    - [2. Testing the integrated **help** command](#2-testing-the-integrated-help-command)
+    - [3. Configuring the library and a console application built with it](#3-configuring-the-library-and-a-console-application-built-with-it)
+    - [4. Implementing a command](#4-implementing-a-command)
+        - [Arguments to concrete types mapping of Do(LambdaExpression expression) expression parameters](#arguments-to-concrete-types-mapping-of-dolambdaexpression-expression-expression-parameters)
+        - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#exemple-of-the-command-help-defined-in-commandlinenetcorecommandscmdline)
+        - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#exemple-of-the-command-get-info-defined-in-commandlinenetcoreexamplecommandsgetinfo)
+    - [5. Setup an unique command console app (without command argument)](#5-setup-an-unique-command-console-app-without-command-argument)
+    - [6. Debug and troobleshoot](#6-debug-and-troobleshoot)
 
-- [Versions history]
+- [Versions history](#versions-history)
 
 # Features
 
