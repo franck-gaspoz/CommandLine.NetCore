@@ -258,14 +258,17 @@ thus any registered dependency can be added as a constructor parameter
     - an `Arg` is either an `option` or a `parameter`. Their grammar is defined as this:
         - `Option ::= [-|--]{optionName}[value0..valuen]`
             - options can be expected or optionnal
+            - options can have from 0 to n values
             - can have from 0 to n values of a type `T`, where T can be any scalar type, a collection of scalar types (with `,` as separator) or an Enum            
             - an option can be defined with values, values are always expected
             - `Opt("x")` builds the option `x` with no expected value: `-x`
             - by convention (posix), if the length of the name of the option is greater than 1, the prefix becomes: `--`. For instance, `Opt("xy")` defines the syntax: `--xy`
             - `Opt("x",true)` builds the option `x` wich is optional in the syntax
             - `Opt<T>("value")` builds the option `value` having one expected value that must be convertible to type `T`. For instance, `Opt<int>("value")` defines an option that expect an int, like in syntax: `--value 123`
-            
+            - **Flag** is a construct of an **Opt** without value
+
         - `Parameter ::= parameterValue?`
+            - parameters have exactly one value
             - parameters are always expected
             - have a value of a type `T`, where T can be any scalar type, a collection of scalar types (with `,` as separator) or an Enum            
             - if a parameter if defined with a value, it is an expected word in the syntax
@@ -275,6 +278,17 @@ thus any registered dependency can be added as a constructor parameter
             - `Param("color")` builds a parameter that is expected and being the syntax: `color`
             
 * the method **`Do`** chained to a **For** indicates the method that must be executed if the syntax match the command line args:
+    
+    - the mon common way to define the operation method si the lambda expression, since it allows to use a standard method with concrete typed parameters (not Opt,Param,.. but the values types inside it) :
+
+    ```csharp
+    // takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
+    // Allows to map command arguments to method parameters and operation context
+    Do(LambdaExpression expression)
+    ```
+    
+    - others operation methods prototypes that are accepted:
+
     ```csharp
     // with no parameter and void result delegate
     Do(Action @delegate)
@@ -287,13 +301,19 @@ thus any registered dependency can be added as a constructor parameter
 
     // with parameter operation context and OperationResult result delegate
     Do(Func<OperationContext, OperationResult> @delegate)
-
-    // takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
-    // Allows to map command arguments to method parameters and operation context
-    Do(LambdaExpression expression)
     ```
 
-    the lambda expression in the method style `Do(LambdaExpression expression)` can have one of these profiles:
+    - the lambda expression in the method style `Do(LambdaExpression expression)` can have one of these profiles:
+
+        - the most practical is the use of concrete values types (not Opt,Param,.. but the values types inside it):
+
+    ```csharp
+    // arguments mapping to concrete types
+    // avoid repeating the command arguments declarations (Param, Opt)
+    void MyOperation( string arg0, bool arg1 , ..)
+    ```
+
+        - others lambda expressions prototypes that are accepted:
 
     ```csharp
     // no parameter and no result
@@ -308,11 +328,7 @@ thus any registered dependency can be added as a constructor parameter
 
     // can also have an auto-mapped parameter to the operation context:
     // a parameter of type OperationContext can be placed anywhere in the parameters list
-    void MyOperation(...,OperationContext context,..)
-
-    // arguments mapping to concrete types
-    // avoid repeating the command arguments declarations (Param, Opt)
-    void MyOperation( string arg0, bool arg1 , ..)
+    void MyOperation(...,OperationContext context,..)    
     ```
 
 * methods **`For`** can be chained
@@ -386,12 +402,12 @@ internal sealed class Help : Command
         .With(args);
 
     
-    private void DumpCommandHelp(Param commandName, Opt v, Opt info)
+    private void DumpCommandHelp(string commandName, bool verbose, bool info)
     {
         // ...
     }
 
-    private void DumpHelpForAllCommands(Opt v, Opt info)
+    private void DumpHelpForAllCommands(bool verbose, bool info)
     {
         // ...
     }

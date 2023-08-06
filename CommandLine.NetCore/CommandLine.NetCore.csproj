@@ -27,10 +27,54 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
-05/09/2023 - 1.0.9
+`1.0.9` - 08/06/2023
+- add support of mapping for parameters having arguments concrete values types in command lambda operation (not Opt,Param,.. but the values types inside it)
 - fix bug GetValue when not setted option
-- add support of mapping for parameters having arguments values types of command lambda operation
-- add parser/binder exceptions SyntaxMatcherDispatcherException and subclasses
+- migrate help,test and get-info commands operations methods with concrete type mapping
+- improve mapping errors feedback
+- add SyntaxMatcherDispatcherException and subclasses
+
+`1.0.8` - 01/14/2023
+- add single command mode allowing to build an executable for only one command and eventually without the global help
+- change editor config and code cleanup
+- packages update
+
+`1.0.7` - 01/13/2023
+- add global option `--no-color` that turn off ansi/vt outputs
+- fix auto syntax -h was not passing global arguments
+- new RunCommand in current host
+- improve help output
+- embed symbols and sources
+
+`1.0.6` - 01/11/2023
+- fix MAJOR bug in command options parsing. Were not recongnized correctly
+- `AppHostBuilder` moved to namespace `CommandLine.NetCore.Services.AppHost`
+- fix auto command -h (Command.RunCommand) didn't call back configure and build delegates
+- fix support of -v and --info in -h auto syntax
+- doc update
+
+`1.0.5` - 01/05/2023
+- fix nupkg: adding the package to a project now deploy files Config/appSettings.core.json, LICENSE.md, README.md, assets/ascii-icon.png in your project. These files are configured as 'Content' and are deployed in the `bin` folder. 
+You can remove any of these files **EXCEPT Config/appSettings.core.json** wich is mandatory since it contains the CommandLine.NetCore parser root configuration
+- fix doc
+
+`1.0.4` - 01/04/2023
+- fix nupkg
+
+`1.0.3` - 01/04/2023
+- fix nupkg
+
+`1.0.2` - 01/04/2023
+- fix doc
+
+`1.0.1` - 01/04/2023
+- add CommandContext to lambda operations method
+- add support of abstract classes that inherits from command
+- rename OperationContext by CommandContext
+- fix bug command options were always set in delegate for -h
+
+`1.0.0` - 03/01/2023
+- init
 		</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/franck-gaspoz/CommandLine.NetCore</RepositoryUrl>

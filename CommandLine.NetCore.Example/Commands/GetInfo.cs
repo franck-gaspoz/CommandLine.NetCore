@@ -152,12 +152,11 @@ sealed class GetInfo : Command
         Console.Infos();
     }
 
-    void DumpEnvVar(Param envVarName)
+    void DumpEnvVar(string envVarName)
     {
-        var value = Environment.GetEnvironmentVariable(
-            envVarName.Value!) ?? throw new ArgumentException(
+        var value = Environment.GetEnvironmentVariable(envVarName) ?? throw new ArgumentException(
                 Texts._("VariableIsNotDefined"));
-        OutputKeyValue(envVarName.Value!, value);
+        OutputKeyValue(envVarName, value);
     }
 
     void DumpAllVars()

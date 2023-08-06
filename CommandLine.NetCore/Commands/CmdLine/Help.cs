@@ -54,7 +54,7 @@ sealed class Help : Command
 
         .With(args);
 
-    void DumpHelpForAllCommands(Opt v, Opt info)
+    void DumpHelpForAllCommands(bool verbose, bool info)
     {
         OutputAppTitle();
 
@@ -65,21 +65,20 @@ sealed class Help : Command
         Console.Out.WriteLine();
 
         OutputSectionTitle(Texts._("Commands"));
-        DumpCommandList(v);
+        DumpCommandList(verbose);
         Console.Out.WriteLine();
 
         OutputSectionTitle(Texts._("GlobalOptions"));
         DumpGlobalOptList();
 
-        CommandEnd(info.IsSet);
+        CommandEnd(info);
     }
 
-    void DumpCommandHelp(Param comandName, Opt v, Opt info)
+    void DumpCommandHelp(string comandName, bool verbose, bool info)
     {
         OutputAppTitle();
 
-        var command = _commandsSet.GetCommand(
-            comandName.Value!);
+        var command = _commandsSet.GetCommand(comandName);
 
         DumpCommandDescription(command, false, false);
 
@@ -88,13 +87,13 @@ sealed class Help : Command
         if (command.GetLongDescriptions(out var longDescs))
             DumpSyntaxes(command, longDescs);
 
-        if (v.IsSet)
+        if (verbose)
             DumpCommandNamespace(command, Br);
 
         if (command.GetOptionsDescriptions(out var optDescs))
             DumpCommandOptions(optDescs);
 
-        CommandEnd(info.IsSet);
+        CommandEnd(info);
     }
 
     string TextBox(List<string> lines)
@@ -178,12 +177,12 @@ sealed class Help : Command
             + isError + optDesc.Value + StOff);
     }
 
-    void DumpCommandList(Opt v)
+    void DumpCommandList(bool v)
     {
         foreach (var kvp in _commandsSet.Commands)
         {
             var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
-            DumpCommandDescription(command, true, v.IsSet);
+            DumpCommandDescription(command, true, v);
         }
     }
 
