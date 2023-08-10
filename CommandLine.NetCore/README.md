@@ -73,7 +73,7 @@ dotnet add package CommandLine.NetCore
 link to the library in your console application main class (example: Program.cs):
 
 ``` csharp
-using CommandLine.NetCore;
+using CommandLine.NetCore.Services.CmdLine;
 ```
 
 from your **main** method of your app or using **top level statements**, transfer control to the library **CommandLine.NetCore** :
@@ -287,7 +287,7 @@ thus any registered dependency can be added as a constructor parameter
             
 * the method **`Do`** chained to a **For** indicates the method that must be executed if the syntax match the command line args:
     
-    - the mon common way to define the operation method si the lambda expression, since it allows to use a standard method with concrete typed parameters (not Opt,Param,.. but the values types inside it) :
+    - the most common way to define the operation method si the lambda expression, since it allows to use a standard method with concrete typed parameters (not Opt,Param,.. but the values types inside it) :
 
     ```csharp
     // takes a method in a lambda unary call expression: () => methodName, takes a called method with no parameter, takes a called method with a default command result (code ok, result null).
@@ -317,6 +317,8 @@ thus any registered dependency can be added as a constructor parameter
 
     ```csharp
     // arguments mapping to concrete types
+    // also accepts an OperationContext parameter placed anywhere
+    // also accepts explicit mapping of arguments, with positional references in syntax, and no result
     // avoid repeating the command arguments declarations (Param, Opt)
     void MyOperation( string arg0, bool arg1 , ..)
     ```
@@ -327,7 +329,7 @@ thus any registered dependency can be added as a constructor parameter
     // no parameter and no result
     void MyOperation()
 
-    // explicit mapping of argument and no result
+    // explicit mapping of arguments, with positional references in syntax, and no result
     void MyOperation([MapArg(1) Param<string> arg0,[MapArg(5)] Opt<bool> arg1)
 
     // implicit mapping of arguments and no result
@@ -567,6 +569,8 @@ If this option is set syntaxes of a command can't be ambiguous
 # Versions history
 
 `1.0.10` - 08/06/2023
+- add support of mapping to array parameters when possible (instead of List) in command lambda operations
+- add global option --disable-global-help
 - doc update
 
 `1.0.9` - 08/06/2023

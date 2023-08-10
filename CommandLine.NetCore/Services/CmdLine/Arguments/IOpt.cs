@@ -70,6 +70,12 @@ public interface IOpt : IArg
     /// <summary>
     /// syntax as string arguments
     /// </summary>
-    /// <returns>string arguments array</returns>
-    public string[] ToArgs();
+    /// <returns>string arguments array<returns>
+    string[] ToArgs();
+
+    /// <summary>
+    /// return the value as an array object[] instead of a List{object}
+    /// </summary>
+    /// <returns>value as an array</returns>
+    object? GetValueArray();
 }

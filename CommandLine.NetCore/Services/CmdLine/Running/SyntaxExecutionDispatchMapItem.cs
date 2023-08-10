@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Linq.Expressions;
+using System.Reflection;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
@@ -115,6 +116,21 @@ public sealed class SyntaxExecutionDispatchMapItem
         return SyntaxMatcherDispatcher;
     }
 
+    const string ArrayTypePostFix = "[]";
+
+    /// <summary>
+    /// indicates if the parameter type is an array value type and the argument is a list value type
+    /// </summary>
+    /// <param name="parameterInfo">parameter info</param>
+    /// <param name="argument">argument</param>
+    /// <returns>a tuple with the question bool result</returns>
+    bool IsArgumentIsArrayAndParameterIsList(ParameterInfo parameterInfo, object argument)
+        => parameterInfo.ParameterType
+            .IsArray
+            && argument is IOpt opt
+            && opt.ExpectedValuesCount > 1
+            && opt.ValueType.FullName + ArrayTypePostFix == parameterInfo.ParameterType.FullName;
+
     /// <summary>
     /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method in a lambda unary call expression: () => methodName</para>
@@ -213,6 +229,7 @@ public sealed class SyntaxExecutionDispatchMapItem
                     var isSet = arg.GetIsSet();
                     var argValueType = arg.ValueType;
                     var useArgIsSetValue = false;
+                    var mapToArray = false;
 
                     if (arg is not Flag
                         && arg is IOpt opt2
@@ -276,7 +293,8 @@ public sealed class SyntaxExecutionDispatchMapItem
 
                         #endregion
 
-                        if (parameter.ParameterType == argValueType)
+                        if (parameter.ParameterType == argValueType
+                            || (mapToArray = IsArgumentIsArrayAndParameterIsList(parameter, arg)))
                         {
                             // argument type == value type (direct type mapping: string,bool,...)
                             callParameters.Add(
@@ -284,7 +302,9 @@ public sealed class SyntaxExecutionDispatchMapItem
                                     isSet
                                     : avoidCollection ?
                                         isSet ? ((IList)arg.GetValue()!)[0] : null
-                                        : arg.GetValue());
+                                        : !mapToArray ?
+                                            arg.GetValue()
+                                            : ((IOpt)arg).GetValueArray());
                         }
                         else
                         {

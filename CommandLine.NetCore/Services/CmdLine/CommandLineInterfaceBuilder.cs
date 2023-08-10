@@ -43,6 +43,7 @@ public sealed class CommandLineInterfaceBuilder
     Type? _forCommandType;
 
     bool _isGlobalHelpEnabled = true;
+    static bool _isDumpStackTrace = false;
 
     /// <summary>
     /// app host
@@ -295,6 +296,7 @@ public sealed class CommandLineInterfaceBuilder
         }
         catch (Exception hostBuilderException)
         {
+            _isDumpStackTrace = true;
             Environment.Exit(
                 ExitWithError(
                     hostBuilderException,
@@ -314,7 +316,10 @@ public sealed class CommandLineInterfaceBuilder
                     + ErrorTypeNameMessageTexteSeparator
                     + Environment.NewLine
                 : string.Empty)
-                + ex.Message,
+                + ex.Message
+                + (_isDumpStackTrace ?
+                    Environment.NewLine + ex.StackTrace
+                    : string.Empty),
                 console,
                 lineBreak);
 

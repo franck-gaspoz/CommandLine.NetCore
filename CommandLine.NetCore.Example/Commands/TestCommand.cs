@@ -65,7 +65,7 @@ class TestCommand : Command
         bool flag,
         string param,
         List<string>? strList,
-        List<string> option,
+        string[] option,
         bool debug)
     {
 

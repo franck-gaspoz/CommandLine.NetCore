@@ -5,9 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<AssemblyVersion>1.0.9.0</AssemblyVersion>
-		<InformationalVersion>1.0.9.0</InformationalVersion>
-		<FileVersion>1.0.9.0</FileVersion>
+		<Version>1.0.10.0</Version>
+		<AssemblyVersion>1.0.10.0</AssemblyVersion>
+		<InformationalVersion>1.0.10.0</InformationalVersion>
+		<FileVersion>1.0.10.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -20,13 +21,16 @@
 		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
 		<Copyright>(c) Franck Gaspoz 2023 Licence MIT</Copyright>
-		<Version>1.0.9</Version>
-		<InformationalVersion>1.0.9</InformationalVersion>
+		
 		<DebugType>embedded</DebugType>
 		<EmbedAllSources>True</EmbedAllSources>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
+`1.0.10` - 08/11/2023			
+- add global option --disable-global-help + improve help output in single command mode
+- add support of mapping to array parameters when possible (instead of List) in command lambda operations
+			
 `1.0.9` - 08/06/2023
 - add support of mapping for parameters having arguments concrete values types in command lambda operation (not Opt,Param,.. but the values types inside it)
 - fix bug GetValue when not setted option

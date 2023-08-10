@@ -11,7 +11,7 @@ new CommandLineInterfaceBuilder()
     // add this for single command mode (here: only get-info, no global help)
     .ForCommand<GetInfo>()
 
-    // add this to avoid global help of the command line parser
+    // add this to avoid global help of the command line parser (not mandatory)
     .DisableGlobalHelp()
 #endif
     .Build(args)

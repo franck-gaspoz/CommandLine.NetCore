@@ -33,7 +33,7 @@ public static class Globals
     /// <summary>
     /// configuration file prefix
     /// </summary>
-    public const string ConfigFilePrefix = "config/appSettings";
+    public const string ConfigFilePrefix = "Config/appSettings";
 
     /// <summary>
     /// configuration file postfix

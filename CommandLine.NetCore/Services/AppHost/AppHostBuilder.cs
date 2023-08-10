@@ -42,19 +42,25 @@ sealed class AppHostBuilder
                 configure =>
                 {
                     configure.AddJsonFile(
-                        ConfigFilePrefix + ConfigFileCoreName + ConfigFilePostfix,
+                        Path.Combine(
+                            Environment.CurrentDirectory,
+                            ConfigFilePrefix + ConfigFileCoreName + ConfigFilePostfix),
                         optional: false);
 
                     configure.AddJsonFile(
-                        ConfigFilePrefix + ConfigFileCoreName + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix,
+                        Path.Combine(
+                            Environment.CurrentDirectory,
+                            ConfigFilePrefix + ConfigFileCoreName + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix),
                         optional: true);
 
                     configure.AddJsonFile(
-                        ConfigFilePrefix + ConfigFilePostfix,
+                        Path.Combine(
+                            Environment.CurrentDirectory, ConfigFilePrefix + ConfigFilePostfix),
                         optional: true);
 
                     configure.AddJsonFile(
-                        ConfigFilePrefix + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix,
+                        Path.Combine(
+                            Environment.CurrentDirectory, ConfigFilePrefix + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix),
                         optional: true);
                 });
 

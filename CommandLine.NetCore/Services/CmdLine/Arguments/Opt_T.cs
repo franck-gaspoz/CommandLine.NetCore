@@ -158,6 +158,11 @@ public class Opt<T> : Arg, IOpt
         => Values.Select(x =>
                 ConvertValue<T>(x)).ToList();
 
+    /// <inheritdoc/>
+    public object? GetValueArray()
+        => Values.Select(x =>
+                ConvertValue<T>(x)).ToArray();
+
     /// <summary>
     /// add a value to the option
     /// </summary>
