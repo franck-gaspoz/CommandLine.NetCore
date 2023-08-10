@@ -70,7 +70,7 @@ public interface IOpt : IArg
     /// <summary>
     /// syntax as string arguments
     /// </summary>
-    /// <returns>string arguments array<returns>
+    /// <returns>string arguments array</returns>
     string[] ToArgs();
 
     /// <summary>
