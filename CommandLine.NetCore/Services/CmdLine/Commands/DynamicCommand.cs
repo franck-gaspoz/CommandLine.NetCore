@@ -7,19 +7,30 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// </summary>
 sealed class DynamicCommand : Command
 {
-    readonly ExecuteMethod _method;
+    readonly DynamicCommandExecuteMethod _method;
+
+    readonly DynamicCommandContext _context;
+
+    readonly CommandBuilder _builder;
 
     /// <summary>
     /// builds a new dynamic command from an execute method
     /// </summary>
+    /// <param name="commandName">nom de la commande</param>
     /// <param name="dependencies">command dependencies</param>
     /// <param name="method">execute method that specify and implements the command</param>
     public DynamicCommand(
+        string commandName,
         Dependencies dependencies,
-        ExecuteMethod method)
-            : base(dependencies) => _method = method;
+        DynamicCommandExecuteMethod method)
+            : base(dependencies)
+    {
+        _method = method;
+        _context = new(dependencies);
+        _builder = new(dependencies, commandName);
+    }
 
     /// <inheritdoc/>
     protected override CommandResult Execute(ArgSet args)
-        => _method.Execute(args);
+        => _method.Execute(args, _builder, _context);
 }

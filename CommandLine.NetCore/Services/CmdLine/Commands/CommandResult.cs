@@ -3,7 +3,7 @@
 /// <summary>
 /// command result
 /// </summary>
-public class CommandResult : OperationResult
+public sealed class CommandResult : OperationResult
 {
     /// <summary>
     /// list of parse errors (if any else empty)

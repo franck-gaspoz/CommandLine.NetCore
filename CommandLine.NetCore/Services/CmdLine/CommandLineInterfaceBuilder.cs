@@ -52,7 +52,7 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     internal IHost? AppHost => _appHostBuilder?.AppHost;
 
-    readonly Dictionary<string, ExecuteMethod> _dynamicCommands = new();
+    readonly Dictionary<string, DynamicCommandExecuteMethod> _dynamicCommands = new();
 
     #endregion
 
@@ -143,18 +143,18 @@ public sealed class CommandLineInterfaceBuilder
     }
 
     /// <summary>
-    /// adds a command speciciation and implementation (classless)
+    /// adds a command specification and implementation (classless)
     /// </summary>
     /// <param name="name">name of the command (as in the command line)</param>
     /// <param name="execute">command execute method</param>
     /// <returns>this</returns>
     public CommandLineInterfaceBuilder AddCommand(
         string name,
-        Func<ArgSet, CommandResult> execute)
+        Func<ArgSet, CommandBuilder, DynamicCommandContext, CommandResult> execute)
     {
         _dynamicCommands.Add(
             name,
-            new ExecuteMethod(execute));
+            new DynamicCommandExecuteMethod(execute));
         return this;
     }
 

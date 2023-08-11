@@ -15,17 +15,18 @@ new CommandLineInterfaceBuilder()
     .DisableGlobalHelp()
 #endif
 
-    /*.AddCommand(
+    .AddCommand(
         "add",
-        (args,builder) =>
-        {
+        (args, builder, context) =>
             builder.For(
+                builder.Param<double>(),
+                builder.Param<double>()
             )
             .Do(
-                (double x,double y) => 
-                    builder.Console
+                () => { }
             )
-        });*/
+            .With(args)
+        )
 
     .Build(args)
     .Run();

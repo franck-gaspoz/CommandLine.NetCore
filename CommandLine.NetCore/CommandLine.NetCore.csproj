@@ -108,6 +108,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 
 	<ItemGroup>
 	  <Compile Remove="Services\CmdLine\Commands\CommandSpecification.cs" />
+	  <Compile Remove="Services\CmdLine\Commands\DynamicCommandBuilder.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

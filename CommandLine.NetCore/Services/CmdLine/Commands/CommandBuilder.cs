@@ -2,7 +2,6 @@
 
 using AnsiVtConsole.NetCore;
 
-using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
@@ -15,7 +14,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// command builder
 /// </summary>
-public class CommandBuilder
+public sealed class CommandBuilder
 {
     #region properties
 
@@ -27,25 +26,28 @@ public class CommandBuilder
     /// <summary>
     /// console service
     /// </summary>
-    protected readonly IAnsiVtConsole Console;
+    readonly IAnsiVtConsole _console;
 
     /// <summary>
     /// texts service
     /// </summary>
-    protected readonly Texts Texts;
+    readonly Texts _texts;
 
     /// <summary>
     /// parser
     /// </summary>
-    protected readonly Parser Parser;
+    readonly Parser _parser;
 
     /// <summary>
     /// setted global options
     /// </summary>
-    protected readonly GlobalSettings GlobalSettings;
+    readonly GlobalSettings _globalSettings;
 
     readonly ArgBuilder _argBuilder;
+
     SyntaxMatcherDispatcher? _syntaxMatcherDispatcher;
+
+    readonly string _commandName;
 
     #endregion
 
@@ -53,44 +55,28 @@ public class CommandBuilder
     /// creates a new command builder
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
+    /// <param name="commandName">command name</param>
     /// <param name="runMethod">a run method for the builded command</param>
     public CommandBuilder(
         Dependencies dependencies,
+        string commandName,
         Func<string[], OperationResult>? runMethod = null)
     {
+        _commandName = commandName;
         _runMethod = runMethod;
         _argBuilder = dependencies.ArgBuilder;
-        GlobalSettings = dependencies.GlobalSettings;
-        Texts = dependencies.Texts;
-        Console = dependencies.Console;
-        Parser = dependencies.Parser;
+        _globalSettings = dependencies.GlobalSettings;
+        _texts = dependencies.Texts;
+        _console = dependencies.Console;
+        _parser = dependencies.Parser;
     }
 
     /// <summary>
     /// set the run method
     /// </summary>
     /// <param name="runMethod">run method</param>
-    protected void SetRunMethod(Func<string[], OperationResult> runMethod)
+    public void SetRunMethod(Func<string[], OperationResult> runMethod)
         => _runMethod = runMethod;
-
-    #region translaters, helpers
-
-    /// <summary>
-    /// returns the command name from this class type
-    /// </summary>
-    /// <returns>command name</returns>
-    public string ClassNameToCommandName()
-        => ClassNameToCommandName(GetType().Name);
-
-    /// <summary>
-    /// transforms a class type name to a commande name
-    /// </summary>
-    /// <param name="className">command type name</param>
-    /// <returns>command name</returns>
-    public static string ClassNameToCommandName(string className)
-        => className.ToKebabCase()!;
-
-    #endregion
 
     #region args build helpers
 
@@ -101,7 +87,7 @@ public class CommandBuilder
     /// <param name="isOptional">is optional</param>
     /// <param name="valueCount">value count</param>
     /// <returns>Opt</returns>
-    protected Opt Opt(string name, bool isOptional = false, int valueCount = 0)
+    public Opt Opt(string name, bool isOptional = false, int valueCount = 0)
         => _argBuilder.Opt(name, isOptional, valueCount);
 
     /// <summary>
@@ -110,7 +96,7 @@ public class CommandBuilder
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
     /// <returns>Flag</returns>
-    protected Flag Flag(string name, bool isOptional = false)
+    public Flag Flag(string name, bool isOptional = false)
         => _argBuilder.Flag(name, isOptional);
 
     /// <summary>
@@ -120,7 +106,7 @@ public class CommandBuilder
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
     /// <returns>Opt{T}</returns>
-    protected Opt<T> Opt<T>(string name, bool isOptional = false)
+    public Opt<T> Opt<T>(string name, bool isOptional = false)
         => _argBuilder.Opt<T>(name, isOptional);
 
     /// <summary>
@@ -129,7 +115,7 @@ public class CommandBuilder
     /// <typeparam name="T">type of parameter value</typeparam>
     /// <param name="value"></param>
     /// <returns>Param{T}</returns>
-    protected Param<T> Param<T>(string? value = null)
+    public Param<T> Param<T>(string? value = null)
         => _argBuilder.Param<T>(value);
 
     /// <summary>
@@ -137,7 +123,7 @@ public class CommandBuilder
     /// </summary>
     /// <param name="value">eventual value</param>
     /// <returns>Param</returns>
-    protected Param Param(string? value = null)
+    public Param Param(string? value = null)
         => _argBuilder.Param(value);
 
     /// <summary>
@@ -145,7 +131,7 @@ public class CommandBuilder
     /// </summary>
     /// <param name="options">options</param>
     /// <returns>option set</returns>
-    protected static OptSet OptSet(params IOpt[] options)
+    public static OptSet OptSet(params IOpt[] options)
         => new(options);
 
     #endregion
@@ -157,17 +143,17 @@ public class CommandBuilder
     /// </summary>
     /// <param name="syntax">arguments syntaxes</param>
     /// <returns>a syntax dispatcher map item</returns>
-    protected SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
+    public SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
     {
         if (_runMethod is null) ArgumentNullException.ThrowIfNull(_runMethod);
 
         if (_syntaxMatcherDispatcher is null)
         {
             _syntaxMatcherDispatcher = new(
-                Texts,
-                Parser,
-                GlobalSettings,
-                Console);
+                _texts,
+                _parser,
+                _globalSettings,
+                _console);
         }
 
 #if Enable_h_Arg
@@ -189,7 +175,7 @@ public class CommandBuilder
         var args =
             new List<string>{
                 "help" ,
-                ClassNameToCommandName() };
+                _commandName };
 
         if (context.OptSet is not null)
         {
@@ -200,7 +186,7 @@ public class CommandBuilder
             }
         }
 
-        foreach (var (_, globalArgSyntax) in GlobalSettings
+        foreach (var (_, globalArgSyntax) in _globalSettings
             .SettedGlobalOptsSet
             .OptSpecs)
         {
