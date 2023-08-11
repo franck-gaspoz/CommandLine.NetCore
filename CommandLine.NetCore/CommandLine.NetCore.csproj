@@ -107,6 +107,10 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Services\CmdLine\Commands\CommandSpecification.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="assets\ascii-icon.png" />
 	</ItemGroup>
 

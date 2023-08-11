@@ -28,6 +28,8 @@ namespace CommandLine.NetCore.Services.CmdLine;
 /// </summary>
 public sealed class CommandLineInterfaceBuilder
 {
+    #region properties
+
     const string ErrorTypeNameMessageTexteSeparator = ": ";
 
     readonly AssemblySet _assemblySet;
@@ -50,6 +52,10 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     internal IHost? AppHost => _appHostBuilder?.AppHost;
 
+    readonly Dictionary<string, ExecuteMethod> _dynamicCommands = new();
+
+    #endregion
+
     /// <summary>
     /// creates a new instance builder
     /// </summary>
@@ -58,6 +64,8 @@ public sealed class CommandLineInterfaceBuilder
         _assemblySet = new AssemblySet(Assembly.GetCallingAssembly());
         UseAssembly(Assembly.GetExecutingAssembly());
     }
+
+    #region configure methods
 
     /// <summary>
     /// configure the command line to work for an unique command
@@ -133,6 +141,26 @@ public sealed class CommandLineInterfaceBuilder
         _buildDelegate = buildDelegate;
         return this;
     }
+
+    /// <summary>
+    /// adds a command speciciation and implementation (classless)
+    /// </summary>
+    /// <param name="name">name of the command (as in the command line)</param>
+    /// <param name="execute">command execute method</param>
+    /// <returns>this</returns>
+    public CommandLineInterfaceBuilder AddCommand(
+        string name,
+        Func<ArgSet, CommandResult> execute)
+    {
+        _dynamicCommands.Add(
+            name,
+            new ExecuteMethod(execute));
+        return this;
+    }
+
+    #endregion
+
+    #region build & run
 
     /// <summary>
     /// run the command line
@@ -306,6 +334,10 @@ public sealed class CommandLineInterfaceBuilder
         return this;
     }
 
+    #endregion
+
+    #region errors fallbacks
+
     static int ExitWithError(
         Exception ex,
         IAnsiVtConsole console,
@@ -334,4 +366,6 @@ public sealed class CommandLineInterfaceBuilder
         console.Logger.LogError();
         return ExitFail;
     }
+
+    #endregion
 }

@@ -124,7 +124,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// <param name="parameterInfo">parameter info</param>
     /// <param name="argument">argument</param>
     /// <returns>a tuple with the question bool result</returns>
-    bool IsArgumentIsArrayAndParameterIsList(ParameterInfo parameterInfo, object argument)
+    static bool IsArgumentIsArrayAndParameterIsList(ParameterInfo parameterInfo, object argument)
         => parameterInfo.ParameterType
             .IsArray
             && argument is IOpt opt

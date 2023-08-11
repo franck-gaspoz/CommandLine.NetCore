@@ -3,7 +3,7 @@ using CommandLine.NetCore.Services.CmdLine.Settings;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CommandLine.NetCore.Services.CmdLine;
+namespace CommandLine.NetCore.Services.CmdLine.Extensions;
 
 static class IServiceProviderExt
 {

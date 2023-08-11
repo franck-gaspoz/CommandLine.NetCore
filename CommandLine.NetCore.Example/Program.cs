@@ -14,5 +14,13 @@ new CommandLineInterfaceBuilder()
     // add this to avoid global help of the command line parser (not mandatory)
     .DisableGlobalHelp()
 #endif
+
+    /*.AddCommand(
+        "add",
+        args =>
+        {
+
+        });*/
+
     .Build(args)
     .Run();

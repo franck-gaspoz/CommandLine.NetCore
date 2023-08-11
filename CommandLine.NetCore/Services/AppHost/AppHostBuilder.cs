@@ -1,7 +1,6 @@
-﻿
-using CommandLine.NetCore.Services.CmdLine;
-using CommandLine.NetCore.Services.CmdLine.Arguments;
+﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.Text;
 
