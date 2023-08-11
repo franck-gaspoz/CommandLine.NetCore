@@ -17,10 +17,10 @@ new CommandLineInterfaceBuilder()
 
     .AddCommand(
         "add",
-        (args, builder, context) =>
-            builder.For(
-                builder.Param<double>(),
-                builder.Param<double>()
+        (args, _, ctx) =>
+            _.For(
+                _.Param<double>(),
+                _.Param<double>()
             )
             .Do(
                 () => { }
@@ -30,3 +30,6 @@ new CommandLineInterfaceBuilder()
 
     .Build(args)
     .Run();
+
+
+//void Add(double x, double y, CommandContext ctx) { }
