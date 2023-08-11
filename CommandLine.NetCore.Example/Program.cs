@@ -17,9 +17,14 @@ new CommandLineInterfaceBuilder()
 
     /*.AddCommand(
         "add",
-        args =>
+        (args,builder) =>
         {
-
+            builder.For(
+            )
+            .Do(
+                (double x,double y) => 
+                    builder.Console
+            )
         });*/
 
     .Build(args)

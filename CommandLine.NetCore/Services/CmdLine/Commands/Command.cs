@@ -31,7 +31,13 @@ public abstract class Command : CommandBuilder
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
     public Command(Dependencies dependencies)
-        : base(dependencies) => Config = dependencies.GlobalSettings.Configuration;
+        : base(dependencies)
+    {
+        Config = dependencies
+                .GlobalSettings
+                .Configuration;
+        SetRunMethod(RunCommand);
+    }
 
     /// <summary>
     /// run the command with the specified arguments
@@ -153,7 +159,7 @@ public abstract class Command : CommandBuilder
     /// </summary>
     /// <param name="args">command line arguments</param>
     /// <returns>operation result</returns>
-    public override OperationResult RunCommand(params string[] args)
+    public OperationResult RunCommand(params string[] args)
     {
         var commandLineInterfaceBuilder = GlobalSettings
             .CommandLineInterfaceBuilder!;

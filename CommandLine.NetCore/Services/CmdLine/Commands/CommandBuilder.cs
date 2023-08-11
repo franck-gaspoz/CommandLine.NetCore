@@ -15,9 +15,14 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// command builder
 /// </summary>
-public abstract class CommandBuilder
+public class CommandBuilder
 {
     #region properties
+
+    /// <summary>
+    /// the run method of the builded command
+    /// </summary>
+    Func<string[], OperationResult>? _runMethod;
 
     /// <summary>
     /// console service
@@ -48,14 +53,25 @@ public abstract class CommandBuilder
     /// creates a new command builder
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
-    public CommandBuilder(Dependencies dependencies)
+    /// <param name="runMethod">a run method for the builded command</param>
+    public CommandBuilder(
+        Dependencies dependencies,
+        Func<string[], OperationResult>? runMethod = null)
     {
+        _runMethod = runMethod;
         _argBuilder = dependencies.ArgBuilder;
         GlobalSettings = dependencies.GlobalSettings;
         Texts = dependencies.Texts;
         Console = dependencies.Console;
         Parser = dependencies.Parser;
     }
+
+    /// <summary>
+    /// set the run method
+    /// </summary>
+    /// <param name="runMethod">run method</param>
+    protected void SetRunMethod(Func<string[], OperationResult> runMethod)
+        => _runMethod = runMethod;
 
     #region translaters, helpers
 
@@ -143,6 +159,8 @@ public abstract class CommandBuilder
     /// <returns>a syntax dispatcher map item</returns>
     protected SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
     {
+        if (_runMethod is null) ArgumentNullException.ThrowIfNull(_runMethod);
+
         if (_syntaxMatcherDispatcher is null)
         {
             _syntaxMatcherDispatcher = new(
@@ -189,19 +207,8 @@ public abstract class CommandBuilder
             args.AddRange(globalArgSyntax);
         }
 
-        return RunCommand(args.ToArray());
+        return _runMethod!(args.ToArray());
     }
-
-    #endregion
-
-    #region command run
-
-    /// <summary>
-    /// run a command from command line arguments
-    /// </summary>
-    /// <param name="args">command line arguments</param>
-    /// <returns>operation result</returns>
-    public abstract OperationResult RunCommand(params string[] args);
 
     #endregion
 }
