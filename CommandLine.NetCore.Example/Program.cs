@@ -7,6 +7,7 @@ using CommandLine.NetCore.Example.Commands;
 using CommandLine.NetCore.Services.CmdLine;
 
 new CommandLineInterfaceBuilder()
+
 #if SINGLE_COMMAND
     // add this for single command mode (here: only get-info, no global help)
     .ForCommand<GetInfo>()
@@ -23,7 +24,16 @@ new CommandLineInterfaceBuilder()
                 _.Param<double>()
             )
             .Do(
-                () => { }
+                // top level statement implies can't use a local method as a lambda expression
+                //() => (Func<double, double, double>)((x, y) => x + y)
+                //() => (Action<double, double>)((x, y) => new A().Add(x,y))
+                //() => (Action<double, double>)((x, y) => new B(x,y).Add())
+                //() => (Action<double, double>)((x, y) => C.Add(x,y))
+                //() => new Action<double>((x) => C.Add(x,x))
+                (double x, double y) =>
+                {
+                    ctx.Console.Out.WriteLine($"x+y={x + y}");
+                }
             )
             .With(args)
         )
@@ -31,5 +41,13 @@ new CommandLineInterfaceBuilder()
     .Build(args)
     .Run();
 
+static void Add(double x, double y) { }
 
-//void Add(double x, double y, CommandContext ctx) { }
+record B(double x, double y) { public double Add() => x + y; }
+
+class A { public void Add(double x, double y) { } }
+
+static class C
+{
+    public static void Add(double x, double y) { }
+}
