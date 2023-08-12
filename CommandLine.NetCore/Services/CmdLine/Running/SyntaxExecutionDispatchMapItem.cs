@@ -54,13 +54,13 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate">with parameter operation context and OperationResult result delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    /*public SyntaxMatcherDispatcher Do(Func<CommandContext, OperationResult> @delegate)
+    public SyntaxMatcherDispatcher Do(Func<CommandContext, OperationResult> @delegate)
     {
         Delegate = @delegate;
         Name = Delegate.Method.Name;
         Syntax.SetName(Name);
         return SyntaxMatcherDispatcher;
-    }*/
+    }
 
     /// <summary>
     /// set up delegate for this syntax execution dispatch map
@@ -68,7 +68,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate">with parameter operation context and void delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    /*public SyntaxMatcherDispatcher Do(Action<CommandContext> @delegate)
+    public SyntaxMatcherDispatcher Do(Action<CommandContext> @delegate)
     {
         Name = @delegate.Method.Name;
         Delegate = (CommandContext context) =>
@@ -78,7 +78,7 @@ public sealed class SyntaxExecutionDispatchMapItem
         };
         Syntax.SetName(Name);
         return SyntaxMatcherDispatcher;
-    }*/
+    }
 
     /// <summary>
     /// set up delegate for this syntax execution dispatch map
@@ -138,6 +138,20 @@ public sealed class SyntaxExecutionDispatchMapItem
     /// <param name="a"></param>
     /// <returns></returns>
     public SyntaxMatcherDispatcher Do<T1>(Action<T1> a) => SyntaxMatcherDispatcher;
+
+    /// <summary>
+    /// test enrichissements de Do
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <param name="a"></param>
+    /// <returns></returns>
+    public SyntaxMatcherDispatcher Do<T1, T2>(Action<T1, T2> a)
+    {
+        var b = a;
+        return SyntaxMatcherDispatcher;
+    }
+
 
     /// <summary>
     /// set up delegate for this syntax execution dispatch map

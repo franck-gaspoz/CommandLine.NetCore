@@ -48,7 +48,7 @@ public sealed class GlobalSettings
     /// <summary>
     /// command line builder
     /// </summary>
-    internal CommandLineInterfaceBuilder? CommandLineInterfaceBuilder { get; private set; }
+    public CommandLineInterfaceBuilder? CommandLineInterfaceBuilder { get; private set; }
 
     /// <summary>
     /// global settings of the command line engine

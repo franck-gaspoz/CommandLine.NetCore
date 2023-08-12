@@ -44,10 +44,6 @@
       "commandName": "Project",
       "commandLineArgs": "help help --parser-logging Debug"
     },
-    "test-command -a 1,2,3,4 -e -b -z -c --parser-logging Trace": {
-      "commandName": "Project",
-      "commandLineArgs": "test-command -a 1,2,3,4 -e -b -z -c --parser-logging Trace"
-    },
     "test-command -a 1,2,3,4 -e -b -c  -z --parser-logging Trace": {
       "commandName": "Project",
       "commandLineArgs": "test-command -a 1,2,3,4 -e -b -c  -z --parser-logging Trace"
@@ -71,6 +67,10 @@
     "-h": {
       "commandName": "Project",
       "commandLineArgs": "-h --parser-logging Trace"
+    },
+    "add 1 2": {
+      "commandName": "Project",
+      "commandLineArgs": "add 1 2"
     }
   }
 }

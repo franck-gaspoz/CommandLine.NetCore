@@ -1,16 +1,18 @@
 ﻿using System.Reflection;
 
 using AnsiVtConsole.NetCore;
-using AnsiVtConsole.NetCore.Lib;
 
 using CommandLine.NetCore.Commands.CmdLine;
+using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.GlobalOpts;
+using CommandLine.NetCore.Initializer;
 using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 using CommandLine.NetCore.Services.CmdLine.Settings;
+using CommandLine.NetCore.Services.Error;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
@@ -44,6 +46,8 @@ public sealed class CommandLineInterfaceBuilder
 
     Type? _forCommandType;
 
+    string? _forCommandName;
+
     bool _isGlobalHelpEnabled = true;
     static bool _isDumpStackTrace = false;
 
@@ -53,6 +57,8 @@ public sealed class CommandLineInterfaceBuilder
     internal IHost? AppHost => _appHostBuilder?.AppHost;
 
     readonly Dictionary<string, DynamicCommandExecuteMethod> _dynamicCommands = new();
+
+    readonly List<ErrorDescriptor> _initializationErrors = new();
 
     #endregion
 
@@ -67,6 +73,18 @@ public sealed class CommandLineInterfaceBuilder
 
     #region configure methods
 
+    bool CheckForCommandIsAccepted()
+    {
+        if (_forCommandType is not null)
+            _initializationErrors.Add(
+                this.MulitpleFor(_forCommandType.Name));
+        if (_forCommandName is not null)
+            _initializationErrors.Add(
+                this.MulitpleFor(_forCommandName));
+        return _forCommandName is null
+            && _forCommandType is null;
+    }
+
     /// <summary>
     /// configure the command line to work for an unique command
     /// <para>only the command of the specified type is available</para>
@@ -77,7 +95,20 @@ public sealed class CommandLineInterfaceBuilder
     public CommandLineInterfaceBuilder ForCommand<CommandType>()
         where CommandType : Command
     {
-        _forCommandType = typeof(CommandType);
+        if (CheckForCommandIsAccepted())
+            _forCommandType = typeof(CommandType);
+        return this;
+    }
+
+    /// <summary>
+    /// configure the command line to work for an unique command
+    /// </summary>
+    /// <param name="commandName">command name</param>
+    /// <returns>this object</returns>
+    public CommandLineInterfaceBuilder ForCommand(string commandName)
+    {
+        if (CheckForCommandIsAccepted())
+            _forCommandName = commandName;
         return this;
     }
 
@@ -152,9 +183,19 @@ public sealed class CommandLineInterfaceBuilder
         string name,
         Func<ArgSet, CommandBuilder, DynamicCommandContext, CommandResult> execute)
     {
-        _dynamicCommands.Add(
-            name,
-            new DynamicCommandExecuteMethod(execute));
+        if (_dynamicCommands.ContainsKey(name))
+            _initializationErrors.Add(
+                this.CommandAlreadyExists(
+                    name,
+                    new
+                    {
+                        Execute = execute
+                    }));
+        else
+            _dynamicCommands.Add(
+                name,
+                new DynamicCommandExecuteMethod(name, execute));
+
         return this;
     }
 
@@ -320,7 +361,9 @@ public sealed class CommandLineInterfaceBuilder
                     _isGlobalHelpEnabled,
                     _forCommandType,
                     _configureDelegate,
-                    _buildDelegate));
+                    _buildDelegate,
+                    _dynamicCommands,
+                    _initializationErrors));
         }
         catch (Exception hostBuilderException)
         {
@@ -340,8 +383,8 @@ public sealed class CommandLineInterfaceBuilder
 
     static int ExitWithError(
         Exception ex,
-        IAnsiVtConsole console,
-        bool lineBreak)
+        IAnsiVtConsole? console = null,
+        bool lineBreak = true)
             => ExitWithError(
                 (ex is INotExplicitMessageException ?
                     ex.GetType().Name
@@ -357,14 +400,42 @@ public sealed class CommandLineInterfaceBuilder
 
     static int ExitWithError(
         string error,
-        IAnsiVtConsole console,
-        bool lineBreak)
+        IAnsiVtConsole? console = null,
+        bool lineBreak = true)
     {
         if (!lineBreak)
-            console.Logger.LogError();
-        console.Logger.LogError(error);
-        console.Logger.LogError();
+            LogError(console);
+        LogError(error, console);
+        LogError(console);
         return ExitFail;
+    }
+
+    static void LogError(IAnsiVtConsole? console = null)
+    {
+        if (console is null)
+            Console.Error.WriteLine(string.Empty);
+        else
+            console!.Logger.LogError(string.Empty);
+    }
+
+    static void LogError(string error = "", IAnsiVtConsole? console = null)
+    {
+        if (console is null)
+            Console.Error.WriteLine(error);
+        else
+            console!.Logger.LogError(error);
+    }
+
+    static void TryOrExit(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception ex)
+        {
+            ExitWithError(ex);
+        }
     }
 
     #endregion

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Dynamic;
+using System.Reflection;
 
 namespace CommandLine.NetCore.Extensions;
 
@@ -7,6 +8,40 @@ namespace CommandLine.NetCore.Extensions;
 /// </summary>
 static class ObjectExt
 {
+    /// <summary>
+    /// transform an object (such an anonymous type) to an expando object
+    /// <para>copy public properties of the source in the target</para>
+    /// </summary>
+    /// <param name="obj">source object</param>
+    /// <returns>expando</returns>
+    public static ExpandoObject ToExpando(this object? obj)
+    {
+        var r = new ExpandoObject();
+        if (obj is not null)
+            foreach (var prop in obj.GetType()
+                .GetProperties())
+                r.TryAdd(
+                    prop.Name,
+                    prop.GetValue(obj, null));
+        return r;
+    }
+
+    /// <summary>
+    /// transform an object (such an anonymous type) to an expando object, and add to its the given properties
+    /// </summary>
+    /// <param name="obj">source object</param>
+    /// <param name="properties">properties to be added</param>
+    /// <returns></returns>
+    public static ExpandoObject Add(
+        this object? obj,
+        params (string Name, object Value)[] properties)
+    {
+        var r = obj?.ToExpando() ?? new ExpandoObject();
+        foreach (var (Name, Value) in properties)
+            r.TryAdd(Name, Value);
+        return r;
+    }
+
     /// <summary>
     /// indicate if an object is one of the given. compares by reference
     /// </summary>
