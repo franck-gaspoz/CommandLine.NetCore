@@ -17,15 +17,15 @@ static class IServiceCollectionExt
     /// <param name="assemblySet">assembly set where lookup for commands and arguments</param>
     /// <param name="appHostConfiguration">app host configuration</param>
     /// <returns>service collection</returns>
-    public static IServiceCollection AddCommands(
+    public static IServiceCollection AddClassCommands(
         this IServiceCollection services,
         AssemblySet assemblySet,
         AppHostConfiguration appHostConfiguration
         )
     {
-        services.AddSingleton<CommandsSet>();
+        services.AddSingleton<ClassCommandsSet>();
 
-        foreach (var classType in CommandsSet.GetCommandTypes(
+        foreach (var classType in ClassCommandsSet.GetCommandTypes(
             assemblySet, appHostConfiguration))
             services.AddTransient(classType);
 
@@ -40,6 +40,15 @@ static class IServiceCollectionExt
     public static IServiceCollection AddDynamicCommands(
         this IServiceCollection services)
             => services.AddTransient<DynamicCommandsSet>();
+
+    /// <summary>
+    /// add mtuli-kind commands set
+    /// </summary>
+    /// <param name="services">services collection</param>
+    /// <returns>services collection</returns>
+    public static IServiceCollection AddCommandsSet(
+        this IServiceCollection services)
+            => services.AddTransient<CommandsSet>();
 
     /// <summary>
     /// add command line arguments as a injectable dependency

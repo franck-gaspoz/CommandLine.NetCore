@@ -79,10 +79,11 @@ sealed class AppHostBuilder
                     .AddSingleton(hostConfiguration)
                     .AddSingleton(hostConfiguration.AssemblySet)
                     .AddCommandLineArgs(args)
-                    .AddCommands(
+                    .AddClassCommands(
                         hostConfiguration.AssemblySet,
                         AppHostConfiguration)
                     .AddDynamicCommands()
+                    .AddCommandsSet()
                     .AddGlobalArguments(hostConfiguration.AssemblySet)
                     .AddGlobalSettings()
                     .ConfigureOutput());

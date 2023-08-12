@@ -278,9 +278,7 @@ public sealed class CommandLineInterfaceBuilder
                         && (!(!isNotHelpCommand
                             && (secondArg is not null
                                 && secondArg == forCommand!.Name))))
-                {
                     command = forCommand!;
-                }
                 else
                     command = commandSet.GetCommand(args.Args.ToArray()[0]);
 
@@ -343,6 +341,34 @@ public sealed class CommandLineInterfaceBuilder
                 false);
         }
     }
+
+#if no
+    /// <summary>
+    /// get a command from service provider, by type (class command) or name (dynamic command)
+    /// </summary>
+    /// <param name="texts">texts</param>
+    /// <param name="serviceProvider">service provider</param>
+    /// <param name="commandType">type of command (if any)</param>
+    /// <param name="commandName">name of command (if any)</param>
+    /// <returns>command</returns>
+    /// <exception cref="ArgumentException">unknwown command</exception>
+    Command GetCommand(
+        Texts texts,
+        IServiceProvider serviceProvider,
+        Type? commandType = null,
+        string? commandName = null,
+        CommandsSet commandsSet,
+        DynamicCommandsSet dynamicCommandsSet)
+    {
+        if (commandType is null && commandName is null)
+            throw new ArgumentException(
+                texts._(
+                    "UnknownCommand","null");
+
+        if (commandType is not null) serviceProvider.GetReqService(commandType);
+
+    }
+#endif
 
     /// <summary>
     /// build the command line interface async host initialized for the command line arguments
@@ -425,18 +451,6 @@ public sealed class CommandLineInterfaceBuilder
             Console.Error.WriteLine(error);
         else
             console!.Logger.LogError(error);
-    }
-
-    static void TryOrExit(Action action)
-    {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            ExitWithError(ex);
-        }
     }
 
     #endregion

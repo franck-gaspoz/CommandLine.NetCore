@@ -1,95 +1,32 @@
-﻿using CommandLine.NetCore.Commands.CmdLine;
-using CommandLine.NetCore.Extensions;
-using CommandLine.NetCore.Services.AppHost;
-using CommandLine.NetCore.Services.CmdLine.Settings;
-using CommandLine.NetCore.Services.Text;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
-/// set of commands operations &amp; store
+/// set of class &amp; dynamic commands operations &amp; store
 /// </summary>
 sealed class CommandsSet
 {
     readonly Texts _texts;
-    readonly IServiceProvider _serviceProvider;
+    readonly ClassCommandsSet _classCommandsSet;
+    readonly DynamicCommandsSet _dynamicCommandsSet;
 
+    /// <summary>
+    /// Creates a new commands set
+    /// </summary>
+    /// <param name="texts">texts</param>
+    /// <param name="classCommandsSet">class commands set</param>
+    /// <param name="dynamicCommandsSet">dynamic commands set</param>
     public CommandsSet(
         Texts texts,
-        IServiceProvider serviceProvider,
-        AssemblySet assemblySet,
-        AppHostConfiguration appHostConfiguration)
+        ClassCommandsSet classCommandsSet,
+        DynamicCommandsSet dynamicCommandsSet
+        )
     {
         _texts = texts;
-        _serviceProvider = serviceProvider;
-
-        foreach (var classType in GetCommandTypes(assemblySet, appHostConfiguration))
-        {
-            Add(
-                Command.ClassNameToCommandName(classType.Name),
-                classType);
-        }
+        _classCommandsSet = classCommandsSet;
+        _dynamicCommandsSet = dynamicCommandsSet;
     }
-
-    /// <summary>
-    /// return selectables types from assembly set
-    /// <para>if unique command, returns the unique command</para>
-    /// <para>'Help' command is always added if found</para>
-    /// </summary>
-    /// <param name="assemblySet"></param>
-    /// <param name="appHostConfiguration"></param>
-    /// <returns></returns>
-    public static IEnumerable<Type> GetCommandTypes(
-        AssemblySet assemblySet,
-        AppHostConfiguration appHostConfiguration)
-    {
-        var commandTypes = new List<Type>();
-        foreach (var assembly in assemblySet.Assemblies)
-            commandTypes
-                .AddRange(
-                    assembly
-                        .GetTypes()
-                        .Where(x => !x.IsAbstract
-                            && x.InheritsFrom(typeof(Command))));
-
-        var selectedTypes = new List<Type>();
-        foreach (var type in commandTypes)
-        {
-            if ((appHostConfiguration.ForCommandType is null
-                || (appHostConfiguration.ForCommandType is not null
-                    && appHostConfiguration.ForCommandType == type)
-                || (appHostConfiguration.ForCommandName is not null
-                    && appHostConfiguration.ForCommandName ==
-                        Command.ClassNameToCommandName(
-                            type.Name))
-                || type == typeof(Help)))
-                selectedTypes.Add(type);
-        }
-
-        return selectedTypes;
-    }
-
-    readonly Dictionary<string, Type> _commands = new();
-    public IReadOnlyDictionary<string, Type> Commands
-        => _commands;
-
-    void Add(
-        string name,
-        Type commandType)
-        => _commands.Add(name, commandType);
-
-    /// <summary>
-    /// returns type of a command
-    /// </summary>
-    /// <param name="name">name of a command</param>
-    /// <exception cref="ArgumentException">unknown command</exception>
-    /// <returns>type of the command class</returns>
-    public Type GetType(string name)
-        => !_commands.TryGetValue(name, out var commandType)
-            ? throw new ArgumentException(_texts._("UnknownCommand", name))
-            : commandType;
 
     /// <summary>
     /// retourne une instance de commande à partir du nom de la commande
@@ -98,8 +35,13 @@ sealed class CommandsSet
     /// <returns>commande</returns>
     /// <exception cref="ArgumentException">unknown command</exception>
     public Command GetCommand(string name)
-        => (Command)_serviceProvider
-            .GetRequiredService(
-                GetType(name));
+    {
+        var comPerType = _classCommandsSet.TryGetCommand(name);
+        if (comPerType is not null) return comPerType;
+        var comPerName = _dynamicCommandsSet.TryGetCommand(name);
+        if (comPerName is not null) return comPerName;
+        throw new ArgumentException(_texts._("UnknownCommand", name));
+    }
+
 }
 

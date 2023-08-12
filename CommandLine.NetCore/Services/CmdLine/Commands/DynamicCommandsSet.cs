@@ -1,5 +1,4 @@
 ﻿using CommandLine.NetCore.Services.AppHost;
-using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
@@ -8,26 +7,18 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// </summary>
 sealed class DynamicCommandsSet
 {
-    readonly Texts _texts;
-    readonly IServiceProvider _serviceProvider;
     readonly Dependencies _dependencies;
 
     /// <summary>
     /// creates a new dynamic commands set
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
-    /// <param name="texts">text</param>
-    /// <param name="serviceProvider"></param>
     /// <param name="appHostConfiguration"></param>
     public DynamicCommandsSet(
         Dependencies dependencies,
-        Texts texts,
-        IServiceProvider serviceProvider,
         AppHostConfiguration appHostConfiguration)
     {
         _dependencies = dependencies;
-        _texts = texts;
-        _serviceProvider = serviceProvider;
 
         foreach (var commandSpec in GetCommands(appHostConfiguration))
             Add(commandSpec);
@@ -58,6 +49,10 @@ sealed class DynamicCommandsSet
     public IReadOnlyDictionary<string, DynamicCommandExecuteMethod> CommandSpecs
         => _commandSpecs;
 
+    readonly Dictionary<string, DynamicCommand> _commands = new();
+    public IReadOnlyDictionary<string, DynamicCommand> Commands
+        => _commands;
+
     void Add(DynamicCommandExecuteMethod commandSpec)
         => _commandSpecs.Add(commandSpec.CommandName, commandSpec);
 
@@ -66,6 +61,20 @@ sealed class DynamicCommandsSet
             commandSpec.CommandName,
             _dependencies,
             commandSpec);
+
+    /// <summary>
+    /// try get a command by its name. if spec exits and not already created in current scope it is created and returns, else returned from cache
+    /// </summary>
+    /// <param name="name">name</param>
+    /// <returns>comamnd or null if unknown</returns>
+    public Command? TryGetCommand(string name)
+    {
+        if (_commands.TryGetValue(name, out var command)) return command;
+        if (!_commandSpecs.TryGetValue(name, out var comSpec)) return null;
+        command = CreateCommand(comSpec);
+        _commands.Add(name, command);
+        return command;
+    }
 
 #if no
     /// <summary>
