@@ -70,7 +70,7 @@
     },
     "add 1 2": {
       "commandName": "Project",
-      "commandLineArgs": "add 1 2"
+      "commandLineArgs": "add 1 2 --parser-logging Trace"
     }
   }
 }

@@ -52,13 +52,15 @@ public sealed class SyntaxMatcherDispatcher
     /// <summary>
     /// build a syntax from arguments syntaxes set
     /// </summary>
-    /// <param name="syntax">arguments syntaxes</param>
+    /// <param name="syntaxArgs">syntaxe arguments</param>
     /// <returns>a syntax object</returns>
-    public SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
+    public SyntaxExecutionDispatchMapItem For(params Arg[] syntaxArgs)
     {
+        var syntax = new Syntax(syntaxArgs);
         var dispatchMap = new SyntaxExecutionDispatchMapItem(
             this,
-            new Syntax(syntax));
+            syntax);
+
         _maps.Add(dispatchMap);
         return dispatchMap;
     }

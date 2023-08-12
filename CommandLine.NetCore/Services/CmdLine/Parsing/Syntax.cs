@@ -31,9 +31,7 @@ public sealed class Syntax
     /// build a new instance
     /// </summary>
     /// <param name="args">arguments</param>
-    public Syntax(
-        IArg[] args
-        )
+    public Syntax(IArg[] args)
         => _args = args.ToList();
 
     /// <summary>

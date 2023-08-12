@@ -160,7 +160,10 @@ public sealed class CommandBuilder
         if (_syntaxMatcherDispatcher.Count == 0)
             AddHelpAboutCommandSyntax(_syntaxMatcherDispatcher);
 #endif
-        return _syntaxMatcherDispatcher.For(syntax);
+        var syntaxExecutionDispatchItem = _syntaxMatcherDispatcher.For(syntax);
+        syntaxExecutionDispatchItem.Syntax
+            .SetName(_commandName);
+        return syntaxExecutionDispatchItem;
     }
 
     void AddHelpAboutCommandSyntax(SyntaxMatcherDispatcher syntaxMatcherDispatcher)

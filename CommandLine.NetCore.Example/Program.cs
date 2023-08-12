@@ -25,8 +25,8 @@ new CommandLineInterfaceBuilder()
 #endif
 
     .AddCommand("add", (args, builder, ctx) =>
-        builder.For(builder.Param<double>(), builder.Param<double>())
-            .Do((double x, double y) =>
+        builder.For(builder.Param<string>(), builder.Param<string>())
+            .Do((string x, string y) =>
             {
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
