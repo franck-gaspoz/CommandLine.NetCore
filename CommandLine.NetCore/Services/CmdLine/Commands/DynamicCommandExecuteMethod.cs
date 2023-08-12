@@ -25,5 +25,5 @@ public sealed class DynamicCommandExecuteMethod
     public DynamicCommandExecuteMethod(
         string commandName,
         Func<ArgSet, CommandBuilder, DynamicCommandContext, CommandResult> execute)
-        => (CommandName, Execute) = (commandName, execute);
+            => (CommandName, Execute) = (commandName, execute);
 }

@@ -12,6 +12,8 @@ namespace CommandLine.NetCore.Services.AppHost;
 /// </summary>
 public sealed class AppHostConfiguration
 {
+    #region properties
+
     /// <summary>
     /// assembly set
     /// </summary>
@@ -26,6 +28,11 @@ public sealed class AppHostConfiguration
     /// for unique command type
     /// </summary>
     public Type? ForCommandType { get; private set; }
+
+    /// <summary>
+    /// for unique command name
+    /// </summary>
+    public string? ForCommandName { get; private set; }
 
     /// <summary>
     /// configure delegate
@@ -47,11 +54,14 @@ public sealed class AppHostConfiguration
     /// </summary>
     public IReadOnlyList<ErrorDescriptor> InitializationErrors { get; private set; }
 
+    #endregion
+
     /// <summary>
     /// build an app host configuration
     /// </summary>
     /// <param name="assemblySet">assembly set</param>
     /// <param name="forCommandType">for command type</param>
+    /// <param name="forCommandName">for command name</param>
     /// <param name="isGlobalHelpEnabled">is global help enabled</param>
     /// <param name="configureDelegate">configure delegate</param>
     /// <param name="buildDelegate">build delegate</param>
@@ -61,6 +71,7 @@ public sealed class AppHostConfiguration
         AssemblySet assemblySet,
         bool isGlobalHelpEnabled,
         Type? forCommandType,
+        string? forCommandName,
         Action<IConfigurationBuilder>? configureDelegate,
         Action<IHostBuilder>? buildDelegate,
         IReadOnlyDictionary<string, DynamicCommandExecuteMethod> dynamicCommands,
@@ -69,6 +80,7 @@ public sealed class AppHostConfiguration
         AssemblySet = assemblySet;
         IsGlobalHelpEnabled = isGlobalHelpEnabled;
         ForCommandType = forCommandType;
+        ForCommandName = forCommandName;
         ConfigureDelegate = configureDelegate;
         BuildDelegate = buildDelegate;
         DynamicCommands = dynamicCommands.ToDictionary(x => x.Key, x => x.Value);

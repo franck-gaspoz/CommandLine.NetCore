@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
+/// <summary>
+/// set of commands operations &amp; store
+/// </summary>
 sealed class CommandsSet
 {
     readonly Texts _texts;
@@ -30,28 +33,37 @@ sealed class CommandsSet
         }
     }
 
+    /// <summary>
+    /// return selectables types from assembly set
+    /// <para>if unique command, returns the unique command</para>
+    /// <para>'Help' command is always added if found</para>
+    /// </summary>
+    /// <param name="assemblySet"></param>
+    /// <param name="appHostConfiguration"></param>
+    /// <returns></returns>
     public static IEnumerable<Type> GetCommandTypes(
         AssemblySet assemblySet,
         AppHostConfiguration appHostConfiguration)
     {
         var commandTypes = new List<Type>();
         foreach (var assembly in assemblySet.Assemblies)
-        {
             commandTypes
                 .AddRange(
                     assembly
                         .GetTypes()
                         .Where(x => !x.IsAbstract
                             && x.InheritsFrom(typeof(Command))));
-        }
 
         var selectedTypes = new List<Type>();
-
         foreach (var type in commandTypes)
         {
             if ((appHostConfiguration.ForCommandType is null
                 || (appHostConfiguration.ForCommandType is not null
                     && appHostConfiguration.ForCommandType == type)
+                || (appHostConfiguration.ForCommandName is not null
+                    && appHostConfiguration.ForCommandName ==
+                        Command.ClassNameToCommandName(
+                            type.Name))
                 || type == typeof(Help)))
                 selectedTypes.Add(type);
         }
@@ -60,7 +72,6 @@ sealed class CommandsSet
     }
 
     readonly Dictionary<string, Type> _commands = new();
-
     public IReadOnlyDictionary<string, Type> Commands
         => _commands;
 
@@ -87,8 +98,8 @@ sealed class CommandsSet
     /// <returns>commande</returns>
     /// <exception cref="ArgumentException">unknown command</exception>
     public Command GetCommand(string name)
-            => (Command)_serviceProvider
-                .GetRequiredService(
-                    GetType(name));
+        => (Command)_serviceProvider
+            .GetRequiredService(
+                GetType(name));
 }
 

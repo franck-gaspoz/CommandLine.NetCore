@@ -25,14 +25,24 @@ static class IServiceCollectionExt
     {
         services.AddSingleton<CommandsSet>();
 
-        foreach (var classType in CommandsSet.GetCommandTypes(assemblySet, appHostConfiguration))
+        foreach (var classType in CommandsSet.GetCommandTypes(
+            assemblySet, appHostConfiguration))
             services.AddTransient(classType);
 
         return services;
     }
 
     /// <summary>
-    /// add command line arguments as a injectable dependcy
+    /// add dynamic commands specified in host configuration as injectable dependencies
+    /// </summary>
+    /// <param name="services">services collection</param>
+    /// <returns>services collection</returns>
+    public static IServiceCollection AddDynamicCommands(
+        this IServiceCollection services)
+            => services.AddTransient<DynamicCommandsSet>();
+
+    /// <summary>
+    /// add command line arguments as a injectable dependency
     /// </summary>
     /// <param name="services">service collection</param>
     /// <param name="args">command line args</param>

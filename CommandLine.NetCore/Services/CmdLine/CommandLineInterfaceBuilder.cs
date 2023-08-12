@@ -360,6 +360,7 @@ public sealed class CommandLineInterfaceBuilder
                     _assemblySet,
                     _isGlobalHelpEnabled,
                     _forCommandType,
+                    _forCommandName,
                     _configureDelegate,
                     _buildDelegate,
                     _dynamicCommands,

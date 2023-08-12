@@ -82,6 +82,7 @@ sealed class AppHostBuilder
                     .AddCommands(
                         hostConfiguration.AssemblySet,
                         AppHostConfiguration)
+                    .AddDynamicCommands()
                     .AddGlobalArguments(hostConfiguration.AssemblySet)
                     .AddGlobalSettings()
                     .ConfigureOutput());
