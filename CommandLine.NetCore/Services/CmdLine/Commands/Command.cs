@@ -50,7 +50,7 @@ public abstract class Command
     /// <summary>
     /// name of the command
     /// </summary>
-    public string Name => ClassNameToCommandName();
+    public virtual string Name => ClassNameToCommandName();
 
     #endregion
 
@@ -65,7 +65,7 @@ public abstract class Command
         Parser = dependencies.Parser;
         GlobalSettings = dependencies.GlobalSettings;
 
-        _builder = new CommandBuilder(
+        _builder = new(
             dependencies,
             ClassNameToCommandName(),
             RunCommand);

@@ -12,6 +12,9 @@ sealed class DynamicCommand : Command
     readonly DynamicCommandContext _context;
 
     readonly CommandBuilder _builder;
+    readonly string _name;
+
+    public override string Name => _name;
 
     /// <summary>
     /// builds a new dynamic command from an execute method
@@ -25,9 +28,10 @@ sealed class DynamicCommand : Command
         DynamicCommandExecuteMethod method)
             : base(dependencies)
     {
+        _name = commandName;
         _method = method;
         _context = new(dependencies);
-        _builder = new(dependencies, commandName);
+        _builder = new(dependencies, commandName, RunCommand);
     }
 
     /// <inheritdoc/>
