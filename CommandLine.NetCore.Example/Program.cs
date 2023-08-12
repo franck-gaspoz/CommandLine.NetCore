@@ -1,13 +1,10 @@
-﻿#define SINGLE_COMMAND_WITH_CLASS
+﻿//#define SINGLE_COMMAND_WITH_CLASS
 #define SINGLE_COMMAND_CLASSLESS
 
 #if SINGLE_COMMAND_WITH_CLASS || SINGLE_COMMAND_CLASSLESS
-using CommandLine.NetCore.Example.Commands;
 #endif
 
 using CommandLine.NetCore.Services.CmdLine;
-using CommandLine.NetCore.Services.CmdLine.Commands;
-using CommandLine.NetCore.Services.CmdLine.Settings;
 
 new CommandLineInterfaceBuilder()
 
@@ -19,7 +16,7 @@ new CommandLineInterfaceBuilder()
     .DisableGlobalHelp()
 #endif
 
-#if SINGLE_COMMAND_WITH_CLASS
+#if SINGLE_COMMAND_CLASSLESS
     // add this for single command mode (here: only get-info, no global help)
     .ForCommand("add")
 
@@ -35,7 +32,7 @@ new CommandLineInterfaceBuilder()
             })
             .With(args))
 
-    .AddCommand("add", (args, builder, ctx) => new CommandResult(Globals.ExitFail))
+    //.AddCommand("add", (args, builder, ctx) => new CommandResult(Globals.ExitFail))
 
     .Build(args)
     .Run();

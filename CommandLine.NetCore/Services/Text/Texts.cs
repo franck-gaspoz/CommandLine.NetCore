@@ -7,6 +7,16 @@ namespace CommandLine.NetCore.Services.Text;
 /// </summary>
 public sealed class Texts
 {
+    /// <summary>
+    /// name of the section 'texts' in the text settings file
+    /// </summary>
+    public static string TextsSectionName = "Texts:";
+
+    /// <summary>
+    /// text not found result
+    /// </summary>
+    public const string TextNotFoundResult = "???";
+
     readonly IConfiguration _config;
 
     /// <summary>
@@ -26,7 +36,7 @@ public sealed class Texts
         string textId,
         params object?[] parameters
         )
-        => T("texts:" + textId, false, parameters);
+        => T(TextsSectionName + textId, false, parameters);
 
     /// <summary>
     /// returns text from text id
@@ -41,10 +51,25 @@ public sealed class Texts
         params object?[] parameters)
     {
         var txt = _config.GetValue<string>(textId);
-        return txt is null
-            ? !noRecurse
-                ? T("texts:UnknownText", true, textId)
-                : $"Unknown text: {textId}"
-            : string.Format(txt, parameters);
+        try
+        {
+            return txt is null
+                ? !noRecurse
+                    ? T(TextsSectionName + "UnknownText", true, textId)
+                    : $"Unknown text: {textId}"
+                : string.Format(txt, parameters);
+        }
+        catch (Exception)
+        {
+            return txt ?? TextNotFoundResult;
+        }
     }
+
+    /// <summary>
+    /// indicates if the text with textId is defined in settings
+    /// </summary>
+    /// <param name="textId">text id</param>
+    /// <returns>true if defined, false otherwise</returns>
+    public bool IsDefined(string textId)
+        => _config.GetValue<string>(TextsSectionName + textId) is not null;
 }

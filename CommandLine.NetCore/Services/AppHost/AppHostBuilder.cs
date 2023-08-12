@@ -90,5 +90,16 @@ sealed class AppHostBuilder
             .Invoke(hostBuilder);
 
         AppHost = hostBuilder.Build();
+
+        FailIfInitializationErrors();
+    }
+
+    void FailIfInitializationErrors()
+    {
+        if (!AppHostConfiguration.InitializationErrors.Any())
+            return;
+        var texts = AppHost.Services.GetRequiredService<Texts>();
+        var error = AppHostConfiguration.InitializationErrors[0];
+        throw error.ToException(texts);
     }
 }

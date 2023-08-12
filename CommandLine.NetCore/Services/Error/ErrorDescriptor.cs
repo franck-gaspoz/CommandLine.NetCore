@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
+using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.Text;
+
 namespace CommandLine.NetCore.Services.Error;
 
 /// <summary>
@@ -59,5 +62,29 @@ public sealed class ErrorDescriptor
         Method = method;
         DataTextMap = dataTextMap;
         CallerMemberName = callerMemberName;
+    }
+
+    /// <summary>
+    /// build an exception from the error
+    /// </summary>
+    /// <param name="texts">texts provider</param>
+    /// <returns>exception</returns>
+    public Exception ToException(Texts texts)
+    {
+        var data = Data.ToExpando();
+        List<object?> datas = new();
+        if (DataTextMap is not null)
+            foreach (var dataName in DataTextMap.DataName)
+                datas.Add(
+                    data.TryGet(dataName));
+
+        var message =
+            texts.IsDefined(Code) ?
+                texts._(
+                    Code,
+                    datas.ToArray()) : Code;
+
+        var exception = new Exception(message);
+        return exception;
     }
 }

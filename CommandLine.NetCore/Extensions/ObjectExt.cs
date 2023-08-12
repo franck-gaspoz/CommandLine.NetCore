@@ -16,6 +16,9 @@ static class ObjectExt
     /// <returns>expando</returns>
     public static ExpandoObject ToExpando(this object? obj)
     {
+        if (obj is ExpandoObject eo)
+            return eo;
+
         var r = new ExpandoObject();
         if (obj is not null)
             foreach (var prop in obj.GetType()
@@ -41,6 +44,18 @@ static class ObjectExt
             r.TryAdd(Name, Value);
         return r;
     }
+
+    /// <summary>
+    /// returns the value of the property of an expando object
+    /// </summary>
+    /// <param name="obj">expando</param>
+    /// <param name="name">property name</param>
+    /// <returns>value of property if exists, null otherwise</returns>
+    public static object? TryGet(this ExpandoObject obj, string name)
+        => obj
+            .Where(x => x.Key == name)
+            .FirstOrDefault()
+            .Value;
 
     /// <summary>
     /// indicate if an object is one of the given. compares by reference

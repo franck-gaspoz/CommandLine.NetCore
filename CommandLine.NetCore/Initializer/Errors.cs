@@ -31,7 +31,7 @@ static class Errors
             => caller.CreateErrorDescriptor(
                 "CommandAlreadyExists",
                 data.Add((NameProperty, name)),
-                new(() => NameProperty),
+                new(NameProperty),
                 callerMemberName);
 
     /// <summary>
@@ -48,8 +48,8 @@ static class Errors
         object? data = null,
         [CallerMemberName] string? callerMemberName = null)
             => caller.CreateErrorDescriptor(
-                "MulitpleFor",
+                "MultipleFor",
                 data.Add((NameProperty, name)),
-                new(() => NameProperty),
+                new(NameProperty),
                 callerMemberName);
 }
