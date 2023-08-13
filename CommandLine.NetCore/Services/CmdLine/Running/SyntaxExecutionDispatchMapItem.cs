@@ -131,6 +131,15 @@ public sealed class SyntaxExecutionDispatchMapItem
             && opt.ExpectedValuesCount > 1
             && opt.ValueType.FullName + ArrayTypePostFix == parameterInfo.ParameterType.FullName;
 
+    void ValidateAction(Delegate action)
+    {
+        var error = () => GetSyntaxError(action.ToString() ?? string.Empty);
+        var methodInfo = action.GetMethodInfo()
+            ?? throw new MissingOrNotFoundCommandOperationException(error());
+        if (methodInfo.ReturnType != typeof(void))
+            throw new InvalidCommandOperationException(error());
+    }
+
     /// <summary>
     /// test enrichissements de Do
     /// </summary>
@@ -140,29 +149,27 @@ public sealed class SyntaxExecutionDispatchMapItem
     public SyntaxMatcherDispatcher Do<T1>(Action<T1> a) => SyntaxMatcherDispatcher;
 
     /// <summary>
-    /// test enrichissements de Do
+    /// set up delegate for this syntax execution dispatch map from an action with typed parameters
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <param name="action"></param>
-    /// <returns></returns>
+    /// <typeparam name="T1">T1</typeparam>
+    /// <typeparam name="T2">T2</typeparam>
+    /// <param name="action">action</param>
     public SyntaxMatcherDispatcher Do<T1, T2>(Action<T1, T2> action)
     {
-        var error = () => GetSyntaxError(Syntax, action.ToString() ?? string.Empty);
         var methodInfo = action.GetMethodInfo();
 
-        if (methodInfo is null)
-            throw new MissingOrNotFoundCommandOperationException(error());
+        ValidateAction(action);
 
         return DoMethod(
             action.ToString() ?? string.Empty,
             Syntax.Name ?? string.Empty,
             methodInfo,
-            null);
+            null,
+            action);
     }
 
-    static string GetSyntaxError(Syntax syntax, string expression)
-        => syntax.ToSyntax()
+    string GetSyntaxError(string expression)
+        => Syntax.ToSyntax()
             + Environment.NewLine
             + expression.ToString();
 
@@ -183,7 +190,7 @@ public sealed class SyntaxExecutionDispatchMapItem
     public SyntaxMatcherDispatcher Do(LambdaExpression expression)
     {
         var (methodInfo, target) = expression.GetAnyCastDelegate();
-        var error = () => GetSyntaxError(Syntax, expression.ToString());
+        var error = () => GetSyntaxError(expression.ToString());
 
         if (methodInfo is null)
             throw new MissingOrNotFoundCommandOperationException(error());
@@ -204,9 +211,10 @@ public sealed class SyntaxExecutionDispatchMapItem
         string expression,
         string methodName,
         MethodInfo methodInfo,
-        object? target)
+        object? target,
+        Delegate? action = null)
     {
-        var error = () => GetSyntaxError(Syntax, expression);
+        var error = () => GetSyntaxError(expression);
 
         Name = methodName;
         Syntax.SetName(Name);
@@ -372,9 +380,10 @@ public sealed class SyntaxExecutionDispatchMapItem
                 }
             }
 
-            methodInfo.Invoke(target, callParameters.ToArray());
-            /*new Invokator(methodInfo, action, target)
-                .Invoke(callParameters.ToArray());*/
+            if (action is null)
+                methodInfo.Invoke(target, callParameters.ToArray());
+            else
+                action!.DynamicInvoke(callParameters.ToArray());
 
             return new();
         };
