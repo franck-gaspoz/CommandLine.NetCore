@@ -305,10 +305,10 @@ thus any registered dependency can be added as a constructor parameter
     Do(Func<OperationResult> @delegate)
 
     // with parameter operation context and void delegate
-    Do(Action<OperationContext> @delegate)
+    Do(Action<CommandContext> @delegate)
 
     // with parameter operation context and OperationResult result delegate
-    Do(Func<OperationContext, OperationResult> @delegate)
+    Do(Func<CommandContext, OperationResult> @delegate)
     ```
 
     - the lambda expression in the method style `Do(LambdaExpression expression)` can have one of these profiles:
@@ -317,7 +317,7 @@ thus any registered dependency can be added as a constructor parameter
 
     ```csharp
     // arguments mapping to concrete types
-    // also accepts an OperationContext parameter placed anywhere
+    // also accepts an CommandContext parameter placed anywhere
     // also accepts explicit mapping of arguments, with positional references in syntax, and no result
     // avoid repeating the command arguments declarations (Param, Opt)
     void MyOperation( string arg0, bool arg1 , ..)
@@ -337,8 +337,8 @@ thus any registered dependency can be added as a constructor parameter
     void MyOperation(Param<string> arg0,Opt<bool> arg1)
 
     // can also have an auto-mapped parameter to the operation context:
-    // a parameter of type OperationContext can be placed anywhere in the parameters list
-    void MyOperation(...,OperationContext context,..)    
+    // a parameter of type CommandContext can be placed anywhere in the parameters list
+    void MyOperation(...,CommandContext context,..)    
     ```
 
 * methods **`For`** can be chained
@@ -620,7 +620,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 `1.0.1` - 01/04/2023
 - add CommandContext to lambda operations method
 - add support of abstract classes that inherits from command
-- rename OperationContext by CommandContext
+- rename CommandContext by CommandContext
 - fix bug command options were always set in delegate for -h
 
 `1.0.0` - 03/01/2023

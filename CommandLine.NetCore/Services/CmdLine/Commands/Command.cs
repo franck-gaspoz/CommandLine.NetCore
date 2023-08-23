@@ -284,7 +284,7 @@ public abstract class Command
     /// </summary>
     /// <param name="args">command line arguments</param>
     /// <returns>operation result</returns>
-    public OperationResult RunCommand(params string[] args)
+    public CommandLineResult RunCommand(params string[] args)
     {
         var commandLineInterfaceBuilder = GlobalSettings
             .CommandLineInterfaceBuilder!;
@@ -309,7 +309,7 @@ public abstract class Command
     /// </summary>
     /// <param name="args">command line arguments</param>
     /// <returns>operation result</returns>
-    public OperationResult RunCommandInSeparateHost(params string[] args) =>
+    public CommandLineResult RunCommandInSeparateHost(params string[] args) =>
         new(
             new CommandLineInterfaceBuilder()
                 .UseAssemblySet(GlobalSettings.AssemblySet)

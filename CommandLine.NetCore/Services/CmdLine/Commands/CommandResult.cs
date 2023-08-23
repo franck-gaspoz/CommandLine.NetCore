@@ -1,9 +1,11 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine.Commands;
+﻿using CommandLine.NetCore.Services.CmdLine.Running;
+
+namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// command result
 /// </summary>
-public sealed class CommandResult : OperationResult
+public sealed class CommandResult : CommandLineResult
 {
     /// <summary>
     /// list of parse errors (if any else empty)

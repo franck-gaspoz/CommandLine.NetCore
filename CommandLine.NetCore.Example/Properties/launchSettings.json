@@ -71,6 +71,10 @@
     "add 1 2": {
       "commandName": "Project",
       "commandLineArgs": "add 1 2 --parser-logging Trace"
+    },
+    "datetime": {
+      "commandName": "Project",
+      "commandLineArgs": "datetime --parser-logging Trace"
     }
   }
 }

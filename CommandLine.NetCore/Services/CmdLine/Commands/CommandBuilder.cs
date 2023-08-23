@@ -21,7 +21,7 @@ public sealed class CommandBuilder
     /// <summary>
     /// the run method of the builded command
     /// </summary>
-    Func<string[], OperationResult>? _runMethod;
+    Func<string[], CommandLineResult>? _runMethod;
 
     /// <summary>
     /// console service
@@ -60,7 +60,7 @@ public sealed class CommandBuilder
     public CommandBuilder(
         Dependencies dependencies,
         string commandName,
-        Func<string[], OperationResult>? runMethod = null)
+        Func<string[], CommandLineResult>? runMethod = null)
     {
         _commandName = commandName;
         _runMethod = runMethod;
@@ -75,7 +75,7 @@ public sealed class CommandBuilder
     /// set the run method
     /// </summary>
     /// <param name="runMethod">run method</param>
-    public void SetRunMethod(Func<string[], OperationResult> runMethod)
+    public void SetRunMethod(Func<string[], CommandLineResult> runMethod)
         => _runMethod = runMethod;
 
     #region args build helpers
@@ -173,7 +173,7 @@ public sealed class CommandBuilder
                     .Do(HelpAboutCommandSyntax)
             .Options(Opt("v"), Opt("info"));
 
-    OperationResult HelpAboutCommandSyntax(CommandContext context)
+    CommandLineResult HelpAboutCommandSyntax(CommandContext context)
     {
         var args =
             new List<string>{

@@ -1,11 +1,11 @@
 ﻿using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
-namespace CommandLine.NetCore.Services.CmdLine.Commands;
+namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
 /// result of an operation done by a command successfully parsed
 /// </summary>
-public class OperationResult
+public class CommandLineResult
 {
     /// <summary>
     /// an exit code
@@ -22,7 +22,7 @@ public class OperationResult
     /// </summary>
     /// <param name="exitCode">exit code (default ExitOk)</param>
     /// <param name="result">eventual result (default null)</param>
-    public OperationResult(int exitCode = ExitOk, object? result = null)
+    public CommandLineResult(int exitCode = ExitOk, object? result = null)
     {
         ExitCode = exitCode;
         Result = result;

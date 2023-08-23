@@ -5,6 +5,7 @@
 #endif
 
 using CommandLine.NetCore.Services.CmdLine;
+using CommandLine.NetCore.Services.CmdLine.Running;
 
 new CommandLineInterfaceBuilder()
 
@@ -24,13 +25,32 @@ new CommandLineInterfaceBuilder()
     //.DisableGlobalHelp()
 #endif
 
-    .AddCommand("add", (args, builder, ctx) =>
-        builder.For(builder.Param<string>(), builder.Param<string>())
+    .AddCommand("add", (args, builder, ctx) => builder
+        .For(builder.Param<string>(), builder.Param<string>(), builder.Param<string>())
+            .Do((string x, string y, string z) =>
+            {
+                ctx.Console.Out.WriteLine($"x+y+z={x + y + z}");
+            })
+        .For(builder.Param<string>(), builder.Param<string>())
             .Do((string x, string y) =>
             {
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
-            .With(args))
+        //.For(builder.Param<string>(), builder.Param<string>()) // TODO: check how this is registered twice ?
+        .For(builder.Param<string>())
+            .Do((string x) =>
+            {
+                ctx.Console.Out.WriteLine($"x+x={x + x}");
+            })
+        .With(args))
+
+    .AddCommand("datetime", (args, builder, ctx) => builder
+        .For()
+            .Do((CommandContext opContext) =>
+            {
+                ctx.Console.Out.WriteLine(DateTime.Now.ToString());
+            })
+        .With(args))
 
     //.AddCommand("add", (args, builder, ctx) => new CommandResult(Globals.ExitFail))
 

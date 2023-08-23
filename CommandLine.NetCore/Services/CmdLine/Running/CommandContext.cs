@@ -8,7 +8,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Running;
 public sealed class CommandContext
 {
     /// <summary>
-    /// running syntac
+    /// running syntax
     /// </summary>
     public Syntax Syntax { get; private set; }
 
