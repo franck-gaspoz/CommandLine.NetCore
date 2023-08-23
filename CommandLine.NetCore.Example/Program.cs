@@ -26,8 +26,8 @@ new CommandLineInterfaceBuilder()
 #endif
 
     .AddCommand("add", (args, builder, ctx) => builder
-        .For(builder.Param<string>(), builder.Param<string>(), builder.Param<string>())
-            .Do((string x, string y, string z) =>
+        .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
+            .Do((int x, int y, int z) =>
             {
                 ctx.Console.Out.WriteLine($"x+y+z={x + y + z}");
             })
@@ -37,8 +37,8 @@ new CommandLineInterfaceBuilder()
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
         //.For(builder.Param<string>(), builder.Param<string>()) // TODO: check how this is registered twice ?
-        .For(builder.Param<string>())
-            .Do((string x) =>
+        .For(builder.Param<int>())
+            .Do((int x) =>
             {
                 ctx.Console.Out.WriteLine($"x+x={x + x}");
             })

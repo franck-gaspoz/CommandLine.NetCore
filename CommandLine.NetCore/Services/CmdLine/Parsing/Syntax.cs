@@ -67,11 +67,17 @@ public sealed class Syntax
     public void SetName(string name) => Name = name;
 
     /// <summary>
+    /// text of the name of an unamed snytax
+    /// </summary>
+    public static string UnNamedSyntaxNameReplacement { get; set; } = "{unamed}";
+
+    /// <summary>
     /// string representation of the syntax
     /// </summary>
+    /// <param name="unNamedSyntaxNameReplacement">replacement text for the name of an unamed syntax</param>
     /// <returns>string representation of the syntax</returns>
-    public string ToSyntax()
-        => ((Name == null) ? "?" : Name!) +
+    public string ToSyntax(string? unNamedSyntaxNameReplacement = null)
+        => ((Name == null) ? (unNamedSyntaxNameReplacement ?? UnNamedSyntaxNameReplacement) : Name!) +
             ": " +
             string.Join(' ', _args.Select((x, n) => n + ":" + x.ToSyntax()));
 

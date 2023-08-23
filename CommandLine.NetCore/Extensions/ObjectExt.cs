@@ -9,6 +9,11 @@ namespace CommandLine.NetCore.Extensions;
 static class ObjectExt
 {
     /// <summary>
+    /// text of a null value
+    /// </summary>
+    public static string IfNullText { get; set; } = "{null}";
+
+    /// <summary>
     /// transform an object (such an anonymous type) to an expando object
     /// <para>copy public properties of the source in the target</para>
     /// </summary>
@@ -72,8 +77,8 @@ static class ObjectExt
     /// <param name="obj">object to translate to text</param>
     /// <param name="ifNullText">text if value is null</param>
     /// <returns></returns>
-    public static string ToText(this object? obj, string ifNullText = "?")
-        => obj is null ? ifNullText : "'" + obj.ToString()! + "'";
+    public static string ToText(this object? obj, string? ifNullText = null)
+        => obj is null ? (ifNullText ?? IfNullText) : "'" + obj.ToString()! + "'";
 
     /// <summary>
     /// surface clone
