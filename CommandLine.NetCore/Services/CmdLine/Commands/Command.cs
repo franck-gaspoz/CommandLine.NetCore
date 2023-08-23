@@ -236,7 +236,8 @@ public abstract class Command
     /// <param name="isOptional">is optional</param>
     /// <returns>Opt{T}</returns>
     protected Opt<T> Opt<T>(string name, bool isOptional = false)
-        => _builder.Opt<T>(name, isOptional);
+        where T : class
+            => _builder.Opt<T>(name, isOptional);
 
     /// <summary>
     /// build a new parameter
@@ -245,7 +246,8 @@ public abstract class Command
     /// <param name="value"></param>
     /// <returns>Param{T}</returns>
     protected Param<T> Param<T>(string? value = null)
-        => _builder.Param<T>(value);
+        where T : struct
+            => _builder.Param<T>(value);
 
     /// <summary>
     /// build a new string parameter

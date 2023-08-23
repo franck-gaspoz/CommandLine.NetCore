@@ -113,7 +113,7 @@ public sealed class CommandBuilder
     /// build a new parameter
     /// </summary>
     /// <typeparam name="T">type of parameter value</typeparam>
-    /// <param name="value"></param>
+    /// <param name="value">text of single value</param>
     /// <returns>Param{T}</returns>
     public Param<T> Param<T>(string? value = null)
         => _argBuilder.Param<T>(value);
@@ -121,7 +121,7 @@ public sealed class CommandBuilder
     /// <summary>
     /// build a new string parameter
     /// </summary>
-    /// <param name="value">eventual value</param>
+    /// <param name="value">text of single value</param>
     /// <returns>Param</returns>
     public Param Param(string? value = null)
         => _argBuilder.Param(value);

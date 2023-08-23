@@ -31,8 +31,8 @@ new CommandLineInterfaceBuilder()
             {
                 ctx.Console.Out.WriteLine($"x+y+z={x + y + z}");
             })
-        .For(builder.Param<string>(), builder.Param<string>())
-            .Do((string x, string y) =>
+        .For(builder.Param<int>(), builder.Param<int>())
+            .Do((int x, int y) =>
             {
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
@@ -48,7 +48,7 @@ new CommandLineInterfaceBuilder()
         .For()
             .Do((CommandContext com) =>
             {
-                com.Console.Out.WriteLine("current date/time: " + DateTime.Now.ToString());
+                com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff,b=black) (b=magenta)" + DateTime.Now.ToString());
             })
         .With(args))
 

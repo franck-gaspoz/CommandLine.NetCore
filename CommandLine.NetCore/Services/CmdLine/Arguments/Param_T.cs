@@ -18,7 +18,8 @@ public class Param<T> : Arg, IParam
     /// <inheritdoc/>
     public override string ToSyntax()
     {
-        var val = Value.ToText();
+        var val = IsNull ? ObjectExt.ToText(null)
+            : Value.ToText();
         return $"Param<{typeof(T).Name}>{val}";
     }
 
@@ -28,6 +29,11 @@ public class Param<T> : Arg, IParam
     T? _value;
 
     /// <summary>
+    /// indicates if Value is null
+    /// </summary>
+    public bool IsNull { get; private set; }
+
+    /// <summary>
     /// value
     /// </summary>
     public T? Value
@@ -35,6 +41,7 @@ public class Param<T> : Arg, IParam
         get => _value;
         set
         {
+            IsNull = false;
             _value = value;
             StringValue = _value?.ToString();
         }
@@ -50,11 +57,11 @@ public class Param<T> : Arg, IParam
     public override bool GetIsOptional() => false;
 
     /// <inheritdoc/>
-    public override bool GetIsSet() => _value is not null;
+    public override bool GetIsSet() => !IsNull;
 
     /// <inheritdoc/>
     public override object? GetValue()
-        => _value;
+        => IsNull ? null : _value;
 
     /// <inheritdoc/>
     public void SetValue(string value) =>
@@ -76,6 +83,9 @@ public class Param<T> : Arg, IParam
     {
         StringValue = value;
         IsExpectingValue = value is null;
-        Value = ConvertValue<T>(value);
+        if (value is not null)
+            Value = ConvertValue<T>(value);
+        else
+            IsNull = true;
     }
 }

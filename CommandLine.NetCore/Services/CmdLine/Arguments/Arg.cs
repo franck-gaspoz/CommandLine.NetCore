@@ -60,11 +60,8 @@ public abstract class Arg : IArg
     /// <param name="value">text representation of the value</param>
     /// <returns>a value of type T or null</returns>
     /// <exception cref="ArgumentException">convert error</exception>
-    public T? ConvertValue<T>(string? value)
+    public T ConvertValue<T>(string value)
     {
-        if (value == null)
-            return default;
-
         var convertOk = ValueConverter.ToTypedValue(
             value,
             typeof(T),
@@ -76,7 +73,7 @@ public abstract class Arg : IArg
             true
             );
 
-        if (!convertOk)
+        if (!convertOk || convertedValue is null)
         {
             var values = possibleValues == null ? string.Empty :
                 Texts._("PossibleValues")
@@ -85,10 +82,6 @@ public abstract class Arg : IArg
                 Texts._("UnableToConvertValue", value, typeof(T).UnmangledName())
                 + ", " + values);
         }
-
-        if (convertedValue is null)
-            return default;
-
         return (T)convertedValue;
     }
 

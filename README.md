@@ -569,6 +569,7 @@ If this option is set syntaxes of a command can't be ambiguous
 # Versions history
 
 `1.0.11` - 08/11/2023
+- more properties in CommandContext
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
 - add initialization errors collect and display

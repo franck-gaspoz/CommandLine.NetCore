@@ -23,5 +23,5 @@ public class Param : Param<string>
         ValueConverter valueConverter,
         string? value)
         : base(config, texts, valueConverter, value)
-            => Value = ConvertValue<string>(value);
+            => Value = value is null ? null : ConvertValue<string>(value);
 }
