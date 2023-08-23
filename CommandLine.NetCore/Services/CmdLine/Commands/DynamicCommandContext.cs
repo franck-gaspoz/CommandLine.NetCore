@@ -8,7 +8,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// dynamic command context
 /// </summary>
-public sealed class DynamicCommandContext
+public class DynamicCommandContext
 {
     /// <summary>
     /// global settings
@@ -29,10 +29,27 @@ public sealed class DynamicCommandContext
     /// creates a new instance
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
-    public DynamicCommandContext(Dependencies dependencies)
+    internal DynamicCommandContext(Dependencies dependencies)
     {
         GlobalSettings = dependencies.GlobalSettings;
         Console = dependencies.Console;
         Texts = dependencies.Texts;
+    }
+
+    /// <summary>
+    /// creates a new instance
+    /// </summary>
+    /// <param name="globalSettings">global settings</param>
+    /// <param name="console">console</param>
+    /// <param name="texts">texts</param>
+    internal DynamicCommandContext(
+        GlobalSettings globalSettings,
+        IAnsiVtConsole console,
+        Texts texts
+        )
+    {
+        GlobalSettings = globalSettings;
+        Console = console;
+        Texts = texts;
     }
 }

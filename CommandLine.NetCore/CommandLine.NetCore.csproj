@@ -29,6 +29,10 @@
 		<PackageReleaseNotes>
 `1.0.11` - 08/11/2023
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class
+- add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
+- add initialization errors collect and display
+- renamings (eg. OperationResult)
+- doc update
 
 `1.0.10` - 08/11/2023			
 - add global option --disable-global-help + improve help output in single command mode

@@ -46,9 +46,9 @@ new CommandLineInterfaceBuilder()
 
     .AddCommand("datetime", (args, builder, ctx) => builder
         .For()
-            .Do((CommandContext opContext) =>
+            .Do((CommandContext com) =>
             {
-                ctx.Console.Out.WriteLine(DateTime.Now.ToString());
+                com.Console.Out.WriteLine("current date/time: " + DateTime.Now.ToString());
             })
         .With(args))
 
@@ -56,23 +56,3 @@ new CommandLineInterfaceBuilder()
 
     .Build(args)
     .Run();
-
-/*
- 
-// top level statement implies can't use a local method or an lambda with body as a lambda expression
-// remaining possiblites are:    
-//() => (Func<double, double, double>)((x, y) => x + y)
-//() => (Action<double, double>)((x, y) => new A().Add(x,y))
-//() => (Action<double, double>)((x, y) => new B(x,y).Add())
-//() => (Action<double, double>)((x, y) => C.Add(x,y))
-//() => new Action<double>((x) => C.Add(x,x))
-
-record B(double x, double y) { public double Add() => x + y; }
-
-class A { public void Add(double x, double y) { } }
-
-static class C
-{
-    public static void Add(double x, double y) { }
-}
-*/

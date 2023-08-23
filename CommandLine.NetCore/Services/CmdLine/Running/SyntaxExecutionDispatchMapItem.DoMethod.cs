@@ -53,6 +53,9 @@ public sealed partial class SyntaxExecutionDispatchMapItem
                 {
                     callParameters.Add(
                         new CommandContext(
+                            SyntaxMatcherDispatcher.GlobalSettings,
+                            SyntaxMatcherDispatcher.Console,
+                            SyntaxMatcherDispatcher.Texts,
                             Syntax,
                             SyntaxMatcherDispatcher.OptSet,
                             SyntaxMatcherDispatcher

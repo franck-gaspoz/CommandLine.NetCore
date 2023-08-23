@@ -19,10 +19,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Running;
 public sealed class SyntaxMatcherDispatcher
 {
     readonly List<SyntaxExecutionDispatchMapItem> _maps = new();
-    readonly Texts _texts;
     readonly Parser _parser;
-    readonly GlobalSettings _globalSettings;
-    readonly IAnsiVtConsole _console;
+    internal Texts Texts { get; private set; }
+    internal GlobalSettings GlobalSettings { get; private set; }
+    internal IAnsiVtConsole Console { get; private set; }
 
     /// <summary>
     /// command options
@@ -46,7 +46,7 @@ public sealed class SyntaxMatcherDispatcher
         Parser parser,
         GlobalSettings globalSettings,
         IAnsiVtConsole console)
-        => (_texts, _parser, _globalSettings, _console)
+        => (Texts, _parser, GlobalSettings, Console)
             = (texts, parser, globalSettings, console);
 
     /// <summary>
@@ -98,7 +98,7 @@ public sealed class SyntaxMatcherDispatcher
     /// <exception cref="InvalidOperationException">the syntax matcher dispatcher delegate action is not defined</exception>
     public CommandResult With(ArgSet args)
     {
-        var logLevel = _globalSettings
+        var logLevel = GlobalSettings
             .SettedGlobalOptsSet
             .TryGetByType<ParserLogging>(out var parserLogging) ?
                 parserLogging.Value() : LogLevel.Error;
@@ -107,8 +107,8 @@ public sealed class SyntaxMatcherDispatcher
             || logLevel == LogLevel.Debug;
 
         void Trace(string? text = "")
-            => _console.Logger.Log(
-                    _console.Colors.Debug + text
+            => Console.Logger.Log(
+                    Console.Colors.Debug + text
                 );
 
         List<CommandResult> tryCommandsResults = new();
@@ -119,7 +119,7 @@ public sealed class SyntaxMatcherDispatcher
         {
             if (syntaxMatcherDispatcher.Delegate is null)
                 throw new InvalidOperationException(
-                    _texts._("SyntaxExecutionDispatchMapItemDelegateNotDefined",
+                    Texts._("SyntaxExecutionDispatchMapItemDelegateNotDefined",
                         syntaxMatcherDispatcher.Syntax.ToSyntax()));
 
             var (hasErrors, errors) = _parser.MatchSyntax(
@@ -157,12 +157,12 @@ public sealed class SyntaxMatcherDispatcher
                 null);
 
         if (matchingSyntaxes.Count > 1
-            && _globalSettings
+            && GlobalSettings
                 .SettedGlobalOptsSet
                 .Contains<ExcludeAmbiguousSyntax>())
         {
             parseErrors.Add(
-                _texts._(
+                Texts._(
                     "AmbiguousSyntaxes",
                     args.ToText()));
 
@@ -186,6 +186,9 @@ public sealed class SyntaxMatcherDispatcher
             .Delegate!
             .Invoke(
                 new CommandContext(
+                    GlobalSettings,
+                    Console,
+                    Texts,
                     selectedSyntaxExecutionDispatchMapItem
                         .SyntaxExecutionDispatchMapItem
                         .Syntax,

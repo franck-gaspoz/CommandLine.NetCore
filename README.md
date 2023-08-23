@@ -570,7 +570,10 @@ If this option is set syntaxes of a command can't be ambiguous
 
 `1.0.11` - 08/11/2023
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class
+- add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
 - add initialization errors collect and display
+- renamings (eg. OperationResult)
+- doc update
 
 `1.0.10` - 08/11/2023
 - add support of mapping to array parameters when possible (instead of List) in command lambda operations
