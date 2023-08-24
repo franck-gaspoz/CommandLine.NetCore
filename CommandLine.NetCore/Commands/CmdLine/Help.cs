@@ -182,11 +182,8 @@ sealed class Help : Command
 
     void DumpCommandList(bool v)
     {
-        /*foreach (var kvp in _commandsSet.Commands)
-        {
-            var command = (Command)_serviceProvider.GetRequiredService(kvp.Value);
+        foreach (var command in _commandsSet.GetCommands())
             DumpCommandDescription(command, true, v);
-        }*/
     }
 
     void DumpCommandDescription(Command command, bool withName, bool dumpNamespace)

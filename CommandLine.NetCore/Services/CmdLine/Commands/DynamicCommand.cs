@@ -1,16 +1,16 @@
 ﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// a command that is declared and implemented dynamically
 /// </summary>
+[IgnoreCommand]
 sealed class DynamicCommand : Command
 {
     readonly DynamicCommandExecuteMethod _method;
-
     readonly DynamicCommandContext _context;
-
     readonly CommandBuilder _builder;
     readonly string _name;
 

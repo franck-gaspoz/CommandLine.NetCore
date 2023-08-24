@@ -76,30 +76,20 @@ sealed class DynamicCommandsSet
         return command;
     }
 
-#if no
     /// <summary>
-    /// returns type of a command
+    /// get list of commands instances
     /// </summary>
-    /// <param name="name">name of a command</param>
-    /// <exception cref="ArgumentException">unknown command</exception>
-    /// <returns>type of the command class</returns>
-    public Type GetType(string name)
-        => !_commands.TryGetValue(name, out var commandType)
-            ? throw new ArgumentException(_texts._("UnknownCommand", name))
-            : commandType;
-#endif
-
-#if no
-    /// <summary>
-    /// retourne une instance de commande à partir du nom de la commande
-    /// </summary>
-    /// <param name="name">nom de la commande</param>
-    /// <returns>commande</returns>
-    /// <exception cref="ArgumentException">unknown command</exception>
-    public Command GetCommand(string name)
-        => (Command)_serviceProvider
-            .GetRequiredService(
-                GetType(name));
-#endif
+    /// <returns>list of commands instances</returns>
+    public List<Command> GetCommands()
+    {
+        var commands = new List<Command>();
+        foreach (var name in _commandSpecs.Keys)
+        {
+            var command = TryGetCommand(name);
+            if (command is not null)
+                commands.Add(command);
+        }
+        return commands;
+    }
 }
 

@@ -575,6 +575,7 @@ If this option is set syntaxes of a command can't be ambiguous
 - more properties in CommandContext
 - add initialization errors collect and display
 - renamings (eg. OperationResult)
+- update as consts of null syntax name and null value text
 - doc update
 
 `1.0.10` - 08/11/2023

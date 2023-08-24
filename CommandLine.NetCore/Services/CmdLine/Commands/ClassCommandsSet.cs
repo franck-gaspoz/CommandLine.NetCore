@@ -1,6 +1,7 @@
 ﻿using CommandLine.NetCore.Commands.CmdLine;
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.AppHost;
+using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
@@ -52,6 +53,8 @@ sealed class ClassCommandsSet
                     assembly
                         .GetTypes()
                         .Where(x => !x.IsAbstract
+                            && !x.GetCustomAttributes(typeof(IgnoreCommandAttribute), false)
+                                .Any()
                             && x.InheritsFrom(typeof(Command))));
 
         var selectedTypes = new List<Type>();

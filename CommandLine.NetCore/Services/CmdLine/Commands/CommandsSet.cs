@@ -1,5 +1,7 @@
 ﻿using CommandLine.NetCore.Services.Text;
 
+using Microsoft.Extensions.DependencyInjection;
+
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
@@ -10,6 +12,7 @@ sealed class CommandsSet
     readonly Texts _texts;
     readonly ClassCommandsSet _classCommandsSet;
     readonly DynamicCommandsSet _dynamicCommandsSet;
+    readonly IServiceProvider _serviceProvider;
 
     /// <summary>
     /// Creates a new commands set
@@ -17,15 +20,18 @@ sealed class CommandsSet
     /// <param name="texts">texts</param>
     /// <param name="classCommandsSet">class commands set</param>
     /// <param name="dynamicCommandsSet">dynamic commands set</param>
+    /// <param name="serviceProvider">service provider</param>
     public CommandsSet(
         Texts texts,
         ClassCommandsSet classCommandsSet,
-        DynamicCommandsSet dynamicCommandsSet
+        DynamicCommandsSet dynamicCommandsSet,
+        IServiceProvider serviceProvider
         )
     {
         _texts = texts;
         _classCommandsSet = classCommandsSet;
         _dynamicCommandsSet = dynamicCommandsSet;
+        _serviceProvider = serviceProvider;
     }
 
     /// <summary>
@@ -41,6 +47,19 @@ sealed class CommandsSet
         var comPerName = _dynamicCommandsSet.TryGetCommand(name);
         if (comPerName is not null) return comPerName;
         throw new ArgumentException(_texts._("UnknownCommand", name));
+    }
+
+    /// <summary>
+    /// get list of commands instances
+    /// </summary>
+    /// <returns>list of commands instances</returns>
+    public List<Command> GetCommands()
+    {
+        var coms = new List<Command>();
+        foreach (var commandType in _classCommandsSet.Commands.Values)
+            coms.Add((Command)_serviceProvider.GetRequiredService(commandType));
+        coms.AddRange(_dynamicCommandsSet.GetCommands());
+        return coms;
     }
 
 }
