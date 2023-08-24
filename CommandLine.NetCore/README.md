@@ -572,6 +572,7 @@ If this option is set syntaxes of a command can't be ambiguous
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
 - fix value was not nullable in Param_T when T is not a class, for instance, Param{int} always had value 0 (=default(T))
+- add ignore command attribute
 - more properties in CommandContext
 - add initialization errors collect and display
 - renamings (eg. OperationResult)
