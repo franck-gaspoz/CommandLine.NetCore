@@ -26,7 +26,6 @@ new CommandLineInterfaceBuilder()
 #endif
 
     .AddCommand("add", (builder, ctx) => builder
-        //.Description("add numbers")
 
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
             .Do((int x, int y, int z) =>
