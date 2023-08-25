@@ -94,7 +94,16 @@ sealed class AppHostBuilder
 
         AppHost = hostBuilder.Build();
 
+        PostBuildSetup();
+
         FailIfInitializationErrors();
+    }
+
+    void PostBuildSetup()
+    {
+        var dynComSet = AppHost.Services.GetRequiredService<DynamicCommandsSet>();
+        var configuration = AppHost.Services.GetRequiredService<Configuration>();
+        dynComSet.ConfigureHelp(configuration);
     }
 
     void FailIfInitializationErrors()

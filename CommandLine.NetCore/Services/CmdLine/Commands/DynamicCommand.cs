@@ -9,7 +9,8 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 [IgnoreCommand]
 sealed class DynamicCommand : Command
 {
-    readonly DynamicCommandSpecification _specification;
+    internal DynamicCommandSpecification Specification { get; private set; }
+
     readonly DynamicCommandContext _context;
     readonly CommandBuilder _builder;
     readonly string _name;
@@ -27,11 +28,11 @@ sealed class DynamicCommand : Command
             : base(dependencies)
     {
         _name = specification.CommandName;
-        _specification = specification;
+        Specification = specification;
         _context = new(dependencies);
         _builder = new(dependencies, _name, RunCommand);
 
-        SyntaxMatcherDispatcher = _specification.SpecificationDelegate(
+        SyntaxMatcherDispatcher = Specification.SpecificationDelegate(
             _builder, _context);
     }
 

@@ -5,7 +5,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// help builder for a dynamic command
 /// </summary>
-public class HelpBuilder
+public sealed class HelpBuilder
 {
     internal readonly Dictionary<string, CommandHelp> _helps = new();
 
@@ -28,4 +28,38 @@ public class HelpBuilder
             new CommandHelp(
                 shortDescription,
                 longDescription));
+
+    /// <summary>
+    /// add help to configuration
+    /// </summary>
+    /// <param name="commandName">command name</param>
+    /// <param name="configuration">configuration</param>
+    internal void Configure(
+        string commandName,
+        Configuration configuration)
+    {
+        foreach (var kvp in _helps)
+            Configure(
+                commandName,
+                kvp.Key,
+                kvp.Value,
+                configuration);
+    }
+
+    static void Configure(
+        string commandName,
+        string culture,
+        CommandHelp help,
+        Configuration configuration) => configuration.Set(
+            ShortDescriptionKey(commandName),
+            help.ShortDescription,
+            culture);
+
+    /// <summary>
+    /// configuration key of the short description of a command
+    /// </summary>
+    /// <param name="commandName">command name (posix)</param>
+    /// <returns>configuration key</returns>
+    internal static string ShortDescriptionKey(string commandName) => $"Commands:{commandName}:Description";
+
 }

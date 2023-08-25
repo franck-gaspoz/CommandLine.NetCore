@@ -54,7 +54,9 @@ sealed class DynamicCommandsSet
         => _commands;
 
     void Add(DynamicCommandSpecification commandSpec)
-        => _commandSpecs.Add(commandSpec.CommandName, commandSpec);
+        => _commandSpecs.Add(
+                commandSpec.CommandName,
+                commandSpec);
 
     DynamicCommand CreateCommand(DynamicCommandSpecification commandSpec)
         => new(_dependencies, commandSpec);
@@ -87,6 +89,18 @@ sealed class DynamicCommandsSet
                 commands.Add(command);
         }
         return commands;
+    }
+
+    /// <summary>
+    /// configure help
+    /// </summary>
+    /// <param name="configuration"></param>
+    public void ConfigureHelp(Configuration configuration)
+    {
+        foreach (var comSpec in _commandSpecs.Values)
+            comSpec.HelpBuilder?.Configure(
+                comSpec.CommandName,
+                configuration);
     }
 }
 

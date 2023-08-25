@@ -1,4 +1,6 @@
-﻿using AnsiVtConsole.NetCore;
+﻿using System.Diagnostics;
+
+using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.AppHost;
@@ -17,6 +19,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// abstract command
 /// </summary>
+[DebuggerDisplay("{Name}")]
 public abstract class Command
 {
     #region properties
@@ -150,7 +153,7 @@ public abstract class Command
     public bool GetDescription(out string text)
     {
         var desc = Config.Get(
-            CommandBuilder.ShortDescriptionKey(
+            HelpBuilder.ShortDescriptionKey(
                 ClassNameToCommandName()));
 
         if (desc is not null)

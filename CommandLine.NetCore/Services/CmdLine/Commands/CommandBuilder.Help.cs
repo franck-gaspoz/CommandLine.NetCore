@@ -7,12 +7,6 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// </summary>
 public sealed partial class CommandBuilder
 {
-    /// <summary>
-    /// configuration key of the short description of a command
-    /// </summary>
-    /// <param name="commandName">command name (posix)</param>
-    /// <returns>configuration key</returns>
-    internal static string ShortDescriptionKey(string commandName) => $"Commands:{commandName}:Description";
 
 #if no
     /// <summary>
