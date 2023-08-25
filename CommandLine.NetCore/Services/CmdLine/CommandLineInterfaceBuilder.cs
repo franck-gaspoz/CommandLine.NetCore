@@ -56,7 +56,7 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     internal IHost? AppHost => _appHostBuilder?.AppHost;
 
-    readonly Dictionary<string, DynamicCommandExecuteMethod> _dynamicCommands = new();
+    readonly Dictionary<string, DynamicCommandSpecification> _dynamicCommands = new();
 
     readonly List<ErrorDescriptor> _initializationErrors = new();
 
@@ -177,11 +177,14 @@ public sealed class CommandLineInterfaceBuilder
     /// adds a command specification and implementation (classless)
     /// </summary>
     /// <param name="name">name of the command (as in the command line)</param>
-    /// <param name="execute">command execute method</param>
+    /// <param name="specificationDelegate">command specification delegate</param>
+    /// <param name="helpBuilder">helper builder</param>
     /// <returns>this</returns>
     public CommandLineInterfaceBuilder AddCommand(
         string name,
-        Func<ArgSet, CommandBuilder, DynamicCommandContext, CommandResult> execute)
+        DynamicCommandSpecificationDelegate specificationDelegate,
+        HelpBuilder? helpBuilder = null
+        )
     {
         if (_dynamicCommands.ContainsKey(name))
             _initializationErrors.Add(
@@ -189,12 +192,15 @@ public sealed class CommandLineInterfaceBuilder
                     name,
                     new
                     {
-                        Execute = execute
+                        Execute = specificationDelegate
                     }));
         else
             _dynamicCommands.Add(
                 name,
-                new DynamicCommandExecuteMethod(name, execute));
+                new DynamicCommandSpecification(
+                    name,
+                    specificationDelegate,
+                    helpBuilder));
 
         return this;
     }

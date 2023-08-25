@@ -5,10 +5,10 @@ using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Running;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandLine.NetCore.Commands.CmdLine;
@@ -33,6 +33,7 @@ sealed class Help : Command
     const string StOff = "(tdoff)";
     const string Br = "(br)";
 
+    /// <inheritdoc/>
     public Help(
         Dependencies dependencies,
         CommandsSet commands,
@@ -45,7 +46,7 @@ sealed class Help : Command
     }
 
     /// <inheritdoc/>
-    protected override CommandResult Execute(ArgSet args) =>
+    protected override SyntaxMatcherDispatcher Declare() =>
 
         For()
             .Do(() => DumpHelpForAllCommands)
@@ -53,9 +54,7 @@ sealed class Help : Command
         .For(Param())
             .Do(() => DumpCommandHelp)
 
-        .Options(Opt("v"), Opt("info"))
-
-        .With(args);
+        .Options(Opt("v"), Opt("info"));
 
     void DumpHelpForAllCommands(bool verbose, bool info)
     {
@@ -200,12 +199,12 @@ sealed class Help : Command
     {
         var date =
             DateOnly.ParseExact(
-                Config.GetValue<string>("App:ReleaseDate")!,
+                Config.Get("App:ReleaseDate")!,
                 Globals.SettingsDateFormat,
                 null);
         var lines = new List<string>
         {
-            Config.GetValue<string>("App:Title")!
+            Config.Get("App:Title")!
             + $" ({Assembly.GetExecutingAssembly().GetName().Version} {date})"
         };
         Console.Out.WriteLine(TextBox(lines));

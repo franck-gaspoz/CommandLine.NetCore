@@ -20,6 +20,9 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         return SyntaxMatcherDispatcher;
     }
 
+
+    // TODO: check this
+#if no
     /// <summary>
     /// set up delegate for this syntax execution dispatch map
     /// <para>takes a method with no parameter </para>
@@ -36,4 +39,5 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         Syntax.SetName(Name);
         return SyntaxMatcherDispatcher;
     }
+#endif
 }

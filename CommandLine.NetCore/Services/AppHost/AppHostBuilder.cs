@@ -70,6 +70,7 @@ sealed class AppHostBuilder
         hostBuilder
             .ConfigureServices(
                 services => services
+                    .AddSingleton<Configuration>()
                     .AddSingleton<AppHostConfiguration>()
                     .AddSingleton<Texts>()
                     .AddSingleton<ArgBuilder>()

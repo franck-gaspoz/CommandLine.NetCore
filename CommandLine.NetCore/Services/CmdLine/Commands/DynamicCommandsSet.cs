@@ -31,10 +31,10 @@ sealed class DynamicCommandsSet
     /// </summary>
     /// <param name="appHostConfiguration">app host configuration</param>
     /// <returns>list of selected dynamic command types</returns>
-    static IEnumerable<DynamicCommandExecuteMethod> GetCommands(
+    static IEnumerable<DynamicCommandSpecification> GetCommands(
         AppHostConfiguration appHostConfiguration)
     {
-        var selectedCommands = new List<DynamicCommandExecuteMethod>();
+        var selectedCommands = new List<DynamicCommandSpecification>();
         foreach (var com in appHostConfiguration.DynamicCommands.Values)
         {
             if (appHostConfiguration.ForCommandName is null
@@ -45,22 +45,19 @@ sealed class DynamicCommandsSet
         return selectedCommands;
     }
 
-    readonly Dictionary<string, DynamicCommandExecuteMethod> _commandSpecs = new();
-    public IReadOnlyDictionary<string, DynamicCommandExecuteMethod> CommandSpecs
+    readonly Dictionary<string, DynamicCommandSpecification> _commandSpecs = new();
+    public IReadOnlyDictionary<string, DynamicCommandSpecification> CommandSpecs
         => _commandSpecs;
 
     readonly Dictionary<string, DynamicCommand> _commands = new();
     public IReadOnlyDictionary<string, DynamicCommand> Commands
         => _commands;
 
-    void Add(DynamicCommandExecuteMethod commandSpec)
+    void Add(DynamicCommandSpecification commandSpec)
         => _commandSpecs.Add(commandSpec.CommandName, commandSpec);
 
-    DynamicCommand CreateCommand(DynamicCommandExecuteMethod commandSpec)
-        => new(
-            commandSpec.CommandName,
-            _dependencies,
-            commandSpec);
+    DynamicCommand CreateCommand(DynamicCommandSpecification commandSpec)
+        => new(_dependencies, commandSpec);
 
     /// <summary>
     /// try get a command by its name. if spec exits and not already created in current scope it is created and returns, else returned from cache

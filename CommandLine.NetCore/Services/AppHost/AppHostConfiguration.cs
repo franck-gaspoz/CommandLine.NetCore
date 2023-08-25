@@ -47,7 +47,7 @@ public sealed class AppHostConfiguration
     /// <summary>
     /// dynamic commands
     /// </summary>
-    public IReadOnlyDictionary<string, DynamicCommandExecuteMethod> DynamicCommands { get; private set; }
+    public IReadOnlyDictionary<string, DynamicCommandSpecification> DynamicCommands { get; private set; }
 
     /// <summary>
     /// initialization errors
@@ -74,7 +74,7 @@ public sealed class AppHostConfiguration
         string? forCommandName,
         Action<IConfigurationBuilder>? configureDelegate,
         Action<IHostBuilder>? buildDelegate,
-        IReadOnlyDictionary<string, DynamicCommandExecuteMethod> dynamicCommands,
+        IReadOnlyDictionary<string, DynamicCommandSpecification> dynamicCommands,
         IReadOnlyList<ErrorDescriptor> initializationErrors)
     {
         AssemblySet = assemblySet;

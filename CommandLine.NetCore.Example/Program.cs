@@ -25,7 +25,9 @@ new CommandLineInterfaceBuilder()
     //.DisableGlobalHelp()
 #endif
 
-    .AddCommand("add", (args, builder, ctx) => builder
+    .AddCommand("add", (builder, ctx) => builder
+        //.Description("add numbers")
+
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
             .Do((int x, int y, int z) =>
             {
@@ -36,22 +38,28 @@ new CommandLineInterfaceBuilder()
             {
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
-        //.For(builder.Param<string>(), builder.Param<string>()) // TODO: check how this is registered twice ?
         .For(builder.Param<int>())
             .Do((int x) =>
             {
                 ctx.Console.Out.WriteLine($"x+x={x + x}");
             })
-        .With(args))
 
-    .AddCommand("datetime", (args, builder, ctx) => builder
+        // TODO: check this
+        //.For(builder.Param<string>(), builder.Param<string>()) // TODO: check how this is registered twice ?
+
+        , new(
+            "add numbers",
+            ""
+        ))
+
+    .AddCommand("datetime", (builder, ctx) => builder
         .For()
             .Do((CommandContext com) =>
             {
                 com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff,b=black) (b=magenta)" + DateTime.Now.ToString());
-            })
-        .With(args))
+            }))
 
+    // TODO: check this
     //.AddCommand("add", (args, builder, ctx) => new CommandResult(Globals.ExitFail))
 
     .Build(args)

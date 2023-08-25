@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 
-using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Running;
 using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Example.Commands;
@@ -17,10 +17,11 @@ sealed class GetInfo : Command
      * getinfo --all            : list all infos
      */
 
+    /// <inheritdoc/>
     public GetInfo(Dependencies dependencies) : base(dependencies) { }
 
     /// <inheritdoc/>
-    protected override CommandResult Execute(ArgSet args) =>
+    protected override SyntaxMatcherDispatcher Declare() =>
 
         // env -l
 
@@ -53,9 +54,7 @@ sealed class GetInfo : Command
 
         .For(
             Opt("all"))
-                .Do(DumpAll)
-
-        .With(args);
+                .Do(DumpAll);
 
     void DumpAll()
     {

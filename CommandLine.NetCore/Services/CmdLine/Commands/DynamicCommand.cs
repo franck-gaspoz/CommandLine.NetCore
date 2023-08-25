@@ -1,5 +1,5 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
+﻿using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
+using CommandLine.NetCore.Services.CmdLine.Running;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
@@ -9,7 +9,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 [IgnoreCommand]
 sealed class DynamicCommand : Command
 {
-    readonly DynamicCommandExecuteMethod _method;
+    readonly DynamicCommandSpecification _specification;
     readonly DynamicCommandContext _context;
     readonly CommandBuilder _builder;
     readonly string _name;
@@ -19,22 +19,30 @@ sealed class DynamicCommand : Command
     /// <summary>
     /// builds a new dynamic command from an execute method
     /// </summary>
-    /// <param name="commandName">nom de la commande</param>
     /// <param name="dependencies">command dependencies</param>
-    /// <param name="method">execute method that specify and implements the command</param>
+    /// <param name="specification">specification of syntax and implementation of the command</param>
     public DynamicCommand(
-        string commandName,
         Dependencies dependencies,
-        DynamicCommandExecuteMethod method)
+        DynamicCommandSpecification specification)
             : base(dependencies)
     {
-        _name = commandName;
-        _method = method;
+        _name = specification.CommandName;
+        _specification = specification;
         _context = new(dependencies);
-        _builder = new(dependencies, commandName, RunCommand);
+        _builder = new(dependencies, _name, RunCommand);
+
+        SyntaxMatcherDispatcher = _specification.SpecificationDelegate(
+            _builder, _context);
     }
 
+    /// <summary>
+    /// returns the command name for this dynamic command
+    /// </summary>
+    /// <returns>command name</returns>
+    public override string ClassNameToCommandName()
+        => _name;
+
     /// <inheritdoc/>
-    protected override CommandResult Execute(ArgSet args)
-        => _method.Execute(args, _builder, _context);
+    protected override SyntaxMatcherDispatcher Declare()
+        => new(Texts, Parser, GlobalSettings, Console);
 }

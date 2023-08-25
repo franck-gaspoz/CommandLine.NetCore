@@ -1,6 +1,7 @@
 ﻿using AnsiVtConsole.NetCore;
 
 using CommandLine.NetCore.Extensions;
+using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Extensions;
@@ -45,12 +46,17 @@ public abstract class Command
     /// <summary>
     /// app config
     /// </summary>
-    protected readonly IConfiguration Config;
+    protected readonly Configuration Config;
 
     /// <summary>
     /// name of the command
     /// </summary>
     public virtual string Name => ClassNameToCommandName();
+
+    /// <summary>
+    /// command specification
+    /// </summary>
+    protected SyntaxMatcherDispatcher SyntaxMatcherDispatcher { get; set; }
 
     #endregion
 
@@ -73,6 +79,8 @@ public abstract class Command
         Config = dependencies
                 .GlobalSettings
                 .Configuration;
+
+        SyntaxMatcherDispatcher = Declare();
     }
 
     /// <summary>
@@ -83,7 +91,7 @@ public abstract class Command
     /// <exception cref="NotImplementedException">not implemented</exception>
     public CommandResult Run(ArgSet args)
     {
-        var commandResult = Execute(args);
+        var commandResult = SyntaxMatcherDispatcher.With(args);
 
         if (commandResult.ParseErrors.Any())
         {
@@ -97,6 +105,7 @@ public abstract class Command
         return commandResult;
     }
 
+#if no
     /// <summary>
     /// command run body to be implemented by subclasses
     /// </summary>
@@ -104,6 +113,13 @@ public abstract class Command
     /// <returns>return code</returns>
     /// <exception cref="NotImplementedException">not implemented</exception>
     protected abstract CommandResult Execute(ArgSet args);
+#endif
+
+    /// <summary>
+    /// declares the command syntax and implementation mappings
+    /// </summary>
+    /// <returns></returns>
+    protected abstract SyntaxMatcherDispatcher Declare();
 
     #region translaters, helpers
 
@@ -111,7 +127,7 @@ public abstract class Command
     /// returns the command name from this class type
     /// </summary>
     /// <returns>command name</returns>
-    public string ClassNameToCommandName()
+    public virtual string ClassNameToCommandName()
         => ClassNameToCommandName(GetType().Name);
 
     /// <summary>
@@ -133,7 +149,10 @@ public abstract class Command
     /// <returns>text of the description</returns>
     public bool GetDescription(out string text)
     {
-        var desc = Config.GetValue<string>($"Commands:{ClassNameToCommandName()}:Description");
+        var desc = Config.Get(
+            CommandBuilder.ShortDescriptionKey(
+                ClassNameToCommandName()));
+
         if (desc is not null)
         {
             text = desc;

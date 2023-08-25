@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CommandLine.NetCore.Services.AppHost;
 
 namespace CommandLine.NetCore.Services.Text;
 
@@ -10,20 +10,20 @@ public sealed class Texts
     /// <summary>
     /// name of the section 'texts' in the text settings file
     /// </summary>
-    public static string TextsSectionName = "Texts:";
+    public static string TextsSectionName { get; private set; } = "Texts:";
 
     /// <summary>
     /// text not found result
     /// </summary>
-    public const string TextNotFoundResult = "???";
+    public static string TextNotFoundResult { get; private set; } = "???";
 
-    readonly IConfiguration _config;
+    readonly Configuration _config;
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="config">app config</param>
-    public Texts(IConfiguration config)
+    public Texts(Configuration config)
         => _config = config;
 
     /// <summary>
@@ -50,7 +50,7 @@ public sealed class Texts
         bool noRecurse,
         params object?[] parameters)
     {
-        var txt = _config.GetValue<string>(textId);
+        var txt = _config.Get(textId);
         try
         {
             return txt is null
@@ -71,5 +71,5 @@ public sealed class Texts
     /// <param name="textId">text id</param>
     /// <returns>true if defined, false otherwise</returns>
     public bool IsDefined(string textId)
-        => _config.GetValue<string>(TextsSectionName + textId) is not null;
+        => _config.Get(TextsSectionName + textId) is not null;
 }

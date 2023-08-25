@@ -1,5 +1,5 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Arguments;
-using CommandLine.NetCore.Services.CmdLine.Commands;
+﻿using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Running;
 
 namespace CommandLine.NetCore.Example.Commands;
 
@@ -9,9 +9,11 @@ namespace CommandLine.NetCore.Example.Commands;
 /// </summary>
 class TestCommand : Command
 {
+    /// <inheritdoc/>
     public TestCommand(Dependencies dependencies) : base(dependencies) { }
 
-    protected override CommandResult Execute(ArgSet args) =>
+    /// <inheritdoc/>
+    protected override SyntaxMatcherDispatcher Declare() =>
         For(
             // must not be mapped
             Param("com"),
@@ -35,9 +37,7 @@ class TestCommand : Command
         .Options(
             // bool
             Flag("debug", true)
-            )
-
-        .With(args);
+            );
 
     /*
         is specyfing this command syntax:
