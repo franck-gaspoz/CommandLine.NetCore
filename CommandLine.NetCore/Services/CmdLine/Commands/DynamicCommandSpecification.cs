@@ -1,6 +1,4 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Parsing;
-
-namespace CommandLine.NetCore.Services.CmdLine.Commands;
+﻿namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// an execute method of a command

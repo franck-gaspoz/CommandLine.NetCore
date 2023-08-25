@@ -1,7 +1,6 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Commands;
-using CommandLine.NetCore.Services.CmdLine.Running;
+﻿using CommandLine.NetCore.Services.CmdLine.Running;
 
-namespace CommandLine.NetCore.Services.CmdLine.Parsing;
+namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// dynamic command specification delegate
