@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Text;
 
+using AnsiVtConsole.NetCore.Component.Console;
+
 using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
@@ -103,25 +105,28 @@ sealed class Help : Command
         var length = lines.Select(line => Console.Out.GetText(line).Length).Max();
         var textColor = "(bon,f=white)";
         var barColor = "(f=white)";
-        var boxBackgroundColor = "(b=darkblue)";
+        var boxBackgroundColor = "(bkb,b=darkblue)";
+
+        var clRight = ANSI.RSTXTA + ANSI.EL(ANSI.ELParameter.p0);
 
         var hBar = string.Empty;
         hBar = string.Empty.PadLeft(length + 2, '─');
         var topBar =
             barColor + boxBackgroundColor
-            + "┌" + hBar + "┐";
+            + "┌" + hBar + "┐" + clRight;
         var bottomBar =
             barColor + boxBackgroundColor +
-            "└" + hBar + "┘";
+            "└" + hBar + "┘" + clRight;
 
         var sb = new StringBuilder();
         sb.AppendLine(topBar);
         foreach (var line in lines)
         {
             sb.AppendLine(
-                barColor + "│ "
-                + "(bkf)" + textColor + line + "(rsf)"
-                + barColor + " │");
+                barColor + boxBackgroundColor + "│ "
+                + textColor + line
+                + barColor + " │"
+                + clRight);
         }
 
         sb.Append(bottomBar);

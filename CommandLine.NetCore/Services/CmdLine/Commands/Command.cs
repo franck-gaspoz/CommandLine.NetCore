@@ -202,7 +202,9 @@ public abstract class Command
     /// <returns>text of the descriptions of each command syntax. key is the syntax, value is the description</returns>
     public bool GetLongDescriptions(out List<KeyValuePair<string, string>> texts)
     {
-        var descs = Config.GetSection($"Commands:{ClassNameToCommandName()}:Syntax");
+        var descs = Config.GetSection(
+            HelpBuilder.LongDescriptionKey(
+                ClassNameToCommandName()));
 
         if (!descs.Exists() || !descs.GetChildren().Any())
         {

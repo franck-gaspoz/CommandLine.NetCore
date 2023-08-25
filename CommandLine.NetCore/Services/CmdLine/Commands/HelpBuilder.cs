@@ -62,4 +62,11 @@ public sealed class HelpBuilder
     /// <returns>configuration key</returns>
     internal static string ShortDescriptionKey(string commandName) => $"Commands:{commandName}:Description";
 
+    /// <summary>
+    /// configuration key of the long description of a command
+    /// </summary>
+    /// <param name="commandName">command name (posix)</param>
+    /// <returns>configuration key</returns>
+    internal static string LongDescriptionKey(string commandName) => $"Commands:{commandName}:Syntax";
+
 }
