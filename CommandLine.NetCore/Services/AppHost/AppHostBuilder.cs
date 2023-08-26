@@ -103,7 +103,7 @@ sealed class AppHostBuilder
     {
         var dynComSet = AppHost.Services.GetRequiredService<DynamicCommandsSet>();
         var configuration = AppHost.Services.GetRequiredService<Configuration>();
-        dynComSet.ConfigureHelp(configuration);
+        //dynComSet.ConfigureHelp(configuration);
     }
 
     void FailIfInitializationErrors()

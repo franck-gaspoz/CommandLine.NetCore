@@ -178,13 +178,10 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     /// <param name="name">name of the command (as in the command line)</param>
     /// <param name="specificationDelegate">command specification delegate</param>
-    /// <param name="helpBuilder">helper builder</param>
     /// <returns>this</returns>
     public CommandLineInterfaceBuilder AddCommand(
         string name,
-        DynamicCommandSpecificationDelegate specificationDelegate,
-        HelpBuilder? helpBuilder = null
-        )
+        DynamicCommandSpecificationDelegate specificationDelegate)
     {
         if (_dynamicCommands.ContainsKey(name))
             _initializationErrors.Add(
@@ -199,8 +196,7 @@ public sealed class CommandLineInterfaceBuilder
                 name,
                 new DynamicCommandSpecification(
                     name,
-                    specificationDelegate,
-                    helpBuilder));
+                    specificationDelegate));
 
         return this;
     }

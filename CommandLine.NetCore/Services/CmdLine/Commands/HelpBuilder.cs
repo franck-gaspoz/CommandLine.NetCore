@@ -5,56 +5,8 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// help builder for a dynamic command
 /// </summary>
-public sealed class HelpBuilder
+public static class HelpBuilder
 {
-    internal readonly Dictionary<string, CommandHelp> _helps = new();
-
-    /// <summary>
-    /// creates a new instance of a command help builder
-    /// </summary>
-    public HelpBuilder() { }
-
-    /// <summary>
-    /// creates a new instance of a command help builder that builds a new help for a command
-    /// </summary>
-    /// <param name="shortDescription">description</param>
-    /// <param name="longDescription">long description</param>
-    /// <param name="culture">culture. if null uses the current culture</param>
-    public HelpBuilder(
-        string shortDescription,
-        string longDescription,
-        string? culture = null) => _helps.Add(
-            culture ?? Configuration.Culture,
-            new CommandHelp(
-                shortDescription,
-                longDescription));
-
-    /// <summary>
-    /// add help to configuration
-    /// </summary>
-    /// <param name="commandName">command name</param>
-    /// <param name="configuration">configuration</param>
-    internal void Configure(
-        string commandName,
-        Configuration configuration)
-    {
-        foreach (var kvp in _helps)
-            Configure(
-                commandName,
-                kvp.Key,
-                kvp.Value,
-                configuration);
-    }
-
-    static void Configure(
-        string commandName,
-        string culture,
-        CommandHelp help,
-        Configuration configuration) => configuration.Set(
-            ShortDescriptionKey(commandName),
-            help.ShortDescription,
-            culture);
-
     /// <summary>
     /// configuration key of the short description of a command
     /// </summary>
@@ -69,4 +21,40 @@ public sealed class HelpBuilder
     /// <returns>configuration key</returns>
     internal static string LongDescriptionKey(string commandName) => $"Commands:{commandName}:Syntax";
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="configuration">configuration</param>
+    /// <param name="commandName">command name</param>
+    /// <param name="argsSyntax">arguments syntax</param>
+    /// <param name="description">description of the argument syntax</param>
+    /// <param name="culture">culture of the text. if null use the current culture</param>
+    internal static void AddSyntaxDescription(
+        Configuration configuration,
+        string commandName,
+        string argsSyntax,
+        string description,
+        string? culture = null)
+        => configuration.Set(
+            HelpBuilder.LongDescriptionKey(commandName)
+                + ":" + argsSyntax,
+            description,
+            culture);
+
+    /// <summary>
+    /// set a short description for the command syntax and the culture    
+    /// </summary>
+    /// <param name="configuration">configuration</param>
+    /// <param name="commandName">command name</param>
+    /// <param name="description">text of the short description</param>
+    /// <param name="culture">culture of the text. if null use the current culture</param>
+    internal static void SetShortDescription(
+        Configuration configuration,
+        string commandName,
+        string description,
+        string? culture = null)
+        => configuration.Set(
+            HelpBuilder.ShortDescriptionKey(commandName),
+            description,
+            culture);
 }

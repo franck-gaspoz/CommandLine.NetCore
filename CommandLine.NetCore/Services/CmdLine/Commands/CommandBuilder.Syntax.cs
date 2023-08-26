@@ -20,13 +20,12 @@ public sealed partial class CommandBuilder
         if (_runMethod is null) ArgumentNullException.ThrowIfNull(_runMethod);
 
         if (_syntaxMatcherDispatcher is null)
-        {
             _syntaxMatcherDispatcher = new(
+                _commandName,
                 _texts,
                 _parser,
                 _globalSettings,
                 _console);
-        }
 
 #if Enable_h_Arg
         if (_syntaxMatcherDispatcher.Count == 0)

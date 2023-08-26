@@ -8,7 +8,7 @@ using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
-/// a syntax dispatch map
+/// a syntax dispatch map : do actions
 /// </summary>
 public sealed partial class SyntaxExecutionDispatchMapItem
 {

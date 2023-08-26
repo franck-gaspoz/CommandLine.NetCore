@@ -3,7 +3,7 @@
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
-/// a syntax dispatch map
+/// a syntax dispatch map : do funcs
 /// </summary>
 public sealed partial class SyntaxExecutionDispatchMapItem
 {

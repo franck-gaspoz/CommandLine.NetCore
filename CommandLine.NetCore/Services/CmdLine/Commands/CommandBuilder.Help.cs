@@ -7,23 +7,21 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// </summary>
 public sealed partial class CommandBuilder
 {
-
-#if no
     /// <summary>
     /// add a short description for the command syntax and the culture    
     /// </summary>
     /// <param name="text">text of the short description</param>
     /// <param name="culture">culture of the text. if null use the current culture</param>
     /// <returns>this object</returns>
-    public CommandBuilder Description(string text, string? culture = null)
+    public CommandBuilder Help(string text, string? culture = null)
     {
-        _configuration.Set(
-            ShortDescriptionKey(_commandName),
+        HelpBuilder.SetShortDescription(
+            _configuration,
+            HelpBuilder.ShortDescriptionKey(_commandName),
             text,
             culture);
         return this;
     }
-#endif
 
     void AddHelpAboutCommandSyntax(SyntaxMatcherDispatcher syntaxMatcherDispatcher)
         => syntaxMatcherDispatcher

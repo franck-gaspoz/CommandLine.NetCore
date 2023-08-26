@@ -91,6 +91,7 @@ sealed class DynamicCommandsSet
         return commands;
     }
 
+#if no
     /// <summary>
     /// configure help
     /// </summary>
@@ -102,5 +103,6 @@ sealed class DynamicCommandsSet
                 comSpec.CommandName,
                 configuration);
     }
+#endif
 }
 

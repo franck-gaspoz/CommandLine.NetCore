@@ -11,6 +11,13 @@ namespace CommandLine.NetCore.Services.CmdLine.Running;
 /// </summary>
 public sealed partial class SyntaxExecutionDispatchMapItem
 {
+    #region properties
+
+    /// <summary>
+    /// command name
+    /// </summary>
+    readonly string _commandName;
+
     /// <summary>
     /// name of the syntax
     /// <para>is the Do method name</para>
@@ -32,16 +39,20 @@ public sealed partial class SyntaxExecutionDispatchMapItem
     /// </summary>
     public SyntaxMatcherDispatcher SyntaxMatcherDispatcher { get; private set; }
 
+    #endregion
+
     /// <summary>
     /// build a new instance
     /// </summary>
+    /// <param name="commandName">command name</param>
     /// <param name="syntaxMatcherDispatcher">the syntax matcher dispatcher owner of this</param>
     /// <param name="syntax">syntax</param>
     public SyntaxExecutionDispatchMapItem(
+        string commandName,
         SyntaxMatcherDispatcher syntaxMatcherDispatcher,
         Syntax syntax)
-        => (SyntaxMatcherDispatcher, Syntax, Name)
-            = (syntaxMatcherDispatcher, syntax, string.Empty);
+        => (_commandName, SyntaxMatcherDispatcher, Syntax, Name)
+            = (commandName, syntaxMatcherDispatcher, syntax, string.Empty);
 
     const string ArrayTypePostFix = "[]";
 

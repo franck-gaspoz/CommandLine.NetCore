@@ -16,20 +16,13 @@ public sealed class DynamicCommandSpecification
     public DynamicCommandSpecificationDelegate SpecificationDelegate { get; private set; }
 
     /// <summary>
-    /// help builder
-    /// </summary>
-    public HelpBuilder? HelpBuilder { get; private set; }
-
-    /// <summary>
     /// builds a new instance
     /// </summary>
     /// <param name="commandName">command name</param>
     /// <param name="specificationDelegate">specification delegate</param>
-    /// <param name="helpBuilder">eventual command help builder</param>
     public DynamicCommandSpecification(
         string commandName,
-        DynamicCommandSpecificationDelegate specificationDelegate,
-        HelpBuilder? helpBuilder)
-            => (CommandName, SpecificationDelegate, HelpBuilder)
-                = (commandName, specificationDelegate, helpBuilder);
+        DynamicCommandSpecificationDelegate specificationDelegate)
+            => (CommandName, SpecificationDelegate)
+                = (commandName, specificationDelegate);
 }

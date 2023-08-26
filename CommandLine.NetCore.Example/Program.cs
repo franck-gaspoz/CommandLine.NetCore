@@ -23,20 +23,27 @@ new CommandLineInterfaceBuilder()
 
     // add this to avoid global help of the command line parser (not mandatory)
     //.DisableGlobalHelp()
-#endif
+#endif    
 
     .AddCommand("add", (builder, ctx) => builder
 
+        .Help("add numbers")
+
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
+
+            .Help("x y z", "returns x+y+z")
+
             .Do((int x, int y, int z) =>
             {
                 ctx.Console.Out.WriteLine($"x+y+z={x + y + z}");
             })
+
         .For(builder.Param<int>(), builder.Param<int>())
             .Do((int x, int y) =>
             {
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
+
         .For(builder.Param<int>())
             .Do((int x) =>
             {
@@ -46,10 +53,10 @@ new CommandLineInterfaceBuilder()
         // TODO: check this
         //.For(builder.Param<string>(), builder.Param<string>()) // TODO: check how this is registered twice ?
 
-        , new(
+        /*, new(
             "add numbers",
             ""
-        ))
+        )*/)
 
     .AddCommand("datetime", (builder, ctx) => builder
         .For()

@@ -18,7 +18,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Running;
 /// </summary>
 public sealed class SyntaxMatcherDispatcher
 {
+    #region properties
+
     readonly List<SyntaxExecutionDispatchMapItem> _maps = new();
+
     readonly Parser _parser;
     internal Texts Texts { get; private set; }
     internal GlobalSettings GlobalSettings { get; private set; }
@@ -34,20 +37,26 @@ public sealed class SyntaxMatcherDispatcher
     /// </summary>
     public int Count => _maps.Count;
 
+    readonly string _commandName;
+
+    #endregion
+
     /// <summary>
     /// build a new instance
     /// </summary>
+    /// <param name="commandName">command name</param>
     /// <param name="texts">texts service</param>
     /// <param name="parser">parser</param>
     /// <param name="globalSettings">setted global options</param>
     /// <param name="console">console</param>
     public SyntaxMatcherDispatcher(
+        string commandName,
         Texts texts,
         Parser parser,
         GlobalSettings globalSettings,
         IAnsiVtConsole console)
-        => (Texts, _parser, GlobalSettings, Console)
-            = (texts, parser, globalSettings, console);
+        => (_commandName, Texts, _parser, GlobalSettings, Console)
+            = (commandName, texts, parser, globalSettings, console);
 
     /// <summary>
     /// build a syntax from arguments syntaxes set
@@ -58,6 +67,7 @@ public sealed class SyntaxMatcherDispatcher
     {
         var syntax = new Syntax(syntaxArgs);
         var dispatchMap = new SyntaxExecutionDispatchMapItem(
+            _commandName,
             this,
             syntax);
 
