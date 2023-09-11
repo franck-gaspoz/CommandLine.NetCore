@@ -17,7 +17,7 @@ public sealed partial class CommandBuilder
     {
         HelpBuilder.SetShortDescription(
             _configuration,
-            HelpBuilder.ShortDescriptionKey(_commandName),
+            _commandName,
             text,
             culture);
         return this;

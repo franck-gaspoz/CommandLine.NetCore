@@ -59,6 +59,7 @@ new CommandLineInterfaceBuilder()
         )*/)
 
     .AddCommand("datetime", (builder, ctx) => builder
+        .Help("get datetime")
         .For()
             .Do((CommandContext com) =>
             {
