@@ -61,9 +61,5 @@ public sealed class ConfigurationSection : Configuration, IConfigurationSection
     /// </summary>
     /// <returns>configuration sub-sections</returns>
     public new IEnumerable<IConfigurationSection> GetChildren()
-    {
-        _childrens ??= new();
-
-        return _childrens;
-    }
+        => _childrens ?? new();
 }
