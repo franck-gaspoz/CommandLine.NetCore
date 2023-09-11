@@ -5,10 +5,14 @@ namespace CommandLine.NetCore.Services.AppHost;
 
 /// <summary>
 /// culture dependent configuration
+/// <para>overloads host configuration</para>
 /// </summary>
-public sealed class Configuration : IConfiguration
+public class Configuration : IConfiguration
 {
-    readonly IConfiguration _configuration;
+    /// <summary>
+    /// host configuration
+    /// </summary>
+    internal IConfiguration HostConfiguration { get; }
 
     readonly Dictionary<string, Dictionary<string, string?>> _settings
         = new();
@@ -18,7 +22,7 @@ public sealed class Configuration : IConfiguration
     /// </summary>
     /// <param name="configuration">host configuration</param>
     public Configuration(IConfiguration configuration)
-        => _configuration = configuration;
+        => HostConfiguration = configuration;
 
     /// <summary>
     /// current culture
@@ -43,7 +47,7 @@ public sealed class Configuration : IConfiguration
             && _settings.TryGetValue(_settings.Keys.First(), out settings)
             && settings.TryGetValue(key, out value))
             return value;
-        return _configuration[key];
+        return HostConfiguration[key];
     }
 
     /// <summary>
@@ -95,13 +99,62 @@ public sealed class Configuration : IConfiguration
 
     /// <inheritdoc/>
     public IEnumerable<IConfigurationSection> GetChildren()
-        => _configuration.GetChildren();
+        => HostConfiguration.GetChildren();
 
     /// <inheritdoc/>
     public IChangeToken GetReloadToken()
-        => _configuration.GetReloadToken();
+        => HostConfiguration.GetReloadToken();
 
     /// <inheritdoc/>
     public IConfigurationSection GetSection(string key)
-        => _configuration.GetSection(key);
+        => GetSection(key, null);
+
+    /// <summary>
+    /// set a section for a culture
+    /// </summary>
+    /// <param name="path">section path</param>
+    /// <param name="culture">culture. if null use the current culture</param>
+    public IConfigurationSection GetSection(
+        string path, string? culture = null)
+    {
+        culture ??= Culture;
+        var hostSection = HostConfiguration.GetSection(path);
+        if (_settings.ContainsKey(culture))
+        {
+            static string PathKey(string x) => x.Split(':').Last();
+            var sectionKey = PathKey(path);
+            _settings[culture].TryGetValue(path, out var value);
+            value ??= hostSection.Value;
+
+            var subpaths = _settings[culture]
+                .Keys
+                .Where(x => x.StartsWith(path) && x != path);
+
+            var subSections = new List<IConfigurationSection>();
+            foreach (var subpath in subpaths)
+            {
+                var subSection = GetSection(
+                        subpath,
+                        culture
+                        );
+                subSections.Add(subSection);
+                if (!subSection.Exists())
+                {
+                    var hostSubSection = HostConfiguration.GetSection(path);
+                    if (hostSubSection.Exists())
+                        subSections.Add(hostSubSection);
+                }
+            }
+
+            var section = new ConfigurationSection(
+                this,
+                sectionKey,
+                path,
+                value,
+                subSections);
+
+            return section;
+        }
+        return hostSection;
+    }
 }

@@ -70,7 +70,8 @@ public abstract partial class Command
             HelpBuilder.LongDescriptionKey(
                 ClassNameToCommandName()));
 
-        if (!descs.Exists() || !descs.GetChildren().Any())
+        var childrens = descs.GetChildren();
+        if (!descs.Exists() || !childrens.Any())
         {
             texts = new List<KeyValuePair<string, string>> {
                 new KeyValuePair<string,string>(
@@ -83,7 +84,7 @@ public abstract partial class Command
         }
 
         texts = new List<KeyValuePair<string, string>>();
-        foreach (var desc in descs.GetChildren())
+        foreach (var desc in childrens)
         {
             texts.Add(
                 new KeyValuePair<string, string>(

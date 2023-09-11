@@ -30,21 +30,21 @@ new CommandLineInterfaceBuilder()
         .Help("add numbers")
 
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
-
             .Help("x y z", "returns x+y+z")
-
             .Do((int x, int y, int z) =>
             {
                 ctx.Console.Out.WriteLine($"x+y+z={x + y + z}");
             })
 
         .For(builder.Param<int>(), builder.Param<int>())
+            .Help("x y", "returns x+y")
             .Do((int x, int y) =>
             {
                 ctx.Console.Out.WriteLine($"x+y={x + y}");
             })
 
         .For(builder.Param<int>())
+            .Help("x", "returns x+x")
             .Do((int x) =>
             {
                 ctx.Console.Out.WriteLine($"x+x={x + x}");
