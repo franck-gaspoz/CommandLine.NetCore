@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.NetCore.Example", "CommandLine.NetCore.Example\CommandLine.NetCore.Example.csproj", "{F4197A89-DB9C-420B-8380-F290021B616E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{A56E6FE9-8EF6-4E97-84BE-41AF073E047F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.NetCore.Example", "Examples\CommandLine.NetCore.Example\CommandLine.NetCore.Example.csproj", "{41B38ED7-96F9-4E4A-BB17-9130EAA901A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,13 +27,16 @@ Global
 		{C7B7336E-74C1-4EDF-B6F7-98CB85666287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7B7336E-74C1-4EDF-B6F7-98CB85666287}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7B7336E-74C1-4EDF-B6F7-98CB85666287}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4197A89-DB9C-420B-8380-F290021B616E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4197A89-DB9C-420B-8380-F290021B616E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4197A89-DB9C-420B-8380-F290021B616E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4197A89-DB9C-420B-8380-F290021B616E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41B38ED7-96F9-4E4A-BB17-9130EAA901A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B38ED7-96F9-4E4A-BB17-9130EAA901A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B38ED7-96F9-4E4A-BB17-9130EAA901A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B38ED7-96F9-4E4A-BB17-9130EAA901A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{41B38ED7-96F9-4E4A-BB17-9130EAA901A0} = {A56E6FE9-8EF6-4E97-84BE-41AF073E047F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0E8ABD74-99D9-4979-9E88-7615B52FB019}

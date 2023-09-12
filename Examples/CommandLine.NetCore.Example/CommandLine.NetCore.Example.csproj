@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommandLine.NetCore\CommandLine.NetCore.csproj" />
+    <ProjectReference Include="..\..\CommandLine.NetCore\CommandLine.NetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
