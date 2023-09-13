@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.20\contentFiles\any\net6.0\assets\example5.png" />
+    <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.20\contentFiles\any\net6.0\assets\example6.png" />
+    <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.20\contentFiles\any\net6.0\assets\example7.png" />
+    <Content Remove="C:\Users\franc\.nuget\packages\ansivtconsole.netcore\1.0.20\contentFiles\any\net6.0\assets\title.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Component\Parser\ansi-seq-patterns.txt" />
   </ItemGroup>
 
