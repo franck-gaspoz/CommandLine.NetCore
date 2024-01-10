@@ -19,7 +19,7 @@
 		<Authors>Franck Gaspoz</Authors>
 		<Company>Franck Gaspoz</Company>
 		<Product>CommandLine.NetCore</Product>
-		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6</Description>
+		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6 or higher</Description>
 		<Copyright>(c) Franck Gaspoz 2023 Licence MIT</Copyright>
 		
 		<DebugType>embedded</DebugType>
@@ -27,7 +27,7 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
-`1.0.11` - 09/12/2023
+`1.0.11` - 01/10/2024 (since 12/09/2023)
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class (dynamic commands)
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
 - fix value was not nullable in Param_T when T is not a class, for instance, Param{int} always had value 0 (=default(T))

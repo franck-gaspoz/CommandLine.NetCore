@@ -23,7 +23,8 @@ ___
         - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#exemple-of-the-command-help-defined-in-commandlinenetcorecommandscmdline)
         - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#exemple-of-the-command-get-info-defined-in-commandlinenetcoreexamplecommandsgetinfo)
     - [5. Setup an unique command console app (without command argument)](#5-setup-an-unique-command-console-app-without-command-argument)
-    - [6. Debug and troobleshoot](#6-debug-and-troobleshoot)
+    - [6. Command classes attributes](#6-command-classes-attributes)
+    - [7. Debug and troobleshoot](#7-debug-and-troobleshoot)
 
 - [Versions history](#versions-history)
 
@@ -248,6 +249,8 @@ several letters are prefixed by `--`
 
 ## 4. Implementing a command
 
+### 4.1. Implementing a command with a class
+
 A command specification and implementation is defined in a class that inherits from `CommandLine.NetCore.Services.CmdLine.Commands.Command`.
 
 * the name of the command is `kebab case` from the name of the class (in this case **GetInfo** declares the **get-info** command)
@@ -470,8 +473,94 @@ internal sealed class GetInfo : Command
 }
 ```
 
-## 5. Setup an unique command console app (without command argument)
+### 4.2. Implementing a classless command with a lambda expression
 
+You can dynamically declares and specify a command directly with `CommandLineInterfaceBuilder` fluent methods:
+
+* **`AddCommand`** adds a new dynamic command named *commandName* that is specified by the delegate type `DynamicCommandSpecificationDelegate` 
+
+```csharp
+CommandInterfaceBuilder AddCommand( commandName , DynamicCommandSpecificationDelegate )
+```
+
+* the delegate `DynamicCommandSpecificationDelegate` provides a `CommandBuilder` and a `DynamicCommandContext` that provides methods for specify and implements the dynamic command
+    
+    ```chsarp
+    (builder, ctx) => ...
+    ```
+
+The `CommandBuilder` exposes the following methods:
+
+* the **`For`** method is the way to specify a command arguments, help and body (it is the same than in the abstract class `Command`)
+
+```csharp
+SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
+```
+
+* methods for building arguments: **`Opt`**, **`Flag`**, **`Param`**, **`OptSet`**
+
+* **`Help`** for dynamically (outside of appsettings) declares the command syntax help:
+
+```csharp
+CommandBuilder Help(string text, string? culture = null)
+```
+
+The `SyntaxExecutionDispatchMapItem` has now specific methods for building dynamic commands:
+
+* new `Do` methods with generic types that takes an **Action delegate** as the command implementation
+
+```csharp
+SyntaxMatcherDispatcher Do<T1>(Action<T1> action)
+SyntaxMatcherDispatcher Do<T1, T2>(Action<T1, T2> action)
+...
+SyntaxMatcherDispatcher Do<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
+```
+
+* new `Do` for commands with returns (pending impl.)
+
+```csharp
+SyntaxMatcherDispatcher Do(Func<CommandContext, CommandLineResult> @delegate)
+```
+
+* **`Help`** for dynamically (outside of appsettings) declares the command syntax help:
+
+```csharp
+SyntaxExecutionDispatchMapItem Help(
+        string argsSyntax,
+        string description,
+        string? culture = null)
+```
+
+### Example of the command `add` defined in `CommandLine.NetCore.Example.Program`:
+
+```csharp
+// the command line interface builder still loads commands defined in classes
+new CommandLineInterfaceBuilder()
+
+    // we add a command dynamically specified
+    .AddCommand("add", (builder, ctx) => builder
+
+        .Help("add numbers")
+
+        .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
+            .Help("x y z", "returns x+y+z")
+            .Do((int x, int y, int z) =>
+            {
+                ctx.Console.Out.WriteLine($"{x}+{y}+{z}={x + y + z}");
+            })
+
+        .For(builder.Param<int>(), builder.Param<int>())
+            .Help("x y", "returns x+y")
+            .Do((int x, int y) =>
+            {
+                ctx.Console.Out.WriteLine($"{x}+{y}={x + y}");
+            })
+
+        // ...
+```
+
+## 5. Setup an unique command console app (without command argument)
+0
 You can prepare a console application that run immediately a specific command at launch and that doesn't requires a command name argument,
 by activating this option in the **main** of your app or using **top level statements** as shown below:
 
@@ -483,7 +572,10 @@ using CommandLine.NetCore.Services.CmdLine;
 new CommandLineInterfaceBuilder()
 
     // add this for single command mode (here: only get-info, no global help)
+    // case of a class command
     .ForCommand<GetInfo>()
+    // case of a dynamic command (here: only add, no global help)
+    //.ForCommand("add")
 
     // add this to avoid global help of the command line parser
     .DisableGlobalHelp()
@@ -542,7 +634,11 @@ C:\ Total Size = 511280410624
 C:\ Available FreeSpace = 98612314112
 ```
 
-## 6. Debug and troobleshoot
+## 6. Command classes attributes
+
+- **`[IgnoreCommand]`** : if placed above a command class declaration, the command will be ignored by the command classes loader
+
+## 7. Debug and troobleshoot
 
 ### Integrated options
 
@@ -568,7 +664,7 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
-`1.0.11` - 09/12/2023
+`1.0.11` - 10/01/2024 (since 09/12/2023)
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class (dynamic commands)
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
 - fix value was not nullable in Param_T when T is not a class, for instance, Param{int} always had value 0 (=default(T))
