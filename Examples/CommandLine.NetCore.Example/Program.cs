@@ -27,47 +27,34 @@ new CommandLineInterfaceBuilder()
 
     .AddCommand("add", (builder, ctx) => builder
 
-        .Help("add numbers")
+        .Help("add operator")
 
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
-            .Help("x y z", "returns x+y+z")
+            .Help("x y z", "output x+y+z")
             .Do((int x, int y, int z) =>
-            {
-                ctx.Console.Out.WriteLine($"{x}+{y}+{z}={x + y + z}");
-            })
+                ctx.Console.Out.WriteLine($"{x + y + z}"))
 
         .For(builder.Param<int>(), builder.Param<int>())
-            .Help("x y", "returns x+y")
+            .Help("x y", "output x+y")
             .Do((int x, int y) =>
-            {
-                ctx.Console.Out.WriteLine($"{x}+{y}={x + y}");
-            })
+                ctx.Console.Out.WriteLine($"{x + y}"))
 
         .For(builder.Param<int>())
-            .Help("x", "returns x+x")
+            .Help("x", "output x+x")
             .Do((int x) =>
-            {
-                ctx.Console.Out.WriteLine($"{x}+{x}={x + x}");
-            })
+                ctx.Console.Out.WriteLine($"{x + x}"))
 
-        // TODO: check this
-        //.For(builder.Param<string>(), builder.Param<string>()) // TODO: check how this is registered twice ?
-
-        /*, new(
-            "add numbers",
-            ""
-        )*/)
+        .For(builder.Param<string>(), builder.Param<string>())
+            .Help("x y", "adds the two strings x and y")
+            .Do((string x, string y)
+                => ctx.Console.Out.WriteLine(x + y))
+    )
 
     .AddCommand("datetime", (builder, ctx) => builder
         .Help("get datetime")
         .For()
             .Do((CommandContext com) =>
-            {
-                com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff,b=black) (b=magenta)" + DateTime.Now.ToString());
-            }))
-
-    // TODO: check this
-    //.AddCommand("add", (args, builder, ctx) => new CommandResult(Globals.ExitFail))
+                com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff,b=black) (b=magenta)" + DateTime.Now.ToString())))
 
     .Build(args)
     .Run();

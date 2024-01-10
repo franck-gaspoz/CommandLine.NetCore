@@ -19,12 +19,13 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         string description,
         string? culture = null)
     {
-        HelpBuilder.AddSyntaxDescription(
-            SyntaxMatcherDispatcher
+        var conf = SyntaxMatcherDispatcher
                 .GlobalSettings
-                .Configuration,
+                .Configuration;
+        HelpBuilder.AddSyntaxDescription(
+            conf,
             _commandName,
-            argsSyntax,
+            conf.BuildUniqueKey(_commandName, argsSyntax),
             description,
             culture
             );

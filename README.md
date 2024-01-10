@@ -664,7 +664,7 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
-`1.0.11` - 10/01/2024 (initially 09/12/2023)
+`1.0.11` - 10/01/2024 (since 09/12/2023)
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class (dynamic commands)
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
 - fix value was not nullable in Param_T when T is not a class, for instance, Param{int} always had value 0 (=default(T))
@@ -674,6 +674,7 @@ If this option is set syntaxes of a command can't be ambiguous
 - renamings (eg. OperationResult)
 - update as consts of null syntax name and null value text
 - add support of dynamic and localized configuration
+- fix help support of dynamic polymorphic commands syntaxes
 - doc update
 
 `1.0.10` - 08/11/2023

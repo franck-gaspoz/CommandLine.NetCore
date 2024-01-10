@@ -674,6 +674,7 @@ If this option is set syntaxes of a command can't be ambiguous
 - renamings (eg. OperationResult)
 - update as consts of null syntax name and null value text
 - add support of dynamic and localized configuration
+- fix help support of dynamic polymorphic commands syntaxes
 - doc update
 
 `1.0.10` - 08/11/2023

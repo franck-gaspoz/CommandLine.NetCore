@@ -36,7 +36,8 @@
 - add initialization errors collect and display
 - renamings (eg. OperationResult)
 - update as consts of null syntax name and null value text
-- add support of dynamic and localized configuration
+- add support of dynamic and localized configuration help
+- fix help support of dynamic polymorphic commands syntaxes
 - doc update
 
 `1.0.10` - 08/11/2023			

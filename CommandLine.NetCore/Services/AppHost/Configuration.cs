@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CommandLine.NetCore.Services.CmdLine.Commands;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 
 namespace CommandLine.NetCore.Services.AppHost;
@@ -48,6 +50,44 @@ public class Configuration : IConfiguration
             && settings.TryGetValue(key, out value))
             return value;
         return HostConfiguration[key];
+    }
+
+    /// <summary>
+    /// determines wheter settings contains key for the culture or not 
+    /// </summary>
+    /// <param name="key">key</param>
+    /// <param name="culture">culture. if null use the current culture</param>
+    /// <returns>true if key is found, false otherwise</returns>
+    public bool ContainsKey(string key, string? culture = null)
+    {
+        culture ??= Culture;
+        if (!_settings.TryGetValue(culture, out var cultureKeys))
+            return false;
+        return cultureKeys.ContainsKey(key);
+    }
+
+    /// <summary>
+    /// build an unique key for the culture. if key exists, a new one is built with a postfix beeing the minimum available index
+    /// </summary>
+    /// <param name="commandName">command name</param>
+    /// <param name="key">key</param>
+    /// <param name="culture">culture. if null use the current culture</param>
+    /// <returns>key itself or key with a postfix beeing the minimum available index</returns>
+    public string BuildUniqueKey(string commandName, string key, string? culture = null)
+    {
+        culture ??= Culture;
+        if (!_settings.TryGetValue(culture, out var cultureKeys))
+            return key;
+        var index = 2;
+        var ckey = key;
+        while (cultureKeys.ContainsKey(
+            HelpBuilder.LongDescriptionKey(commandName)
+                + ":" + ckey))
+        {
+            ckey = key + " (" + index + ")";
+            index++;
+        }
+        return ckey;
     }
 
     /// <summary>
