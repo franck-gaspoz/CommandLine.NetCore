@@ -4,6 +4,7 @@ using System.Text;
 using AnsiVtConsole.NetCore.Component.Console;
 
 using CommandLine.NetCore.GlobalOpts;
+using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Commands;
@@ -26,6 +27,7 @@ sealed class Help : Command
     readonly GlobalOptsSet _globalOptsSet;
     readonly GlobalSettings _globalSettings;
     readonly IServiceProvider _serviceProvider;
+    readonly Configuration _config;
 
     const string SepColor = "(uon,f=cyan,bon)";
     const string SectionTitleColor = "(uon,f=yellow,bon)";
@@ -42,12 +44,14 @@ sealed class Help : Command
     public Help(
         Dependencies dependencies,
         CommandsSet commands,
-        IServiceProvider serviceProvider) : base(dependencies)
+        IServiceProvider serviceProvider,
+        Configuration config) : base(dependencies)
     {
         _globalOptsSet = dependencies.GlobalSettings.GlobalOptsSet;
         _globalSettings = dependencies.GlobalSettings;
         _serviceProvider = serviceProvider;
         _commandsSet = commands;
+        _config = config;
     }
 
     /// <inheritdoc/>
@@ -81,26 +85,32 @@ sealed class Help : Command
         CommandEnd(info);
     }
 
-    void DumpCommandHelp(string comandName, bool verbose, bool info)
+    void DumpCommandHelp(string commandName, bool verbose, bool info)
     {
         OutputAppTitle();
 
-        var command = _commandsSet.GetCommand(comandName);
-
-        DumpCommandDescription(command, false, false, false, command.Name.Length + 3);
+        DumpCommandDescription(commandName, false, false, false, commandName.Length + 3);
 
         Console.Out.WriteLine();
 
-        if (command.GetLongDescriptions(out var longDescs))
-            DumpSyntaxes(command, longDescs);
+        if (Command.GetLongDescriptions(
+            commandName,
+            _config,
+            Texts,
+            Console,
+            out var longDescs))
+            DumpSyntaxes(commandName, longDescs);
 
         if (verbose)
         {
-            var hasTags = DumpCommandTags(command, Br);
-            DumpCommandNamespace(command, hasTags ? string.Empty : Br);
+            var hasTags = DumpCommandTags(commandName, Br);
+            DumpCommandNamespace(commandName, hasTags ? string.Empty : Br);
         }
 
-        if (command.GetOptionsDescriptions(out var optDescs))
+        if (Command.GetOptionsDescriptions(
+            commandName,
+            Config,
+            out var optDescs))
             DumpCommandOptions(optDescs);
 
         CommandEnd(info);
@@ -139,9 +149,9 @@ sealed class Help : Command
         return sb.ToString();
     }
 
-    bool DumpCommandTags(Command command, string prefix = "")
+    bool DumpCommandTags(string commandName, string prefix = "")
     {
-        var tags = _commandsSet.GetTags(command.Name);
+        var tags = _commandsSet.GetTags(commandName);
         if (!tags.Any())
             return false;
         Console.Out.WriteLine(
@@ -151,11 +161,11 @@ sealed class Help : Command
         return true;
     }
 
-    void DumpCommandNamespace(Command command, string prefix = "")
+    void DumpCommandNamespace(string commandName, string prefix = "")
         => Console.Out.WriteLine(
             prefix
             + "(f=darkgray)namespace: "
-            + CommandNamespaceColor + command.GetType().Namespace + StOff);
+            + CommandNamespaceColor + _commandsSet.GetNamespace(commandName) + StOff);
 
     void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
     {
@@ -213,25 +223,35 @@ sealed class Help : Command
 
     void DumpCommandList(bool v)
     {
-        var commands = _commandsSet.GetCommands();
+        var commands = _commandsSet.GetCommandNames();
+        _commandsSet.BuildDynamicCommands();
+
         var maxCommandNameLength = commands.Any() ? commands.Max(
-            x => x.Name.Length) : 0;
+            x => x.Value.Length) : 0;
         foreach (var command in commands)
-            DumpCommandDescription(command, true, v, v, maxCommandNameLength + 3);
+            DumpCommandDescription(command.Value, true, v, v, maxCommandNameLength + 3);
     }
 
     void DumpCommandDescription(
-        Command command,
+        string commandName,
         bool withName,
         bool dumpNamespace,
         bool dumpTags,
         int padLeft)
     {
-        command.GetDescription(out var description);
+        _commandsSet.GetCommand(commandName);
+
+        Command.GetDescription(
+            commandName,
+            _config,
+            Texts,
+            Console,
+            out var description);
+
         if (withName)
         {
-            var margin = "".PadLeft(padLeft - command.Name.Length);
-            Console.Out.Write(CommandNameColor + command.Name + $"{StOff}{margin}");
+            var margin = "".PadLeft(padLeft - commandName.Length);
+            Console.Out.Write(CommandNameColor + commandName + $"{StOff}{margin}");
         }
         Console.Out.WriteLine(description + StOff);
 
@@ -240,9 +260,9 @@ sealed class Help : Command
             : string.Empty;
 
         if (dumpTags)
-            DumpCommandTags(command, sep);
+            DumpCommandTags(commandName, sep);
         if (dumpNamespace)
-            DumpCommandNamespace(command, sep);
+            DumpCommandNamespace(commandName, sep);
     }
 
     void OutputAppTitle()
@@ -285,7 +305,7 @@ sealed class Help : Command
     }
 
     void DumpSyntaxes(
-        Command command,
+        string commandName,
         List<KeyValuePair<string, string>> longDescriptions)
     {
         longDescriptions.Insert(
@@ -298,11 +318,11 @@ sealed class Help : Command
             longDescriptions.Max(x => x.Key.Trim().Length) : 0;
 
         foreach (var kvp in longDescriptions)
-            DumpSyntax(command, kvp, margin);
+            DumpSyntax(commandName, kvp, margin);
     }
 
     void DumpSyntax(
-        Command command,
+        string commandName,
         KeyValuePair<string, string> longDescription,
         int margin)
     {
@@ -313,7 +333,7 @@ sealed class Help : Command
         DumpCommandSyntax(
             ((_globalSettings.IsGlobalOptionSet<DisableGlobalHelp>()
                 ? string.Empty
-                : command.Name + " ")
+                : commandName + " ")
             + args
             + "".PadLeft(margin - args.Length)
             ));

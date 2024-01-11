@@ -102,6 +102,20 @@ sealed class DynamicCommandsSet : AbstractCommandsSetBase
     }
 
     /// <inheritdoc/>
+    public override SortedList<string, string> GetCommandNames()
+    {
+        var names = new SortedList<string, string>();
+        foreach (var name in _commandSpecs.Select(
+            x => x.Key))
+            names.Add(name, name);
+        return names;
+    }
+
+    /// <inheritdoc/>
+    public override string GetNamespace(string name)
+        => GetType().Namespace!;
+
+    /// <inheritdoc/>
     public override List<string> GetTags(string name)
     {
         if (!_commandSpecs.TryGetValue(name, out var comSpec))

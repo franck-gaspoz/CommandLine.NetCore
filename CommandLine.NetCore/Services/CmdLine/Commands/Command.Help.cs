@@ -1,4 +1,7 @@
-﻿using CommandLine.NetCore.Services.Text;
+﻿using AnsiVtConsole.NetCore;
+
+using CommandLine.NetCore.Services.AppHost;
+using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.Configuration;
 
@@ -13,21 +16,42 @@ public abstract partial class Command
     /// short description of the command
     /// </summary>
     /// <param name="text">short description or error text if not found in help settings</param>
-    /// <returns>text of the description</returns>
+    /// <returns>true if found, false if missing</returns>
     public bool GetDescription(out string text)
+        => GetDescription(
+            ClassNameToCommandName(),
+            Config,
+            Texts,
+            Console,
+            out text);
+
+    /// <summary>
+    /// short description of the command with provided name
+    /// </summary>
+    /// <param name="name">command name</param>
+    /// <param name="config">configuration</param>
+    /// <param name="texts">texts</param>
+    /// <param name="console">console</param>
+    /// <param name="text">short description</param>
+    /// <returns>true if found, false if missing</returns>
+    public static bool GetDescription(
+        string name,
+        Configuration config,
+        Texts texts,
+        IAnsiVtConsole console,
+        out string text)
     {
-        var desc = Config.Get(
-            HelpBuilder.ShortDescriptionKey(
-                ClassNameToCommandName()));
+        var desc = config.Get(
+            HelpBuilder.ShortDescriptionKey(name));
 
         if (desc is not null)
         {
             text = desc;
             return true;
         }
-        text = Console.Colors.Error + Texts._(
+        text = console.Colors.Error + texts._(
             "CommandShortHelpNotFound",
-            ClassNameToCommandName());
+           name);
         return false;
     }
 
@@ -37,20 +61,37 @@ public abstract partial class Command
     /// <param name="texts">founded descriptions or empty list</param>
     /// <returns>true if some options exists</returns>
     public bool GetOptionsDescriptions(out List<KeyValuePair<string, string>> texts)
+        => GetOptionsDescriptions(
+            ClassNameToCommandName(),
+            Config,
+            out texts
+            );
+
+    /// <summary>
+    /// get descriptions for the command options
+    /// </summary>
+    /// <param name="name">command name</param>
+    /// <param name="config">configuration</param>
+    /// <param name="lines">founded descriptions or empty list</param>
+    /// <returns>true if some options exists</returns>
+    public static bool GetOptionsDescriptions(
+        string name,
+        Configuration config,
+        out List<KeyValuePair<string, string>> lines)
     {
-        var sectionName = $"Commands:{ClassNameToCommandName()}:Options";
-        var optDescs = Config.GetSection(sectionName);
+        var sectionName = $"Commands:{name}:Options";
+        var optDescs = config.GetSection(sectionName);
 
         if (!optDescs.Exists() || !optDescs.GetChildren().Any())
         {
-            texts = new List<KeyValuePair<string, string>>();
+            lines = new List<KeyValuePair<string, string>>();
             return false;
         }
 
-        texts = new List<KeyValuePair<string, string>>();
+        lines = new List<KeyValuePair<string, string>>();
         foreach (var optDesc in optDescs.GetChildren())
         {
-            texts.Add(
+            lines.Add(
                 new KeyValuePair<string, string>(
                     optDesc.Key,
                     optDesc.Value ?? string.Empty
@@ -63,30 +104,51 @@ public abstract partial class Command
     /// long descriptions of the command
     /// </summary>
     /// <param name="texts">command syntaxes descriptions or error text if not found in help settings</param>
-    /// <returns>text of the descriptions of each command syntax. key is the syntax, value is the description</returns>
+    /// <returns>true if found, false if missing</returns>
     public bool GetLongDescriptions(out List<KeyValuePair<string, string>> texts)
+        => GetLongDescriptions(
+            ClassNameToCommandName(),
+            Config,
+            Texts,
+            Console,
+            out texts
+            );
+
+    /// <summary>
+    /// long descriptions of the command
+    /// </summary>
+    /// <param name="name">command name</param>
+    /// <param name="config">configuration</param>
+    /// <param name="texts">texts</param>
+    /// <param name="console">console</param>
+    /// <param name="lines">long descriptions</param>
+    /// <returns>true if found, false if missing</returns>
+    public static bool GetLongDescriptions(
+        string name,
+        Configuration config,
+        Texts texts,
+        IAnsiVtConsole console,
+        out List<KeyValuePair<string, string>> lines)
     {
-        var descs = Config.GetSection(
-            HelpBuilder.LongDescriptionKey(
-                ClassNameToCommandName()));
+        var descs = config.GetSection(
+            HelpBuilder.LongDescriptionKey(name));
 
         var childrens = descs.GetChildren();
         if (!descs.Exists() || !childrens.Any())
         {
-            texts = new List<KeyValuePair<string, string>> {
+            lines = new List<KeyValuePair<string, string>> {
                 new KeyValuePair<string,string>(
-                    Console.Colors.Error +
-                    Texts._("CommandLongHelpNotFound",
-                        ClassNameToCommandName()),
+                    console.Colors.Error +
+                    texts._("CommandLongHelpNotFound",name),
                     string.Empty)
             };
             return false;
         }
 
-        texts = new List<KeyValuePair<string, string>>();
+        lines = new List<KeyValuePair<string, string>>();
         foreach (var desc in childrens)
         {
-            texts.Add(
+            lines.Add(
                 new KeyValuePair<string, string>(
                     desc.Key, desc.Value ?? string.Empty));
         }

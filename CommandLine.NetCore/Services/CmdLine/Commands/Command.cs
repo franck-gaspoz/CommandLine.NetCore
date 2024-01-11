@@ -41,6 +41,9 @@ public abstract partial class Command
     /// </summary>
     protected readonly GlobalSettings GlobalSettings;
 
+    /// <summary>
+    /// command builder
+    /// </summary>
     readonly CommandBuilder _builder;
 
     /// <summary>
@@ -119,6 +122,14 @@ public abstract partial class Command
     /// <returns>command name</returns>
     public virtual string ClassNameToCommandName()
         => ClassNameToCommandName(GetType().Name);
+
+    /// <summary>
+    /// returns a command name from a command class type
+    /// </summary>
+    /// <param name="t">command type</param>
+    /// <returns>command name</returns>
+    public static string ClassNameToCommandName(Type t)
+        => ClassNameToCommandName(t.Name);
 
     /// <summary>
     /// transforms a class type name to a commande name

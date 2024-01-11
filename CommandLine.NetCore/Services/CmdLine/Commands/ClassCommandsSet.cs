@@ -136,6 +136,23 @@ sealed class ClassCommandsSet : AbstractCommandsSetBase
         => _commands.ContainsKey(name);
 
     /// <inheritdoc/>
+    public override SortedList<string, string> GetCommandNames()
+    {
+        var names = new SortedList<string, string>();
+        foreach (var name in _commands.Keys)
+            names.Add(name, name);
+        return names;
+    }
+
+    /// <inheritdoc/>
+    public override string GetNamespace(string name)
+    {
+        var type = TryGetType(name)
+            ?? throw UnknownCommand(name);
+        return type.Namespace!;
+    }
+
+    /// <inheritdoc/>
     public override List<string> GetTags(string name)
     {
         var type = TryGetType(name)

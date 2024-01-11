@@ -58,6 +58,37 @@ sealed class CommandsSet : AbstractCommandsSetBase
         return coms;
     }
 
+    /// <summary>
+    /// returns list of command names
+    /// </summary>
+    /// <returns>list of command names</returns>
+    public override SortedList<string, string> GetCommandNames()
+    {
+        var names = new SortedList<string, string>();
+        foreach (var name in _classCommandsSet.GetCommandNames())
+            names.Add(name.Key, name.Value);
+        foreach (var name in _dynamicCommandsSet.GetCommandNames())
+            names.Add(name.Key, name.Value);
+        return names;
+    }
+
+    /// <inheritdoc/>
+    public override string GetNamespace(string name)
+    {
+        if (_classCommandsSet.Exists(name))
+            return _classCommandsSet.GetNamespace(name);
+        if (_dynamicCommandsSet.Exists(name))
+            return _dynamicCommandsSet.GetNamespace(name);
+        throw UnknownCommand(name);
+    }
+
+    /// <summary>
+    /// build dynamic commands
+    /// <para>usefull to store specifications</para>
+    /// </summary>
+    public void BuildDynamicCommands()
+        => _dynamicCommandsSet.GetCommands();
+
     /// <inheritdoc/>
     public override bool Exists(string name)
         => _classCommandsSet.Exists(name) || _dynamicCommandsSet.Exists(name);
