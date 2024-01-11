@@ -59,7 +59,7 @@ sealed class Help : Command
     protected override SyntaxMatcherDispatcher Declare() =>
 
         // Opt (isOptional:true) maps to nullable
-        For(Opt("n", true, 1)/*, Opt("p", true, 1)*/)
+        For(Opt("n", true, 1), Opt("p", true, 1))
             .Do(() => DumpHelpForAllCommands)
 
         .For(Param())
@@ -69,7 +69,7 @@ sealed class Help : Command
         // Flag is equivalent to Opt<bool>(name,true,0) with a non nullable target type (as for Flag)
         .Options(Flag("v"), Flag("info"));
 
-    void DumpHelpForAllCommands(string? n, /*string? p,*/ bool verbose, bool info)
+    void DumpHelpForAllCommands(string? n, string? p, bool verbose, bool info)
     {
         OutputAppTitle();
 

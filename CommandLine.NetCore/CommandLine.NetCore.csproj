@@ -28,6 +28,7 @@
 		
 		<PackageReleaseNotes>
 `1.0.12` - 02/10/2024
+- set Opt default value count to 1 (distinguish from Flag) + fix nullable parameter identification in case of classes (string, ..)
 - add command class attribute Tag + dynamic commands specification method Tag
 - improve help display
 - doc update

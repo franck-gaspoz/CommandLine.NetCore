@@ -46,7 +46,7 @@ public abstract partial class Command
     /// <param name="value"></param>
     /// <returns>Param{T}</returns>
     protected Param<T> Param<T>(string? value = null)
-        where T : struct
+            //where T : struct
             => _builder.Param<T>(value);
 
     /// <summary>
