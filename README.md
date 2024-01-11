@@ -670,6 +670,11 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
+`1.0.12` - 02/10/2024
+- add command class attribute Tag + dynamic commands specification method Tag
+- improve help display
+- doc update
+
 `1.0.11` - 10/01/2024 (since 09/12/2023)
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class (dynamic commands)
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem
