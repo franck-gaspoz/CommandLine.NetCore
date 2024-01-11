@@ -24,16 +24,13 @@ abstract class AbstractCommandsSetBase : ICommandsSpecificationSet
     }
 
     /// <inheritdoc/>
-    public abstract List<string> GetTags(string name);
-
-    /// <inheritdoc/>
     public abstract bool Exists(string name);
 
     /// <inheritdoc/>
     public abstract SortedList<string, string> GetCommandNames();
 
     /// <inheritdoc/>
-    public abstract string GetNamespace(string name);
+    public abstract CommandProperties GetProperties(string name);
 
     /// <summary>
     /// build an unknwon command exception

@@ -72,35 +72,50 @@ sealed class CommandsSet : AbstractCommandsSetBase
         return names;
     }
 
-    /// <inheritdoc/>
-    public override string GetNamespace(string name)
-    {
-        if (_classCommandsSet.Exists(name))
-            return _classCommandsSet.GetNamespace(name);
-        if (_dynamicCommandsSet.Exists(name))
-            return _dynamicCommandsSet.GetNamespace(name);
-        throw UnknownCommand(name);
-    }
+    readonly bool _dynamicCommandsBuilded = false;
 
     /// <summary>
     /// build dynamic commands
     /// <para>usefull to store specifications</para>
     /// </summary>
     public void BuildDynamicCommands()
-        => _dynamicCommandsSet.GetCommands();
+    {
+        if (_dynamicCommandsBuilded)
+            return;
+        _dynamicCommandsSet.GetCommands();
+    }
+
+    /// <summary>
+    /// try to build a dynamic command with the provided name
+    /// <para>errors silently</para>
+    /// </summary>
+    /// <param name="name">command name</param>
+    public void BuildDynamicCommand(string name)
+        => _dynamicCommandsSet.TryGetCommand(name);
 
     /// <inheritdoc/>
     public override bool Exists(string name)
         => _classCommandsSet.Exists(name) || _dynamicCommandsSet.Exists(name);
 
-    /// <inheritdoc/>
-    public override List<string> GetTags(string name)
+    /// <summary>
+    /// indicates if a command is a dynamic specification or not
+    /// </summary>
+    /// <param name="name">command name</param>
+    /// <returns>true if the command is a dynamic specificaiton, false otherwise</returns>
+    public bool IsDynamicCommand(string name)
+        => _dynamicCommandsSet.Exists(name);
+
+    ICommandsSpecificationSet CommandSet(string name)
     {
-        if (_classCommandsSet.Exists(name))
-            return _classCommandsSet.GetTags(name);
-        if (_dynamicCommandsSet.Exists(name))
-            return _dynamicCommandsSet.GetTags(name);
+        if (_classCommandsSet.Exists(name)) return _classCommandsSet;
+        if (_dynamicCommandsSet.Exists(name)) return _dynamicCommandsSet;
         throw UnknownCommand(name);
     }
+
+    /// <inheritdoc/>
+    public override CommandProperties GetProperties(string name)
+        => CommandSet(name)
+            .GetProperties(name);
+
 }
 

@@ -145,22 +145,21 @@ sealed class ClassCommandsSet : AbstractCommandsSetBase
     }
 
     /// <inheritdoc/>
-    public override string GetNamespace(string name)
+    public override CommandProperties GetProperties(string name)
     {
         var type = TryGetType(name)
             ?? throw UnknownCommand(name);
-        return type.Namespace!;
-    }
-
-    /// <inheritdoc/>
-    public override List<string> GetTags(string name)
-    {
-        var type = TryGetType(name)
-            ?? throw UnknownCommand(name);
+        var ns = type.Namespace!;
         var tags = new List<string>();
         foreach (var tagAttribute in type.GetCustomAttributes(typeof(TagAttribute), true))
             tags.AddRange(((TagAttribute)tagAttribute).Tags);
-        return tags;
+
+        return new CommandProperties(
+            name,
+            tags.ToArray(),
+            ns,
+            ""
+            );
     }
 }
 

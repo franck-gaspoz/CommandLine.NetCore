@@ -6,19 +6,12 @@
 interface ICommandsSpecificationSet
 {
     /// <summary>
-    /// get tags of the command with the provided name
+    /// get command properties
     /// </summary>
     /// <param name="name">command name</param>
     /// <exception cref="ArgumentException">unknwown command exception</exception>
-    /// <returns>tags list</returns>
-    public List<string> GetTags(string name);
-
-    /// <summary>
-    /// get namespace of the command having the provided name
-    /// </summary>
-    /// <param name="name">command name</param>
-    /// <returns>namespace of the command</returns>
-    public string GetNamespace(string name);
+    /// <returns>command properties</returns>    
+    public CommandProperties GetProperties(string name);
 
     /// <summary>
     /// check if a command with provided name exists or not

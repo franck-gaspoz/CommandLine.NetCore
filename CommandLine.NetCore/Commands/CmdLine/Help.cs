@@ -89,7 +89,8 @@ sealed class Help : Command
     {
         OutputAppTitle();
 
-        DumpCommandDescription(commandName, false, false, false, commandName.Length + 3);
+        var comProps = _commandsSet.GetProperties(commandName);
+        DumpCommandDescription(comProps, false, false, false, commandName.Length + 3);
 
         Console.Out.WriteLine();
 
@@ -103,8 +104,8 @@ sealed class Help : Command
 
         if (verbose)
         {
-            var hasTags = DumpCommandTags(commandName, Br);
-            DumpCommandNamespace(commandName, hasTags ? string.Empty : Br);
+            var hasTags = DumpCommandTags(comProps, Br);
+            DumpCommandNamespace(comProps, hasTags ? string.Empty : Br);
         }
 
         if (Command.GetOptionsDescriptions(
@@ -149,9 +150,9 @@ sealed class Help : Command
         return sb.ToString();
     }
 
-    bool DumpCommandTags(string commandName, string prefix = "")
+    bool DumpCommandTags(CommandProperties comProps, string prefix = "")
     {
-        var tags = _commandsSet.GetTags(commandName);
+        var tags = comProps.Tags;
         if (!tags.Any())
             return false;
         Console.Out.WriteLine(
@@ -161,11 +162,11 @@ sealed class Help : Command
         return true;
     }
 
-    void DumpCommandNamespace(string commandName, string prefix = "")
+    void DumpCommandNamespace(CommandProperties comProps, string prefix = "")
         => Console.Out.WriteLine(
             prefix
             + "(f=darkgray)namespace: "
-            + CommandNamespaceColor + _commandsSet.GetNamespace(commandName) + StOff);
+            + CommandNamespaceColor + comProps.Namespace + StOff);
 
     void DumpCommandOptions(List<KeyValuePair<string, string>> optDescs)
     {
@@ -229,17 +230,27 @@ sealed class Help : Command
         var maxCommandNameLength = commands.Any() ? commands.Max(
             x => x.Value.Length) : 0;
         foreach (var command in commands)
-            DumpCommandDescription(command.Value, true, v, v, maxCommandNameLength + 3);
+        {
+            var comProps = _commandsSet.GetProperties(command.Value);
+            DumpCommandDescription(
+                comProps,
+                true,
+                v,
+                v,
+                maxCommandNameLength + 3);
+        }
     }
 
     void DumpCommandDescription(
-        string commandName,
+        CommandProperties comProps,
         bool withName,
         bool dumpNamespace,
         bool dumpTags,
         int padLeft)
     {
-        _commandsSet.GetCommand(commandName);
+        var commandName = comProps.Name;
+        if (_commandsSet.IsDynamicCommand(commandName))
+            _commandsSet.BuildDynamicCommand(commandName);
 
         Command.GetDescription(
             commandName,
@@ -260,9 +271,9 @@ sealed class Help : Command
             : string.Empty;
 
         if (dumpTags)
-            DumpCommandTags(commandName, sep);
+            DumpCommandTags(comProps, sep);
         if (dumpNamespace)
-            DumpCommandNamespace(commandName, sep);
+            DumpCommandNamespace(comProps, sep);
     }
 
     void OutputAppTitle()

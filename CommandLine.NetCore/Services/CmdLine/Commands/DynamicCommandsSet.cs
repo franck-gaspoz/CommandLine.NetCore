@@ -112,14 +112,20 @@ sealed class DynamicCommandsSet : AbstractCommandsSetBase
     }
 
     /// <inheritdoc/>
-    public override string GetNamespace(string name)
-        => GetType().Namespace!;
-
-    /// <inheritdoc/>
-    public override List<string> GetTags(string name)
+    public override CommandProperties GetProperties(string name)
     {
         if (!_commandSpecs.TryGetValue(name, out var comSpec))
             throw UnknownCommand(name);
-        return comSpec.Tags;
+
+        return new CommandProperties(
+            name,
+            comSpec.Tags.ToArray(),
+            GetDefaultNamespace(),
+            ""
+            );
     }
+
+    /// <inheritdoc/>
+    public string GetDefaultNamespace()
+        => GetType().Namespace!;
 }

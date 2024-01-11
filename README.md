@@ -508,6 +508,7 @@ CommandBuilder Help(string text, string? culture = null)
 ```
 
 * **`Tag`** associates one or several tags to the command specification
+* **`Package`** specify a package the command belongs to
 
 The `SyntaxExecutionDispatchMapItem` has now specific methods for building dynamic commands:
 
@@ -643,6 +644,7 @@ C:\ Available FreeSpace = 98612314112
 
 - **`[IgnoreCommand]`** : if placed above a command class declaration, the command will be ignored by the command classes loader
 - **`[Tag(tag1,..,tagn)]`** : when placed above a command class declaration, this associates one or several tags to the command specification
+- **`[Package(name)]`** : when placed above a command class declaration, specify that the command belongs to a named package. When not specified, command package is `global`
 
 ## 7. Debug and troobleshoot
 
@@ -671,7 +673,7 @@ If this option is set syntaxes of a command can't be ambiguous
 # Versions history
 
 `1.0.12` - 02/10/2024
-- add command class attribute Tag + dynamic commands specification method Tag
+- add command class attributes Tag,Package + dynamic commands specification methods Tag,Package
 - improve help display
 - doc update
 
