@@ -19,9 +19,11 @@ ___
     - [2. Testing the integrated **help** command](#2-testing-the-integrated-help-command)
     - [3. Configuring the library and a console application built with it](#3-configuring-the-library-and-a-console-application-built-with-it)
     - [4. Implementing a command](#4-implementing-a-command)
-        - [Arguments to concrete types mapping of Do(LambdaExpression expression) expression parameters](#arguments-to-concrete-types-mapping-of-dolambdaexpression-expression-expression-parameters)
-        - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#exemple-of-the-command-help-defined-in-commandlinenetcorecommandscmdline)
-        - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#exemple-of-the-command-get-info-defined-in-commandlinenetcoreexamplecommandsgetinfo)
+        - [4.1. Implementing a command with a class](#4-1-implementing-a-command-with-a-class)
+            - [Arguments to concrete types mapping of Do(LambdaExpression expression) expression parameters](#arguments-to-concrete-types-mapping-of-dolambdaexpression-expression-expression-parameters)
+            - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#exemple-of-the-command-help-defined-in-commandlinenetcorecommandscmdline)
+            - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#exemple-of-the-command-get-info-defined-in-commandlinenetcoreexamplecommandsgetinfo)
+        - [4.2. Implementing a classless command with a lambda expression](#4-2-implementing-a-classless-command-with-a-lambda-expression) 
     - [5. Setup an unique command console app (without command argument)](#5-setup-an-unique-command-console-app-without-command-argument)
     - [6. Command classes attributes](#6-command-classes-attributes)
     - [7. Debug and troobleshoot](#7-debug-and-troobleshoot)
@@ -505,6 +507,8 @@ SyntaxExecutionDispatchMapItem For(params Arg[] syntax)
 CommandBuilder Help(string text, string? culture = null)
 ```
 
+* **`Tag`** associates one or several tags to the command specification
+
 The `SyntaxExecutionDispatchMapItem` has now specific methods for building dynamic commands:
 
 * new `Do` methods with generic types that takes an **Action delegate** as the command implementation
@@ -540,7 +544,8 @@ new CommandLineInterfaceBuilder()
     // we add a command dynamically specified
     .AddCommand("add", (builder, ctx) => builder
 
-        .Help("add numbers")
+        .Help("add operator")
+        .Tag(Tags.Math, Tags.Text)
 
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
             .Help("x y z", "returns x+y+z")
@@ -637,6 +642,7 @@ C:\ Available FreeSpace = 98612314112
 ## 6. Command classes attributes
 
 - **`[IgnoreCommand]`** : if placed above a command class declaration, the command will be ignored by the command classes loader
+- **`[Tag(tag1,..,tagn)]`** : when placed above a command class declaration, this associates one or several tags to the command specification
 
 ## 7. Debug and troobleshoot
 

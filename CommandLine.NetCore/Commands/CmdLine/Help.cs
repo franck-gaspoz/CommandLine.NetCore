@@ -87,7 +87,7 @@ sealed class Help : Command
 
         var command = _commandsSet.GetCommand(comandName);
 
-        DumpCommandDescription(command, false, false, false);
+        DumpCommandDescription(command, false, false, false, command.Name.Length + 3);
 
         Console.Out.WriteLine();
 
@@ -161,8 +161,10 @@ sealed class Help : Command
     {
         Console.Out.WriteLine();
         OutputSectionTitle(Texts._("CommandOptions"));
+        var padLeft = optDescs.Any() ?
+            optDescs.Max(x => x.Key.Length) : 0;
         foreach (var optDesc in optDescs)
-            DumpOpt(optDesc, true);
+            DumpOpt(optDesc, true, padLeft);
     }
 
     void CommandEnd(bool info)
@@ -180,47 +182,61 @@ sealed class Help : Command
 
     void DumpGlobalOptList()
     {
+        var padLeft = _globalOptsSet.Opts.Any() ?
+            _globalOptsSet.Opts.Max(x => x.Key.Length) : 0;
         foreach (var kvp in _globalOptsSet.Opts)
         {
             var globalOpt = (IOpt)_serviceProvider.GetRequiredService(kvp.Value);
             var descriptionAvailable = globalOpt.GetDescription(out var argDesc);
             DumpOpt(
                 argDesc,
-                descriptionAvailable
+                descriptionAvailable,
+                padLeft + 2
                 );
         }
     }
 
     void DumpOpt(
         KeyValuePair<string, string> optDesc,
-        bool descriptionAvailable)
+        bool descriptionAvailable,
+        int padLeft)
     {
         var isError = !descriptionAvailable
             ? Console.Colors.Error.ToString() : "";
         Console.Out.WriteLine(
-            ArgNameColor + optDesc.Key + $"{StOff} :{Br}"
+            ArgNameColor
+            + optDesc.Key
+            + StOff
+            + "".PadLeft(padLeft - optDesc.Key.Length + 3)
             + isError + optDesc.Value + StOff);
     }
 
     void DumpCommandList(bool v)
     {
-        foreach (var command in _commandsSet.GetCommands())
-            DumpCommandDescription(command, true, v, v);
+        var commands = _commandsSet.GetCommands();
+        var maxCommandNameLength = commands.Any() ? commands.Max(
+            x => x.Name.Length) : 0;
+        foreach (var command in commands)
+            DumpCommandDescription(command, true, v, v, maxCommandNameLength + 3);
     }
 
     void DumpCommandDescription(
         Command command,
         bool withName,
         bool dumpNamespace,
-        bool dumpTags)
+        bool dumpTags,
+        int padLeft)
     {
         command.GetDescription(out var description);
         if (withName)
-            Console.Out.Write(CommandNameColor + command.Name + $"{StOff} : ");
+        {
+            var margin = "".PadLeft(padLeft - command.Name.Length);
+            Console.Out.Write(CommandNameColor + command.Name + $"{StOff}{margin}");
+        }
         Console.Out.WriteLine(description + StOff);
 
         var sep = (dumpTags | dumpNamespace) ?
-            ("".PadLeft(command.Name.Length + 3))
+            ("".PadLeft(padLeft))
             : string.Empty;
 
         if (dumpTags)
@@ -278,26 +294,32 @@ sealed class Help : Command
                 "-h",
                 Texts._("HelpAboutThisCommand")));
 
+        var margin = longDescriptions.Any() ?
+            longDescriptions.Max(x => x.Key.Trim().Length) : 0;
+
         foreach (var kvp in longDescriptions)
-            DumpSyntax(command, kvp);
+            DumpSyntax(command, kvp, margin);
     }
 
     void DumpSyntax(
         Command command,
-        KeyValuePair<string, string> longDescription)
+        KeyValuePair<string, string> longDescription,
+        int margin)
     {
         var desc = longDescription.Value.Trim();
         var descExists = !string.IsNullOrWhiteSpace(desc);
+        var args = longDescription.Key.Trim();
 
         DumpCommandSyntax(
             ((_globalSettings.IsGlobalOptionSet<DisableGlobalHelp>()
                 ? string.Empty
                 : command.Name + " ")
-            + longDescription.Key.Trim())
-                .Trim());
+            + args
+            + "".PadLeft(margin - args.Length)
+            ));
 
         if (descExists)
-            Console.Out.Write(" : " + desc);
+            Console.Out.Write("   " + desc);
         Console.Out.WriteLine();
     }
 
