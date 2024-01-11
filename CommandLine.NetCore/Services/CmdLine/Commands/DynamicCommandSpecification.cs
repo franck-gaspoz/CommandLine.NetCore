@@ -1,4 +1,6 @@
-﻿namespace CommandLine.NetCore.Services.CmdLine.Commands;
+﻿using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
+
+namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// an execute method of a command
@@ -14,6 +16,11 @@ public sealed class DynamicCommandSpecification
     /// tags
     /// </summary>
     public List<string> Tags { get; private set; } = new();
+
+    /// <summary>
+    /// package
+    /// </summary>
+    public string Package { get; set; } = PackageAttribute.DefaultPackage;
 
     /// <summary>
     /// execute

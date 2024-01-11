@@ -8,60 +8,60 @@ public enum Tags
     /// <summary>
     /// command line
     /// </summary>
-    CmdLine,
+    cmdLine,
 
     /// <summary>
     /// shell
     /// </summary>
-    Shell,
+    shell,
 
     /// <summary>
     /// help
     /// </summary>
-    Help,
+    help,
 
     /// <summary>
     /// text
     /// </summary>
-    Text,
+    text,
 
     /// <summary>
     /// math
     /// </summary>
-    Math,
+    math,
 
     /// <summary>
     /// disk
     /// </summary>
-    Disk,
+    disk,
 
     /// <summary>
     /// file
     /// </summary>
-    File,
+    file,
 
     /// <summary>
     /// process
     /// </summary>
-    Process,
+    process,
 
     /// <summary>
     /// memory
     /// </summary>
-    Memory,
+    memory,
 
     /// <summary>
     /// console
     /// </summary>
-    Console,
+    console,
 
     /// <summary>
     /// system
     /// </summary>
-    System,
+    system,
 
     /// <summary>
     /// date and time
     /// </summary>
-    DateTime
+    dateTime
 }

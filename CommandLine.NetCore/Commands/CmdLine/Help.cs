@@ -20,7 +20,8 @@ namespace CommandLine.NetCore.Commands.CmdLine;
 /// <summary>
 /// command line help
 /// </summary>
-[Tag(Tags.CmdLine, Tags.Shell, Tags.Help)]
+[Package(Packages.cmdLine)]
+[Tag(Tags.cmdLine, Tags.shell, Tags.help)]
 sealed class Help : Command
 {
     readonly CommandsSet _commandsSet;
@@ -90,7 +91,13 @@ sealed class Help : Command
         OutputAppTitle();
 
         var comProps = _commandsSet.GetProperties(commandName);
-        DumpCommandDescription(comProps, false, false, false, commandName.Length + 3);
+        DumpCommandDescription(
+            comProps,
+            false,
+            false,
+            false,
+            false,
+            commandName.Length + 3);
 
         Console.Out.WriteLine();
 
@@ -104,8 +111,9 @@ sealed class Help : Command
 
         if (verbose)
         {
-            var hasTags = DumpCommandTags(comProps, Br);
-            DumpCommandNamespace(comProps, hasTags ? string.Empty : Br);
+            DumpCommandPackage(comProps, Br);
+            var hasTags = DumpCommandTags(comProps, string.Empty);
+            DumpCommandNamespace(comProps, string.Empty);
         }
 
         if (Command.GetOptionsDescriptions(
@@ -148,6 +156,16 @@ sealed class Help : Command
 
         sb.Append(bottomBar);
         return sb.ToString();
+    }
+
+    bool DumpCommandPackage(CommandProperties comProps, string prefix = "")
+    {
+        var tags = comProps.Package;
+        Console.Out.WriteLine(
+            prefix
+            + "(f=darkgray)package: "
+            + CommandTagsColor + string.Join(',', tags) + StOff);
+        return true;
     }
 
     bool DumpCommandTags(CommandProperties comProps, string prefix = "")
@@ -237,6 +255,7 @@ sealed class Help : Command
                 true,
                 v,
                 v,
+                v,
                 maxCommandNameLength + 3);
         }
     }
@@ -246,6 +265,7 @@ sealed class Help : Command
         bool withName,
         bool dumpNamespace,
         bool dumpTags,
+        bool dumpPackage,
         int padLeft)
     {
         var commandName = comProps.Name;
@@ -270,6 +290,8 @@ sealed class Help : Command
             ("".PadLeft(padLeft))
             : string.Empty;
 
+        if (dumpPackage)
+            DumpCommandPackage(comProps, sep);
         if (dumpTags)
             DumpCommandTags(comProps, sep);
         if (dumpNamespace)

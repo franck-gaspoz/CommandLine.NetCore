@@ -150,15 +150,20 @@ sealed class ClassCommandsSet : AbstractCommandsSetBase
         var type = TryGetType(name)
             ?? throw UnknownCommand(name);
         var ns = type.Namespace!;
+
         var tags = new List<string>();
         foreach (var tagAttribute in type.GetCustomAttributes(typeof(TagAttribute), true))
             tags.AddRange(((TagAttribute)tagAttribute).Tags);
+
+        var pkg = ((PackageAttribute?)type.GetCustomAttributes(typeof(PackageAttribute), true)
+            .FirstOrDefault())?.Package
+                ?? PackageAttribute.DefaultPackage;
 
         return new CommandProperties(
             name,
             tags.ToArray(),
             ns,
-            ""
+            pkg
             );
     }
 }

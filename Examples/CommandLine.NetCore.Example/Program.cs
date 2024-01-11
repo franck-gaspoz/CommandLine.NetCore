@@ -29,7 +29,8 @@ new CommandLineInterfaceBuilder()
     .AddCommand("add", (builder, ctx) => builder
 
         .Help("add operator")
-        .Tag(Tags.Math, Tags.Text)
+        .Package(Packages.miscelaneous)
+        .Tag(Tags.math, Tags.text)
 
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
             .Help("x y z", "output x+y+z")
@@ -54,7 +55,7 @@ new CommandLineInterfaceBuilder()
 
     .AddCommand("datetime", (builder, ctx) => builder
         .Help("get datetime")
-        .Tag(Tags.System, Tags.DateTime)
+        .Tag(Tags.system, Tags.dateTime)
         .For()
             .Do((CommandContext com) =>
                 com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff) (b=magenta)" + DateTime.Now.ToString())))

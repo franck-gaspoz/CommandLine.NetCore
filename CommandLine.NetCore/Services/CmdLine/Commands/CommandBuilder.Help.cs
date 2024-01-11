@@ -1,4 +1,5 @@
-﻿using CommandLine.NetCore.Services.CmdLine.Running;
+﻿using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
+using CommandLine.NetCore.Services.CmdLine.Running;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
@@ -32,6 +33,32 @@ public sealed partial class CommandBuilder
     {
         DynamicCommandSpecification?.Tags
             .AddRange(tags);
+        return this;
+    }
+
+    /// <summary>
+    /// setup the package the command belongs to
+    /// <para>does nothing if DynamicCommandSpecification is null</para>
+    /// </summary>
+    /// <param name="package">package</param>
+    /// <returns>this object</returns>
+    public CommandBuilder Package(string package)
+    {
+        if (DynamicCommandSpecification is not null)
+            DynamicCommandSpecification!.Package = package;
+        return this;
+    }
+
+    /// <summary>
+    /// setup the package the command belongs to
+    /// <para>does nothing if DynamicCommandSpecification is null</para>
+    /// </summary>
+    /// <param name="package">package</param>
+    /// <returns>this object</returns>
+    public CommandBuilder Package(Packages package)
+    {
+        if (DynamicCommandSpecification is not null)
+            DynamicCommandSpecification!.Package = package.ToString();
         return this;
     }
 

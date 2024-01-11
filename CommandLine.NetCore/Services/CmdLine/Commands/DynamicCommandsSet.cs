@@ -121,7 +121,7 @@ sealed class DynamicCommandsSet : AbstractCommandsSetBase
             name,
             comSpec.Tags.ToArray(),
             GetDefaultNamespace(),
-            ""
+            comSpec.Package
             );
     }
 
