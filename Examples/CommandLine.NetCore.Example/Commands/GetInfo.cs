@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
 using CommandLine.NetCore.Services.CmdLine.Running;
 using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Example.Commands;
 
+/// <summary>
+/// get-info command
+/// </summary>
+[Tag(Tags.Shell, Tags.Console)]
 sealed class GetInfo : Command
 {
     /*

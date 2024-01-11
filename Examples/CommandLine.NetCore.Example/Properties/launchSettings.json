@@ -76,9 +76,9 @@
       "commandName": "Project",
       "commandLineArgs": "datetime --parser-logging Trace"
     },
-    "help add": {
+    "help add -v": {
       "commandName": "Project",
-      "commandLineArgs": "help add"
+      "commandLineArgs": "help add -v"
     }
   }
 }

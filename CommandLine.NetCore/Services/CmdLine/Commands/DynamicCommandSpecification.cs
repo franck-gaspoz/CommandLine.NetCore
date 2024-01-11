@@ -11,6 +11,11 @@ public sealed class DynamicCommandSpecification
     public string CommandName { get; private set; }
 
     /// <summary>
+    /// tags
+    /// </summary>
+    public List<string> Tags { get; private set; } = new();
+
+    /// <summary>
     /// execute
     /// </summary>
     public DynamicCommandSpecificationDelegate SpecificationDelegate { get; private set; }

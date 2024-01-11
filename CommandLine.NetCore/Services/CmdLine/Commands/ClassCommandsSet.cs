@@ -12,20 +12,22 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// set of class commands operations &amp; store
 /// </summary>
-sealed class ClassCommandsSet
+sealed class ClassCommandsSet : AbstractCommandsSetBase
 {
-    readonly Texts _texts;
-    readonly IServiceProvider _serviceProvider;
-
+    /// <summary>
+    /// creates a new class commands set
+    /// </summary>
+    /// <param name="texts">texts</param>
+    /// <param name="serviceProvider">service provider</param>
+    /// <param name="assemblySet">assambly set</param>
+    /// <param name="appHostConfiguration">app host configuration</param>
     public ClassCommandsSet(
         Texts texts,
         IServiceProvider serviceProvider,
         AssemblySet assemblySet,
         AppHostConfiguration appHostConfiguration)
+        : base(texts, serviceProvider)
     {
-        _texts = texts;
-        _serviceProvider = serviceProvider;
-
         foreach (var classType in GetCommandTypes(assemblySet, appHostConfiguration))
         {
             Add(
@@ -91,7 +93,7 @@ sealed class ClassCommandsSet
     /// <returns>type of the command class</returns>
     Type GetType(string name)
         => !_commands.TryGetValue(name, out var commandType)
-            ? throw new ArgumentException(_texts._("UnknownCommand", name))
+            ? throw new ArgumentException(Texts._("UnknownCommand", name))
             : commandType;
 
     /// <summary>
@@ -111,7 +113,7 @@ sealed class ClassCommandsSet
     /// <returns>commande</returns>
     /// <exception cref="ArgumentException">unknown command</exception>
     public Command GetCommand(string name)
-        => (Command)_serviceProvider
+        => (Command)ServiceProvider
             .GetRequiredService(
                 GetType(name));
 
@@ -125,8 +127,23 @@ sealed class ClassCommandsSet
     {
         var type = TryGetType(name);
         if (type is null) return null;
-        return (Command?)_serviceProvider
+        return (Command?)ServiceProvider
             .GetService(type);
+    }
+
+    /// <inheritdoc/>
+    public override bool Exists(string name)
+        => _commands.ContainsKey(name);
+
+    /// <inheritdoc/>
+    public override List<string> GetTags(string name)
+    {
+        var type = TryGetType(name)
+            ?? throw UnknownCommand(name);
+        var tags = new List<string>();
+        foreach (var tagAttribute in type.GetCustomAttributes(typeof(TagAttribute), true))
+            tags.AddRange(((TagAttribute)tagAttribute).Tags);
+        return tags;
     }
 }
 

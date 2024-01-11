@@ -5,10 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<Version>1.0.11.0</Version>
-		<AssemblyVersion>1.0.11.0</AssemblyVersion>
-		<InformationalVersion>1.0.11.0</InformationalVersion>
-		<FileVersion>1.0.11.0</FileVersion>
+		<Version>1.0.12.0</Version>
+		<AssemblyVersion>1.0.12.0</AssemblyVersion>
+		<InformationalVersion>1.0.12.0</InformationalVersion>
+		<FileVersion>1.0.12.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -20,13 +20,15 @@
 		<Company>Franck Gaspoz</Company>
 		<Product>CommandLine.NetCore</Product>
 		<Description>Provides support to handle command line arguments (parse, validate, command pattern) for .Net Core console applications with ANSI VT support (cursor,colors,screen size) for multi-plateform (windows, linux, osx, arm) console applications using C# and .NET Core 6 or higher</Description>
-		<Copyright>(c) Franck Gaspoz 2023 Licence MIT</Copyright>
+		<Copyright>(c) Franck Gaspoz 2024 Licence MIT</Copyright>
 		
 		<DebugType>embedded</DebugType>
 		<EmbedAllSources>True</EmbedAllSources>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
+`1.0.12` - 02/10/2024
+- add command class attributes + dynamic commands specification methods
 `1.0.11` - 01/10/2024 (since 12/09/2023)
 - add possiblity to declare and implement a command using uniquely a fluent syntax and no class (dynamic commands)
 - add support for actions with typed parameters in SyntaxExecutionDispatchMapItem

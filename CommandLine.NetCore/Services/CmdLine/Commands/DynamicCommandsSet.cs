@@ -1,22 +1,28 @@
 ﻿using CommandLine.NetCore.Services.AppHost;
+using CommandLine.NetCore.Services.Text;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// set of dynamic commands operations &amp; store
 /// </summary>
-sealed class DynamicCommandsSet
+sealed class DynamicCommandsSet : AbstractCommandsSetBase
 {
     readonly Dependencies _dependencies;
 
     /// <summary>
     /// creates a new dynamic commands set
     /// </summary>
+    /// <param name="texts">texts</param>
+    /// <param name="serviceProvider">service provider</param>
     /// <param name="dependencies">command dependencies</param>
-    /// <param name="appHostConfiguration"></param>
+    /// <param name="appHostConfiguration">app host configuration</param>
     public DynamicCommandsSet(
+        Texts texts,
+        IServiceProvider serviceProvider,
         Dependencies dependencies,
         AppHostConfiguration appHostConfiguration)
+        : base(texts, serviceProvider)
     {
         _dependencies = dependencies;
 
@@ -75,6 +81,10 @@ sealed class DynamicCommandsSet
         return command;
     }
 
+    /// <inheritdoc/>
+    public override bool Exists(string name)
+        => _commandSpecs.ContainsKey(name);
+
     /// <summary>
     /// get list of commands instances
     /// </summary>
@@ -91,18 +101,11 @@ sealed class DynamicCommandsSet
         return commands;
     }
 
-#if no
-    /// <summary>
-    /// configure help
-    /// </summary>
-    /// <param name="configuration"></param>
-    public void ConfigureHelp(Configuration configuration)
+    /// <inheritdoc/>
+    public override List<string> GetTags(string name)
     {
-        foreach (var comSpec in _commandSpecs.Values)
-            comSpec.HelpBuilder?.Configure(
-                comSpec.CommandName,
-                configuration);
+        if (!_commandSpecs.TryGetValue(name, out var comSpec))
+            throw UnknownCommand(name);
+        return comSpec.Tags;
     }
-#endif
 }
-

@@ -7,6 +7,9 @@ using cons = AnsiVtConsole.NetCore;
 
 namespace CommandLine.NetCore.Services;
 
+/// <summary>
+/// console factory
+/// </summary>
 sealed class ConsoleFactory
 {
     readonly IServiceProvider _serviceProvider;

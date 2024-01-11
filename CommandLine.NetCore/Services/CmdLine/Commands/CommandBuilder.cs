@@ -16,6 +16,11 @@ public sealed partial class CommandBuilder
 {
     #region properties
 
+    /// <summary>
+    /// dynamic command specification only if the builder is related to a dynamic command
+    /// </summary>
+    public DynamicCommandSpecification? DynamicCommandSpecification { get; }
+
     readonly Configuration _configuration;
 
     /// <summary>
@@ -62,6 +67,30 @@ public sealed partial class CommandBuilder
         string commandName,
         Func<string[], CommandLineResult>? runMethod = null)
     {
+        _configuration = dependencies.GlobalSettings.Configuration;
+        _commandName = commandName;
+        _runMethod = runMethod;
+        _argBuilder = dependencies.ArgBuilder;
+        _globalSettings = dependencies.GlobalSettings;
+        _texts = dependencies.Texts;
+        _console = dependencies.Console;
+        _parser = dependencies.Parser;
+    }
+
+    /// <summary>
+    /// creates a new command builder
+    /// </summary>
+    /// <param name="dependencies">command dependencies</param>
+    /// <param name="commandName">command name</param>
+    /// <param name="specification">specification</param>
+    /// <param name="runMethod">a run method for the builded command</param>
+    public CommandBuilder(
+        Dependencies dependencies,
+        string commandName,
+        DynamicCommandSpecification specification,
+        Func<string[], CommandLineResult>? runMethod = null)
+    {
+        DynamicCommandSpecification = specification;
         _configuration = dependencies.GlobalSettings.Configuration;
         _commandName = commandName;
         _runMethod = runMethod;

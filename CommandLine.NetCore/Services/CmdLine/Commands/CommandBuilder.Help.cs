@@ -23,6 +23,32 @@ public sealed partial class CommandBuilder
         return this;
     }
 
+    /// <summary>
+    /// associate the command to one or several tags
+    /// </summary>
+    /// <param name="tags">tags</param>
+    /// <returns>this object</returns>
+    public CommandBuilder Tag(params string[] tags)
+    {
+        DynamicCommandSpecification?.Tags
+            .AddRange(tags);
+        return this;
+    }
+
+    /// <summary>
+    /// associate a dynamic command to one or several tags
+    /// </summary>
+    /// <param name="tags">tags</param>
+    /// <returns>this object</returns>
+    public CommandBuilder Tag(params object[] tags)
+    {
+        DynamicCommandSpecification?.Tags
+            .AddRange(
+                tags.Select(
+                    x => x.ToString()!));
+        return this;
+    }
+
     void AddHelpAboutCommandSyntax(SyntaxMatcherDispatcher syntaxMatcherDispatcher)
         => syntaxMatcherDispatcher
             .For(

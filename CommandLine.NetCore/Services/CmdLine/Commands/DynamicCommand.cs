@@ -30,7 +30,7 @@ sealed class DynamicCommand : Command
         _name = specification.CommandName;
         Specification = specification;
         _context = new(dependencies);
-        _builder = new(dependencies, _name, RunCommand);
+        _builder = new(dependencies, _name, Specification, RunCommand);
 
         SyntaxMatcherDispatcher = Specification.SpecificationDelegate(
             _builder, _context);

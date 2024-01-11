@@ -7,6 +7,7 @@ using CommandLine.NetCore.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
 using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
 using CommandLine.NetCore.Services.CmdLine.Running;
 using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
@@ -18,6 +19,7 @@ namespace CommandLine.NetCore.Commands.CmdLine;
 /// <summary>
 /// command line help
 /// </summary>
+[Tag(Tags.CmdLine, Tags.Shell, Tags.Help)]
 sealed class Help : Command
 {
     readonly CommandsSet _commandsSet;
@@ -28,6 +30,7 @@ sealed class Help : Command
     const string SepColor = "(uon,f=cyan,bon)";
     const string SectionTitleColor = "(uon,f=yellow,bon)";
     const string CommandNameColor = "(bon,f=green)";
+    const string CommandTagsColor = "(f=blue)";
     const string CommandNamespaceColor = "(f=blue)";
     const string ArgNameColor = "(f=darkyellow)";
     const string InformationalDataMessage = "(f=darkgreen)";
@@ -84,7 +87,7 @@ sealed class Help : Command
 
         var command = _commandsSet.GetCommand(comandName);
 
-        DumpCommandDescription(command, false, false);
+        DumpCommandDescription(command, false, false, false);
 
         Console.Out.WriteLine();
 
@@ -92,7 +95,10 @@ sealed class Help : Command
             DumpSyntaxes(command, longDescs);
 
         if (verbose)
-            DumpCommandNamespace(command, Br);
+        {
+            var hasTags = DumpCommandTags(command, Br);
+            DumpCommandNamespace(command, hasTags ? string.Empty : Br);
+        }
 
         if (command.GetOptionsDescriptions(out var optDescs))
             DumpCommandOptions(optDescs);
@@ -131,6 +137,18 @@ sealed class Help : Command
 
         sb.Append(bottomBar);
         return sb.ToString();
+    }
+
+    bool DumpCommandTags(Command command, string prefix = "")
+    {
+        var tags = _commandsSet.GetTags(command.Name);
+        if (!tags.Any())
+            return false;
+        Console.Out.WriteLine(
+            prefix
+            + "(f=darkgray)tags: "
+            + CommandTagsColor + string.Join(',', tags) + StOff);
+        return true;
     }
 
     void DumpCommandNamespace(Command command, string prefix = "")
@@ -187,17 +205,28 @@ sealed class Help : Command
     void DumpCommandList(bool v)
     {
         foreach (var command in _commandsSet.GetCommands())
-            DumpCommandDescription(command, true, v);
+            DumpCommandDescription(command, true, v, v);
     }
 
-    void DumpCommandDescription(Command command, bool withName, bool dumpNamespace)
+    void DumpCommandDescription(
+        Command command,
+        bool withName,
+        bool dumpNamespace,
+        bool dumpTags)
     {
         command.GetDescription(out var description);
         if (withName)
             Console.Out.Write(CommandNameColor + command.Name + $"{StOff} : ");
         Console.Out.WriteLine(description + StOff);
+
+        var sep = (dumpTags | dumpNamespace) ?
+            ("".PadLeft(command.Name.Length + 3))
+            : string.Empty;
+
+        if (dumpTags)
+            DumpCommandTags(command, sep);
         if (dumpNamespace)
-            DumpCommandNamespace(command, "".PadLeft(command.Name.Length + 3));
+            DumpCommandNamespace(command, sep);
     }
 
     void OutputAppTitle()

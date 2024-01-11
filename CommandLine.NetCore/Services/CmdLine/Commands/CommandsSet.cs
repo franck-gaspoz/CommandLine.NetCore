@@ -7,12 +7,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// <summary>
 /// set of class &amp; dynamic commands operations &amp; store
 /// </summary>
-sealed class CommandsSet
+sealed class CommandsSet : AbstractCommandsSetBase
 {
-    readonly Texts _texts;
     readonly ClassCommandsSet _classCommandsSet;
     readonly DynamicCommandsSet _dynamicCommandsSet;
-    readonly IServiceProvider _serviceProvider;
 
     /// <summary>
     /// Creates a new commands set
@@ -26,16 +24,14 @@ sealed class CommandsSet
         ClassCommandsSet classCommandsSet,
         DynamicCommandsSet dynamicCommandsSet,
         IServiceProvider serviceProvider
-        )
+        ) : base(texts, serviceProvider)
     {
-        _texts = texts;
         _classCommandsSet = classCommandsSet;
         _dynamicCommandsSet = dynamicCommandsSet;
-        _serviceProvider = serviceProvider;
     }
 
     /// <summary>
-    /// retourne une instance de commande à partir du nom de la commande
+    /// return a commanfd instance within the command name
     /// </summary>
     /// <param name="name">nom de la commande</param>
     /// <returns>commande</returns>
@@ -46,7 +42,7 @@ sealed class CommandsSet
         if (comPerType is not null) return comPerType;
         var comPerName = _dynamicCommandsSet.TryGetCommand(name);
         if (comPerName is not null) return comPerName;
-        throw new ArgumentException(_texts._("UnknownCommand", name));
+        throw UnknownCommand(name);
     }
 
     /// <summary>
@@ -57,12 +53,23 @@ sealed class CommandsSet
     {
         var coms = new List<Command>();
         foreach (var commandType in _classCommandsSet.Commands.Values)
-            coms.Add((Command)_serviceProvider.GetRequiredService(commandType));
+            coms.Add((Command)ServiceProvider.GetRequiredService(commandType));
         coms.AddRange(_dynamicCommandsSet.GetCommands());
         return coms;
     }
 
+    /// <inheritdoc/>
+    public override bool Exists(string name)
+        => _classCommandsSet.Exists(name) || _dynamicCommandsSet.Exists(name);
 
-
+    /// <inheritdoc/>
+    public override List<string> GetTags(string name)
+    {
+        if (_classCommandsSet.Exists(name))
+            return _classCommandsSet.GetTags(name);
+        if (_dynamicCommandsSet.Exists(name))
+            return _dynamicCommandsSet.GetTags(name);
+        throw UnknownCommand(name);
+    }
 }
 

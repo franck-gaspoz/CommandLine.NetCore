@@ -5,6 +5,7 @@
 #endif
 
 using CommandLine.NetCore.Services.CmdLine;
+using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
 using CommandLine.NetCore.Services.CmdLine.Running;
 
 new CommandLineInterfaceBuilder()
@@ -28,6 +29,7 @@ new CommandLineInterfaceBuilder()
     .AddCommand("add", (builder, ctx) => builder
 
         .Help("add operator")
+        .Tag(Tags.Math, Tags.Text)
 
         .For(builder.Param<int>(), builder.Param<int>(), builder.Param<int>())
             .Help("x y z", "output x+y+z")
@@ -52,9 +54,10 @@ new CommandLineInterfaceBuilder()
 
     .AddCommand("datetime", (builder, ctx) => builder
         .Help("get datetime")
+        .Tag(Tags.System, Tags.DateTime)
         .For()
             .Do((CommandContext com) =>
-                com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff,b=black) (b=magenta)" + DateTime.Now.ToString())))
+                com.Console.Out.WriteLine("(f=yellow,uon)current date/time:(tdoff) (b=magenta)" + DateTime.Now.ToString())))
 
     .Build(args)
     .Run();

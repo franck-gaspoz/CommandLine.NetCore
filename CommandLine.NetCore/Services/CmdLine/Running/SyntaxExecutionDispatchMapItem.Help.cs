@@ -20,8 +20,8 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         string? culture = null)
     {
         var conf = SyntaxMatcherDispatcher
-                .GlobalSettings
-                .Configuration;
+            .GlobalSettings
+            .Configuration;
         HelpBuilder.AddSyntaxDescription(
             conf,
             _commandName,
