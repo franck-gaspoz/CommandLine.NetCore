@@ -10,6 +10,8 @@ namespace CommandLine.NetCore.Example.Commands;
 /// <summary>
 /// get-info command
 /// </summary>
+[Package(Packages.example)]
+[Tag(Tags.dev, Tags.test)]
 [Tag(Tags.shell, Tags.console)]
 sealed class GetInfo : Command
 {

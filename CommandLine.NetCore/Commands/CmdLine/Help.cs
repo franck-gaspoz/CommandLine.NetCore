@@ -58,15 +58,18 @@ sealed class Help : Command
     /// <inheritdoc/>
     protected override SyntaxMatcherDispatcher Declare() =>
 
-        For()
+        // Opt (isOptional:true) maps to nullable
+        For(Opt("n", true, 1)/*, Opt("p", true, 1)*/)
             .Do(() => DumpHelpForAllCommands)
 
         .For(Param())
             .Do(() => DumpCommandHelp)
 
-        .Options(Opt("v"), Opt("info"));
+        // Flag map to bool and not bool? (for conveniency)
+        // Flag is equivalent to Opt<bool>(name,true,0) with a non nullable target type (as for Flag)
+        .Options(Flag("v"), Flag("info"));
 
-    void DumpHelpForAllCommands(bool verbose, bool info)
+    void DumpHelpForAllCommands(string? n, /*string? p,*/ bool verbose, bool info)
     {
         OutputAppTitle();
 

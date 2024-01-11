@@ -35,9 +35,10 @@ public sealed partial class CommandBuilder
     /// <typeparam name="T">type of options values</typeparam>
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
+    /// <param name="valueCount">value count</param>
     /// <returns>Opt{T}</returns>
-    public Opt<T> Opt<T>(string name, bool isOptional = false)
-        => _argBuilder.Opt<T>(name, isOptional);
+    public Opt<T> Opt<T>(string name, bool isOptional = false, int valueCount = 0)
+        => _argBuilder.Opt<T>(name, isOptional, valueCount);
 
     /// <summary>
     /// build a new parameter

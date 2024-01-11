@@ -1,4 +1,5 @@
 ﻿using CommandLine.NetCore.Services.CmdLine.Commands;
+using CommandLine.NetCore.Services.CmdLine.Commands.Attributes;
 using CommandLine.NetCore.Services.CmdLine.Running;
 
 namespace CommandLine.NetCore.Example.Commands;
@@ -7,6 +8,8 @@ namespace CommandLine.NetCore.Example.Commands;
 /// test command for development,test and example purpose
 /// <para><code>test-command com --0ValueOpt --opts myOpt strValue --strList str1,str2 --option opt1 opt2 --debug --parser-logging Trace</code></para>
 /// </summary>
+[Package(Packages.example)]
+[Tag(Tags.dev, Tags.test)]
 class TestCommand : Command
 {
     /// <inheritdoc/>

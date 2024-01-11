@@ -39,7 +39,7 @@ public sealed class ArgBuilder
     public Opt Opt(
         string name,
         bool isOptional,
-        int valueCount = 0
+        int valueCount = 1
         )
         => new(name, _config, _texts, _valueConverter, isOptional, valueCount);
 
@@ -60,9 +60,10 @@ public sealed class ArgBuilder
     /// <typeparam name="T">type of options values</typeparam>
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
+    /// <param name="valueCount">value count</param>
     /// <returns>Opt{T}</returns>
-    public Opt<T> Opt<T>(string name, bool isOptional)
-        => new(name, _config, _texts, _valueConverter, isOptional, 1);
+    public Opt<T> Opt<T>(string name, bool isOptional, int valueCount = 1)
+        => new(name, _config, _texts, _valueConverter, isOptional, valueCount);
 
     /// <summary>
     /// build a new parameter

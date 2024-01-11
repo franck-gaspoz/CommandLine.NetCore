@@ -63,5 +63,15 @@ public enum Tags
     /// <summary>
     /// date and time
     /// </summary>
-    dateTime
+    dateTime,
+
+    /// <summary>
+    /// development
+    /// </summary>
+    dev,
+
+    /// <summary>
+    /// test
+    /// </summary>
+    test
 }

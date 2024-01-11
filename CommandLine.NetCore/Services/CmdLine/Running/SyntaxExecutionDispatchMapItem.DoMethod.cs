@@ -117,6 +117,7 @@ public sealed partial class SyntaxExecutionDispatchMapItem
                         && opt2.ExpectedValuesCount == 0
                         && isOptional)
                     {
+                        // an optional opt with no expected value acts as a flag wathever its type definition
                         isOptional = false;
                         isTargetNullableRequired = false;
                         argValueType = typeof(bool);
@@ -174,7 +175,11 @@ public sealed partial class SyntaxExecutionDispatchMapItem
 
                         #endregion
 
-                        if (parameter.ParameterType == argValueType
+                        if (((!isOptional || !isTargetNullableRequired) && parameter.ParameterType == argValueType)
+                            || (isOptional && isTargetNullableRequired
+                                 && (isTargetNullable
+                                    || (parameter.ParameterType.GenericTypeArguments.Any()
+                                        && parameter.ParameterType.GenericTypeArguments[0] == argValueType)))
                             || (mapToArray = IsArgumentIsArrayAndParameterIsList(parameter, arg)))
                         {
                             // argument type == value type (direct type mapping: string,bool,...)

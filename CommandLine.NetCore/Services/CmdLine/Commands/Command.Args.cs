@@ -13,9 +13,9 @@ public abstract partial class Command
     /// </summary>
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
-    /// <param name="valueCount">value count</param>
+    /// <param name="valueCount">value count (default 1)</param>
     /// <returns>Opt</returns>
-    protected Opt Opt(string name, bool isOptional = false, int valueCount = 0)
+    protected Opt Opt(string name, bool isOptional = false, int valueCount = 1)
         => _builder.Opt(name, isOptional, valueCount);
 
     /// <summary>
@@ -33,10 +33,11 @@ public abstract partial class Command
     /// <typeparam name="T">type of options values</typeparam>
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
+    /// <param name="valueCount">value count (default 1)</param>
     /// <returns>Opt{T}</returns>
-    protected Opt<T> Opt<T>(string name, bool isOptional = false)
-        where T : class
-            => _builder.Opt<T>(name, isOptional);
+    protected Opt<T> Opt<T>(string name, bool isOptional = false, int valueCount = 1)
+            //where T : struct
+            => _builder.Opt<T>(name, isOptional, valueCount);
 
     /// <summary>
     /// build a new parameter

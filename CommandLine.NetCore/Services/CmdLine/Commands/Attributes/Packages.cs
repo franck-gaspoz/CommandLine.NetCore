@@ -13,5 +13,10 @@ public enum Packages
     /// <summary>
     /// miscelaneous
     /// </summary>
-    miscelaneous
+    miscelaneous,
+
+    /// <summary>
+    /// example
+    /// </summary>
+    example
 }

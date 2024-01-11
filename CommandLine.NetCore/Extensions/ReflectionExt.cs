@@ -8,6 +8,7 @@ namespace CommandLine.NetCore.Extensions;
 static class ReflectionExt
 {
     const string NullableAttributePartialName = "NullableAttribute";
+    const string NullableContextAttributePartialName = "NullableContextAttribute";
 
     /// <summary>
     /// indicates if the parameter seems to be declared nullable based on type name and parameter attributes
@@ -20,7 +21,12 @@ static class ReflectionExt
                 || parameter.CustomAttributes.
                     Any(x => x.AttributeType
                         .Name
-                        .Contains(NullableAttributePartialName));
+                        .Contains(NullableAttributePartialName))
+                || (!parameter.ParameterType.IsValueType && parameter.Member
+                    .CustomAttributes
+                        .Any(x => x.AttributeType
+                                .Name
+                                .Contains(NullableContextAttributePartialName)));
 
     /// <summary>
     /// returns a description of the parameter
