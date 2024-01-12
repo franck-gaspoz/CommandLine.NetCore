@@ -48,10 +48,6 @@
       "commandName": "Project",
       "commandLineArgs": "help -h -v --info --no-color --parser-logging Trace"
     },
-    "help": {
-      "commandName": "Project",
-      "commandLineArgs": "help"
-    },
     "empty": {
       "commandName": "Project",
       "commandLineArgs": "--parser-logging Trace"
@@ -64,10 +60,6 @@
       "commandName": "Project",
       "commandLineArgs": "-h --parser-logging Trace"
     },
-    "add 1 2": {
-      "commandName": "Project",
-      "commandLineArgs": "add 1 2 --parser-logging Trace"
-    },
     "datetime": {
       "commandName": "Project",
       "commandLineArgs": "datetime --parser-logging Trace"
@@ -75,6 +67,14 @@
     "help add -v": {
       "commandName": "Project",
       "commandLineArgs": "help add -v"
+    },
+    "help -p *glo* -v": {
+      "commandName": "Project",
+      "commandLineArgs": "help -p *glo* -v"
+    },
+    "add a b": {
+      "commandName": "Project",
+      "commandLineArgs": "add a b"
     }
   }
 }

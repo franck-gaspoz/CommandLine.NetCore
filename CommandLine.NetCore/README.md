@@ -673,7 +673,8 @@ If this option is set syntaxes of a command can't be ambiguous
 # Versions history
 
 `1.0.12` - 02/10/2024
-- set Opt default value count to 1 (distinguish from Flag) + fix nullable parameter identification in case of classes (string, ..)
+- set Opt default value count to 1 (distinguish from Flag)
+- fix nullable parameter identification in case of classes (string, ..)
 - add command class attributes Tag,Package + dynamic commands specification methods Tag,Package
 - improve help display
 - doc update

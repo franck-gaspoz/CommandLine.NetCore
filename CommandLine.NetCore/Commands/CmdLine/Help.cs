@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO.Enumeration;
+using System.Reflection;
 using System.Text;
 
 using AnsiVtConsole.NetCore.Component.Console;
@@ -40,6 +41,7 @@ sealed class Help : Command
     const string ArgValueColor = "(bon,f=cyan)";
     const string StOff = "(tdoff)";
     const string Br = "(br)";
+    const string MatchAny = "*";
 
     /// <inheritdoc/>
     public Help(
@@ -59,7 +61,7 @@ sealed class Help : Command
     protected override SyntaxMatcherDispatcher Declare() =>
 
         // Opt (isOptional:true) maps to nullable
-        For(Opt("n", true, 1), Opt("p", true, 1))
+        For(Opt("n", true, 1), Opt("p", true, 1), Opt("t", true, 1))
             .Do(() => DumpHelpForAllCommands)
 
         .For(Param())
@@ -69,7 +71,12 @@ sealed class Help : Command
         // Flag is equivalent to Opt<bool>(name,true,0) with a non nullable target type (as for Flag)
         .Options(Flag("v"), Flag("info"));
 
-    void DumpHelpForAllCommands(string? n, string? p, bool verbose, bool info)
+    void DumpHelpForAllCommands(
+        string? n,
+        string? p,
+        string? t,
+        bool verbose,
+        bool info)
     {
         OutputAppTitle();
 
@@ -80,7 +87,12 @@ sealed class Help : Command
         Console.Out.WriteLine();
 
         OutputSectionTitle(Texts._("Commands"));
-        DumpCommandList(verbose);
+        DumpCommandList(
+            verbose,
+            n ?? MatchAny,
+            p ?? MatchAny,
+            t ?? MatchAny);
+
         Console.Out.WriteLine();
 
         OutputSectionTitle(Texts._("GlobalOptions"));
@@ -243,7 +255,11 @@ sealed class Help : Command
             + isError + optDesc.Value + StOff);
     }
 
-    void DumpCommandList(bool v)
+    void DumpCommandList(
+        bool v,
+        string namespaceFilter,
+        string packageFilter,
+        string tagsFilter)
     {
         var commands = _commandsSet.GetCommandNames();
         _commandsSet.BuildDynamicCommands();
@@ -253,13 +269,23 @@ sealed class Help : Command
         foreach (var command in commands)
         {
             var comProps = _commandsSet.GetProperties(command.Value);
-            DumpCommandDescription(
-                comProps,
-                true,
-                v,
-                v,
-                v,
-                maxCommandNameLength + 3);
+
+            if (FileSystemName.MatchesSimpleExpression(
+                    namespaceFilter,
+                    comProps.Namespace)
+                && FileSystemName.MatchesSimpleExpression(
+                    packageFilter,
+                    comProps.Package)
+
+                )
+
+                DumpCommandDescription(
+                    comProps,
+                    true,
+                    v,
+                    v,
+                    v,
+                    maxCommandNameLength + 3);
         }
     }
 

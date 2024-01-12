@@ -167,10 +167,10 @@ public sealed partial class SyntaxExecutionDispatchMapItem
                         if (targetIsArg)
                             ThrowInvalidCommandOperationParameterCastException();
 
-                        if (!isTargetNullableRequired && isTargetNullable)
+                        if (parameter.ParameterType.IsValueType && !isTargetNullableRequired && isTargetNullable)
                             ThrowInvalidCommandOperationParameterNullabilityNotExpectedException();
 
-                        if (isTargetNullableRequired && !isTargetNullable)
+                        if (parameter.ParameterType.IsValueType && isTargetNullableRequired && !isTargetNullable)
                             ThrowInvalidCommandOperationParameterNullabilityExpectedException();
 
                         #endregion
