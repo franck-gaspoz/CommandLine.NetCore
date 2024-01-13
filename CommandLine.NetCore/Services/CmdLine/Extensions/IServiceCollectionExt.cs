@@ -39,16 +39,16 @@ static class IServiceCollectionExt
     /// <returns>services collection</returns>
     public static IServiceCollection AddDynamicCommands(
         this IServiceCollection services)
-            => services.AddTransient<DynamicCommandsSet>();
+            => services.AddSingleton<DynamicCommandsSet>();
 
     /// <summary>
-    /// add mtuli-kind commands set
+    /// add multi-kind commands set
     /// </summary>
     /// <param name="services">services collection</param>
     /// <returns>services collection</returns>
     public static IServiceCollection AddCommandsSet(
         this IServiceCollection services)
-            => services.AddTransient<CommandsSet>();
+            => services.AddSingleton<CommandsSet>();
 
     /// <summary>
     /// add command line arguments as a injectable dependency

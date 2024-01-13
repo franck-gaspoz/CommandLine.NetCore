@@ -276,7 +276,10 @@ sealed class Help : Command
                 && FileSystemName.MatchesSimpleExpression(
                     packageFilter,
                     comProps.Package)
-
+                && FileSystemName.MatchesSimpleExpression(
+                    tagsFilter,
+                    string.Join(",", comProps.Tags)
+                    )
                 )
 
                 DumpCommandDescription(

@@ -72,9 +72,9 @@
       "commandName": "Project",
       "commandLineArgs": "help -p *glo* -v"
     },
-    "add a b": {
+    "add -h": {
       "commandName": "Project",
-      "commandLineArgs": "add a b"
+      "commandLineArgs": "add -h"
     }
   }
 }

@@ -72,7 +72,7 @@ sealed class CommandsSet : AbstractCommandsSetBase
         return names;
     }
 
-    readonly bool _dynamicCommandsBuilded = false;
+    bool _dynamicCommandsBuilded = false;
 
     /// <summary>
     /// build dynamic commands
@@ -83,6 +83,7 @@ sealed class CommandsSet : AbstractCommandsSetBase
         if (_dynamicCommandsBuilded)
             return;
         _dynamicCommandsSet.GetCommands();
+        _dynamicCommandsBuilded = true;
     }
 
     /// <summary>
