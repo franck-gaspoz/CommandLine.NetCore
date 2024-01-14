@@ -25,7 +25,8 @@ public sealed partial class CommandBuilder
                 _texts,
                 _parser,
                 _globalSettings,
-                _console);
+                _console,
+                _logger);
 
 #if Enable_h_Arg
         if (_syntaxMatcherDispatcher.Count == 0)

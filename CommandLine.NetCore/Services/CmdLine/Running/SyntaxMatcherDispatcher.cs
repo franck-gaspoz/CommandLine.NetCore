@@ -39,6 +39,11 @@ public sealed class SyntaxMatcherDispatcher
 
     readonly string _commandName;
 
+    /// <summary>
+    /// logger
+    /// </summary>
+    public CoreLogger Logger { get; private set; }
+
     #endregion
 
     /// <summary>
@@ -49,14 +54,16 @@ public sealed class SyntaxMatcherDispatcher
     /// <param name="parser">parser</param>
     /// <param name="globalSettings">setted global options</param>
     /// <param name="console">console</param>
+    /// <param name="logger">logger</param>
     public SyntaxMatcherDispatcher(
         string commandName,
         Texts texts,
         Parser parser,
         GlobalSettings globalSettings,
-        IAnsiVtConsole console)
-        => (_commandName, Texts, _parser, GlobalSettings, Console)
-            = (commandName, texts, parser, globalSettings, console);
+        IAnsiVtConsole console,
+        CoreLogger logger)
+        => (_commandName, Texts, _parser, GlobalSettings, Console, Logger)
+            = (commandName, texts, parser, globalSettings, console, logger);
 
     /// <summary>
     /// build a syntax from arguments syntaxes set
@@ -113,11 +120,16 @@ public sealed class SyntaxMatcherDispatcher
             .TryGetByType<ParserLogging>(out var parserLogging) ?
                 parserLogging.Value() : LogLevel.Error;
 
+        if (GlobalSettings
+            .LogSettings
+            .SyntaxesIdentification)
+            logLevel = LogLevel.Trace;
+
         var logTrace = logLevel == LogLevel.Trace
             || logLevel == LogLevel.Debug;
 
         void Trace(string? text = "")
-            => Console.Logger.Log(
+            => Logger.Log(
                     Console.Colors.Debug + text
                 );
 

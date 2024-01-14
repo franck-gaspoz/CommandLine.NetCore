@@ -26,6 +26,11 @@ public class DynamicCommandContext
     public Texts Texts { get; private set; }
 
     /// <summary>
+    /// logger
+    /// </summary>
+    public CoreLogger Logger { get; private set; }
+
+    /// <summary>
     /// creates a new instance
     /// </summary>
     /// <param name="dependencies">command dependencies</param>
@@ -34,6 +39,7 @@ public class DynamicCommandContext
         GlobalSettings = dependencies.GlobalSettings;
         Console = dependencies.Console;
         Texts = dependencies.Texts;
+        Logger = dependencies.Logger;
     }
 
     /// <summary>
@@ -42,14 +48,17 @@ public class DynamicCommandContext
     /// <param name="globalSettings">global settings</param>
     /// <param name="console">console</param>
     /// <param name="texts">texts</param>
+    /// <param name="logger">logger</param>
     internal DynamicCommandContext(
         GlobalSettings globalSettings,
         IAnsiVtConsole console,
-        Texts texts
+        Texts texts,
+        CoreLogger logger
         )
     {
         GlobalSettings = globalSettings;
         Console = console;
         Texts = texts;
+        Logger = logger;
     }
 }

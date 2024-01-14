@@ -39,6 +39,11 @@ public class Dependencies
     public Parser Parser { get; private set; }
 
     /// <summary>
+    /// logger
+    /// </summary>
+    public CoreLogger Logger { get; private set; }
+
+    /// <summary>
     /// build set of command dependencies
     /// </summary>
     /// <param name="globalSettings">global settings</param>
@@ -46,17 +51,20 @@ public class Dependencies
     /// <param name="texts">texts</param>
     /// <param name="argBuilder">arg builder</param>
     /// <param name="parser">parser</param>
+    /// <param name="logger">logger</param>
     public Dependencies(
         GlobalSettings globalSettings,
         IAnsiVtConsole console,
         Texts texts,
         ArgBuilder argBuilder,
-        Parser parser)
+        Parser parser,
+        CoreLogger logger)
     {
         GlobalSettings = globalSettings;
         Console = console;
         Texts = texts;
         ArgBuilder = argBuilder;
         Parser = parser;
+        Logger = logger;
     }
 }

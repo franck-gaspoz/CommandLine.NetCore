@@ -46,7 +46,8 @@ public sealed class CommandContext : DynamicCommandContext
         : base(
             globalSettings,
             console,
-            texts
+            texts,
+            syntaxMatcherDispatcher.Logger
             )
     {
         Syntax = syntax;

@@ -71,6 +71,7 @@ sealed class AppHostBuilder
             .ConfigureServices(
                 services => services
                     .AddSingleton<Configuration>()
+                    .AddSingleton<CoreLogger>()
                     .AddSingleton<AppHostConfiguration>()
                     .AddSingleton<Texts>()
                     .AddSingleton<ArgBuilder>()

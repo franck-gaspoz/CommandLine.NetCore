@@ -54,6 +54,8 @@ public sealed partial class CommandBuilder
 
     readonly string _commandName;
 
+    readonly CoreLogger _logger;
+
     #endregion
 
     /// <summary>
@@ -75,6 +77,7 @@ public sealed partial class CommandBuilder
         _texts = dependencies.Texts;
         _console = dependencies.Console;
         _parser = dependencies.Parser;
+        _logger = dependencies.Logger;
     }
 
     /// <summary>
@@ -99,6 +102,7 @@ public sealed partial class CommandBuilder
         _texts = dependencies.Texts;
         _console = dependencies.Console;
         _parser = dependencies.Parser;
+        _logger = dependencies.Logger;
     }
 
     /// <summary>
