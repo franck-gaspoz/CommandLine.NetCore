@@ -61,6 +61,11 @@ public abstract partial class Command
     /// </summary>
     protected SyntaxMatcherDispatcher SyntaxMatcherDispatcher { get; set; }
 
+    /// <summary>
+    /// logger
+    /// </summary>
+    protected CoreLogger Logger { get; private set; }
+
     #endregion
 
     /// <summary>
@@ -73,6 +78,7 @@ public abstract partial class Command
         Texts = dependencies.Texts;
         Parser = dependencies.Parser;
         GlobalSettings = dependencies.GlobalSettings;
+        Logger = dependencies.Logger;
 
         _builder = new(
             dependencies,

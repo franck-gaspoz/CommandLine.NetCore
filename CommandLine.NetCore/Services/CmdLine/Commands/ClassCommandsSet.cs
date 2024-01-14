@@ -14,6 +14,10 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// </summary>
 sealed class ClassCommandsSet : AbstractCommandsSetBase
 {
+    const string AddClassCommandText = "add class command";
+    readonly GlobalSettings _globalSettings;
+    readonly CoreLogger _logger;
+
     /// <summary>
     /// creates a new class commands set
     /// </summary>
@@ -21,13 +25,19 @@ sealed class ClassCommandsSet : AbstractCommandsSetBase
     /// <param name="serviceProvider">service provider</param>
     /// <param name="assemblySet">assambly set</param>
     /// <param name="appHostConfiguration">app host configuration</param>
+    /// <param name="globalSettings">global settings</param>
+    /// <param name="logger">logger</param>
     public ClassCommandsSet(
         Texts texts,
         IServiceProvider serviceProvider,
         AssemblySet assemblySet,
-        AppHostConfiguration appHostConfiguration)
+        AppHostConfiguration appHostConfiguration,
+        GlobalSettings globalSettings,
+        CoreLogger logger)
         : base(texts, serviceProvider)
     {
+        _globalSettings = globalSettings;
+        _logger = logger;
         foreach (var classType in GetCommandTypes(assemblySet, appHostConfiguration))
         {
             Add(
@@ -83,7 +93,15 @@ sealed class ClassCommandsSet : AbstractCommandsSetBase
     void Add(
         string name,
         Type commandType)
-        => _commands.Add(name, commandType);
+    {
+        if (_globalSettings
+            .LogSettings
+            .AddDynamicCommand)
+            _logger.Log(
+                AddClassCommandText,
+                name + $" ({commandType.FullName})");
+        _commands.Add(name, commandType);
+    }
 
     /// <summary>
     /// returns type of a command

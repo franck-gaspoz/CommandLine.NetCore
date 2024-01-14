@@ -37,4 +37,8 @@ public sealed class DynamicCommandSpecification
         DynamicCommandSpecificationDelegate specificationDelegate)
             => (CommandName, SpecificationDelegate)
                 = (commandName, specificationDelegate);
+
+    /// <inheritdoc/>
+    public override string ToString()
+        => $"{CommandName} tags={string.Join(",", Tags)} package={Package}";
 }

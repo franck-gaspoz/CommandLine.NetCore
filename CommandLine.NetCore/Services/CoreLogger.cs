@@ -38,20 +38,98 @@ public sealed class CoreLogger
     /// <summary>
     /// log
     /// </summary>
-    /// <param name="message">message</param>
+    /// <param name="action">action</param>
+    /// <param name="details">details</param>
     /// <param name="callerMemberName">caller member name</param>
     /// <param name="callerFilePath">caller file path</param>
     /// <param name="callerLineNumber">caller line number</param>
     /// <param name="messageOnly">if true only log message, ignore meta data</param>
     public void Log(
-        string message,
+        string action = "",
+        object? details = null,
         [CallerMemberName] string? callerMemberName = null,
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int? callerLineNumber = null,
         bool messageOnly = true)
             => OutputLog(
                 LogLevel.Information,
-                message,
+                action,
+                details,
+                callerMemberName ?? string.Empty,
+                callerFilePath ?? string.Empty,
+                callerLineNumber ?? -1,
+                messageOnly);
+
+    /// <summary>
+    /// log debug
+    /// </summary>
+    /// <param name="action">action</param>
+    /// <param name="details">details</param>
+    /// <param name="callerMemberName">caller member name</param>
+    /// <param name="callerFilePath">caller file path</param>
+    /// <param name="callerLineNumber">caller line number</param>
+    /// <param name="messageOnly">if true only log message, ignore meta data</param>
+    public void LogDebug(
+        string action = "",
+        object? details = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int? callerLineNumber = null,
+        bool messageOnly = true)
+            => OutputLog(
+                LogLevel.Debug,
+                action,
+                details,
+                callerMemberName ?? string.Empty,
+                callerFilePath ?? string.Empty,
+                callerLineNumber ?? -1,
+                messageOnly);
+
+    /// <summary>
+    /// log debug
+    /// </summary>
+    /// <param name="action">action</param>
+    /// <param name="details">details</param>
+    /// <param name="callerMemberName">caller member name</param>
+    /// <param name="callerFilePath">caller file path</param>
+    /// <param name="callerLineNumber">caller line number</param>
+    /// <param name="messageOnly">if true only log message, ignore meta data</param>
+    public void LogWarning(
+        string action = "",
+        object? details = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int? callerLineNumber = null,
+        bool messageOnly = true)
+            => OutputLog(
+                LogLevel.Warning,
+                action,
+                details,
+                callerMemberName ?? string.Empty,
+                callerFilePath ?? string.Empty,
+                callerLineNumber ?? -1,
+                messageOnly);
+
+    /// <summary>
+    /// log debug
+    /// </summary>
+    /// <param name="action">action</param>
+    /// <param name="details">details</param>
+    /// <param name="callerMemberName">caller member name</param>
+    /// <param name="callerFilePath">caller file path</param>
+    /// <param name="callerLineNumber">caller line number</param>
+    /// <param name="messageOnly">if true only log message, ignore meta data</param>
+    public void LogError(
+        string action = "",
+        object? details = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int? callerLineNumber = null,
+        bool messageOnly = true)
+            => OutputLog(
+                LogLevel.Error,
+                action,
+                details,
                 callerMemberName ?? string.Empty,
                 callerFilePath ?? string.Empty,
                 callerLineNumber ?? -1,
@@ -59,15 +137,21 @@ public sealed class CoreLogger
 
     void OutputLog(
         LogLevel logLevel,
-        string message,
+        string action,
+        object? details,
         string callerMemberName,
         string callerFilePath,
         int callerLineNumber,
         bool messageOnly)
     {
+        if (string.IsNullOrWhiteSpace(action))
+        {
+            _console.Logger.Log(action);
+            return;
+        }
         var txt =
-            messageOnly ? message
-            : $"[{logLevel}][{callerFilePath}:{callerLineNumber}][{callerMemberName}][{message}]";
+            messageOnly ? $"[{action}] {details}"
+            : $"[{logLevel}][{callerFilePath}:{callerLineNumber}][{callerMemberName}][{action}] {details}";
         switch (logLevel)
         {
             case LogLevel.Information:

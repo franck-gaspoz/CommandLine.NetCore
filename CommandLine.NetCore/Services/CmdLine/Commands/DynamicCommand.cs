@@ -45,5 +45,5 @@ sealed class DynamicCommand : Command
 
     /// <inheritdoc/>
     protected override SyntaxMatcherDispatcher Declare()
-        => new(_name, Texts, Parser, GlobalSettings, Console, _context.Logger);
+        => new(_name, Texts, Parser, GlobalSettings, Console, Logger);
 }

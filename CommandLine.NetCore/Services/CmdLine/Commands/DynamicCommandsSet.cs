@@ -8,7 +8,9 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// </summary>
 sealed class DynamicCommandsSet : AbstractCommandsSetBase
 {
+    const string AddDynamicCommandText = "add dynamic command";
     readonly Dependencies _dependencies;
+    readonly CoreLogger _logger;
 
     /// <summary>
     /// creates a new dynamic commands set
@@ -25,6 +27,7 @@ sealed class DynamicCommandsSet : AbstractCommandsSetBase
         : base(texts, serviceProvider)
     {
         _dependencies = dependencies;
+        _logger = _dependencies.Logger;
 
         foreach (var commandSpec in GetCommands(appHostConfiguration))
             Add(commandSpec);
@@ -60,9 +63,18 @@ sealed class DynamicCommandsSet : AbstractCommandsSetBase
         => _commands;
 
     void Add(DynamicCommandSpecification commandSpec)
-        => _commandSpecs.Add(
-                commandSpec.CommandName,
-                commandSpec);
+    {
+        if (_dependencies
+            .GlobalSettings
+            .LogSettings
+            .AddDynamicCommand)
+            _logger.Log(
+                AddDynamicCommandText,
+                commandSpec.CommandName);
+        _commandSpecs.Add(
+            commandSpec.CommandName,
+            commandSpec);
+    }
 
     DynamicCommand CreateCommand(DynamicCommandSpecification commandSpec)
         => new(_dependencies, commandSpec);

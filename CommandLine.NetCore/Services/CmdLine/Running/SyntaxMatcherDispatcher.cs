@@ -128,9 +128,10 @@ public sealed class SyntaxMatcherDispatcher
         var logTrace = logLevel == LogLevel.Trace
             || logLevel == LogLevel.Debug;
 
-        void Trace(string? text = "")
+        void Trace(string action = "", string? text = "")
             => Logger.Log(
-                    Console.Colors.Debug + text
+                    action,
+                    text
                 );
 
         List<CommandResult> tryCommandsResults = new();
@@ -153,6 +154,7 @@ public sealed class SyntaxMatcherDispatcher
 
             if (logTrace)
                 Trace(
+                    "syntax",
                     syntaxMatcherDispatcher
                     .Syntax
                     .ToSyntax() +
