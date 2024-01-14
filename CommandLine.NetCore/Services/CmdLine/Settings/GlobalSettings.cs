@@ -1,6 +1,9 @@
-﻿using CommandLine.NetCore.Services.AppHost;
+﻿using CommandLine.NetCore.Config;
+using CommandLine.NetCore.Services.AppHost;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.GlobalOpts;
+
+using Microsoft.Extensions.Configuration;
 
 namespace CommandLine.NetCore.Services.CmdLine.Settings;
 
@@ -13,6 +16,11 @@ namespace CommandLine.NetCore.Services.CmdLine.Settings;
 /// </summary>
 public sealed class GlobalSettings
 {
+    /// <summary>
+    /// log settings key
+    /// </summary>
+    public const string LogSettingsKey = "Log";
+
     /// <summary>
     /// assembly set
     /// </summary>
@@ -49,6 +57,11 @@ public sealed class GlobalSettings
     public CommandLineInterfaceBuilder? CommandLineInterfaceBuilder { get; private set; }
 
     /// <summary>
+    /// log settings
+    /// </summary>
+    public LogSettings LogSettings { get; private set; }
+
+    /// <summary>
     /// global settings of the command line engine
     /// <para>provides access to:
     /// <list type="bullet">
@@ -77,6 +90,8 @@ public sealed class GlobalSettings
         CommandLineArgs = commandLineArgs;
         GlobalOptsSet = globalOptsSet;
         SettedGlobalOptsSet = new(globalOptsSet, commandLineArgs);
+        LogSettings = new();
+        configuration.Bind(LogSettingsKey, LogSettings);
     }
 
     /// <summary>
