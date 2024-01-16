@@ -676,7 +676,8 @@ If this option is set syntaxes of a command can't be ambiguous
 - set Opt default value count to 1 (distinguish from Flag)
 - fix nullable parameter identification in case of classes (string, ..)
 - add command class attributes Tag,Package + dynamic commands specification methods Tag,Package
-- fix dynamic commands set injection scope*
+- fix dynamic commands set injection scope
+- add tests project
 - improve help display
 - doc update
 
