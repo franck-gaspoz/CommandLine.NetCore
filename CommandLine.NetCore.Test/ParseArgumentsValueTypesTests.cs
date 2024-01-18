@@ -20,6 +20,7 @@ public class ParseArgumentsValueTypesTests
         res = RunCmdLine(arg, res);
         Assert.Equal(value, res);
     }
+
     static void CheckArgTypeAsStr<T>(string arg, T value)
     {
         T? res = default;
