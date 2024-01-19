@@ -64,7 +64,7 @@ public sealed partial class CommandBuilder
     /// <param name="dependencies">command dependencies</param>
     /// <param name="commandName">command name</param>
     /// <param name="runMethod">a run method for the builded command</param>
-    public CommandBuilder(
+    internal CommandBuilder(
         Dependencies dependencies,
         string commandName,
         Func<string[], CommandLineResult>? runMethod = null)
@@ -87,7 +87,7 @@ public sealed partial class CommandBuilder
     /// <param name="commandName">command name</param>
     /// <param name="specification">specification</param>
     /// <param name="runMethod">a run method for the builded command</param>
-    public CommandBuilder(
+    internal CommandBuilder(
         Dependencies dependencies,
         string commandName,
         DynamicCommandSpecification specification,
@@ -109,6 +109,6 @@ public sealed partial class CommandBuilder
     /// set the run method
     /// </summary>
     /// <param name="runMethod">run method</param>
-    public void SetRunMethod(Func<string[], CommandLineResult> runMethod)
+    internal void SetRunMethod(Func<string[], CommandLineResult> runMethod)
         => _runMethod = runMethod;
 }
