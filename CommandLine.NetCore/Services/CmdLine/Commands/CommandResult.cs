@@ -5,6 +5,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
 /// <summary>
 /// command result
+/// <para>can implicitly cast to int exit code</para>
 /// </summary>
 public sealed class CommandResult : CommandLineResult
 {

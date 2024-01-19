@@ -7,6 +7,9 @@ using Xunit;
 
 namespace CommandLine.NetCore.Test;
 
+/// <summary>
+/// testing arguments values parsing
+/// </summary>
 public class ParseArgumentsValueTypesTests
 {
     const string CommandName = "test";
