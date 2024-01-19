@@ -2,7 +2,10 @@
 
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
+
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
@@ -73,9 +76,19 @@ public sealed partial class SyntaxExecutionDispatchMapItem
     {
         var error = () => GetSyntaxError(action.ToString() ?? string.Empty);
         var methodInfo = action.GetMethodInfo()
-            ?? throw new MissingOrNotFoundCommandOperationException(error());
+            ?? throw new MissingOrNotFoundCommandOperationException(
+                error(),
+                new CommandResult(
+                    ExitFail,
+                    Syntax)
+                );
         if (methodInfo.ReturnType != typeof(void))
-            throw new InvalidCommandOperationException(error());
+            throw new InvalidCommandOperationException(
+                error(),
+                new CommandResult(
+                    ExitFail,
+                    Syntax)
+                );
     }
 
     string GetSyntaxError(string expression)

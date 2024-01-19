@@ -207,6 +207,7 @@ public sealed class CommandLineInterfaceBuilder
 
     /// <summary>
     /// run the command line
+    /// <para>returns the command result</para>
     /// <para>run the command according to the command line arguments</para>
     /// <para>handle errors</para>
     /// <para>output to console command results and any error</para>
@@ -214,7 +215,7 @@ public sealed class CommandLineInterfaceBuilder
     /// </summary>
     /// <returns>return code of the command</returns>
     /// <exception cref="ArgumentException">argument error</exception>
-    public int Run()
+    public CommandResult Run()
     {
         try
         {
@@ -289,28 +290,30 @@ public sealed class CommandLineInterfaceBuilder
 
                 console.Out.WriteLine();
 
-                return commandResult.ExitCode;
+                return commandResult;
             }
             catch (MissingOrNotFoundCommandOperationException missingOrNotFoundCommandOperationException)
             {
-                return ExitWithError(
+                _ = ExitWithError(
                     texts._("MissingOrNotFoundCommandOperation",
                         missingOrNotFoundCommandOperationException.Details),
                     console,
                     lineBreak);
+                return missingOrNotFoundCommandOperationException.CommandResult;
             }
             catch (InvalidCommandOperationException invalidCommandOperation)
             {
-                return ExitWithError(
+                _ = ExitWithError(
                     texts._(
                         "InvalidCommandOperation",
                         invalidCommandOperation.Details),
                     console,
                     lineBreak);
+                return invalidCommandOperation.CommandResult;
             }
             catch (InvalidCommandOperationParameterCastException invalidCommandOperationParameterCastException)
             {
-                return ExitWithError(
+                _ = ExitWithError(
                     texts._(
                         "InvalidCommandOperationParameterCast",
                         invalidCommandOperationParameterCastException.Index,
@@ -319,28 +322,38 @@ public sealed class CommandLineInterfaceBuilder
                         invalidCommandOperationParameterCastException.Details),
                     console,
                     lineBreak);
+                return invalidCommandOperationParameterCastException.CommandResult;
             }
             catch (TargetInvocationException invokeCommandOperationExecutionException)
             {
-                return ExitWithError(
+                _ = ExitWithError(
                     invokeCommandOperationExecutionException.InnerException!,
                     console,
                     lineBreak);
+                return new CommandResult(
+                    ExitFail,
+                    invokeCommandOperationExecutionException);
             }
             catch (Exception commandExecutionException)
             {
-                return ExitWithError(
+                _ = ExitWithError(
                     commandExecutionException,
                     console,
                     lineBreak);
+                return new CommandResult(
+                    ExitFail,
+                    commandExecutionException);
             }
         }
         catch (Exception hostBuilderException)
         {
-            return ExitWithError(
+            _ = ExitWithError(
                 hostBuilderException,
                 new cons.AnsiVtConsole(),
                 false);
+            return new CommandResult(
+                ExitFail,
+                hostBuilderException);
         }
     }
 

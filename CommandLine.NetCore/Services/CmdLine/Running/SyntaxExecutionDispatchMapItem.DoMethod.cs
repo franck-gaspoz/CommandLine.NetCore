@@ -5,8 +5,11 @@ using System.Reflection;
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
 using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
+
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
 
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
@@ -135,21 +138,33 @@ public sealed partial class SyntaxExecutionDispatchMapItem
                                 currentParamIndex,
                                 arg,
                                 parameter,
-                                error());
+                                error(),
+                                new CommandResult(
+                                    ExitFail,
+                                    Syntax
+                                    ));
 
                     void ThrowInvalidCommandOperationParameterNullabilityExpectedException()
                         => throw new InvalidCommandOperationParameterNullabilityExpectedException(
                                 currentParamIndex,
                                 arg,
                                 parameter,
-                                error());
+                                error(),
+                                new CommandResult(
+                                    ExitFail,
+                                    Syntax
+                                    ));
 
                     void ThrowInvalidCommandOperationParameterNullabilityNotExpectedException()
                         => throw new InvalidCommandOperationParameterNullabilityNotExpectedException(
                                 currentParamIndex,
                                 arg,
                                 parameter,
-                                error());
+                                error(),
+                                new CommandResult(
+                                    ExitFail,
+                                    Syntax
+                                    ));
 
                     #endregion
 

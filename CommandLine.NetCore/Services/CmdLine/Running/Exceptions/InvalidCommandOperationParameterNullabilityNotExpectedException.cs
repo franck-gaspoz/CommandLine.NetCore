@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 
 namespace CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 
@@ -17,14 +18,17 @@ sealed class InvalidCommandOperationParameterNullabilityNotExpectedException
     /// <param name="sourceArgument">source argument</param>
     /// <param name="parameter">target parameter</param>
     /// <param name="details">details</param>
+    /// <param name="commandResult">command result</param>
     public InvalidCommandOperationParameterNullabilityNotExpectedException(
         int index,
         IArg sourceArgument,
         ParameterInfo parameter,
-        string details) : base(
+        string details,
+        CommandResult commandResult) : base(
             index,
             sourceArgument,
             parameter,
-            details)
+            details,
+            commandResult)
     { }
 }

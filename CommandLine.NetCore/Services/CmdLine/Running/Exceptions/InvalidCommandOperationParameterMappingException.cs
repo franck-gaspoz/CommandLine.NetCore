@@ -2,6 +2,7 @@
 
 using CommandLine.NetCore.Extensions;
 using CommandLine.NetCore.Services.CmdLine.Arguments;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 
 namespace CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 
@@ -33,12 +34,15 @@ class InvalidCommandOperationParameterMappingException
     /// <param name="sourceArgument">source argument</param>
     /// <param name="targetParameter">target parameter type</param>
     /// <param name="details">details</param>
+    /// <param name="commandResult">command result</param>
     public InvalidCommandOperationParameterMappingException(
         int index,
         IArg sourceArgument,
         ParameterInfo targetParameter,
-        string details) : base(
-            $"parameter index={index}{Environment.NewLine}argument source={sourceArgument.ToSyntax()}{Environment.NewLine}target parameter={targetParameter.ToText()}{Environment.NewLine}{details}")
+        string details,
+        CommandResult commandResult) : base(
+            $"parameter index={index}{Environment.NewLine}argument source={sourceArgument.ToSyntax()}{Environment.NewLine}target parameter={targetParameter.ToText()}{Environment.NewLine}{details}",
+            commandResult)
     {
         Index = index;
         SourceArgument = sourceArgument;

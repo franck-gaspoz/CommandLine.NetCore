@@ -5,6 +5,8 @@ using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
 using CommandLine.NetCore.Services.CmdLine.Commands;
 using CommandLine.NetCore.Services.CmdLine.Running.Exceptions;
 
+using static CommandLine.NetCore.Services.CmdLine.Settings.Globals;
+
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
 /// <summary>
@@ -209,12 +211,20 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         var error = () => GetSyntaxError(expression.ToString());
 
         if (methodInfo is null)
-            throw new MissingOrNotFoundCommandOperationException(error());
+            throw new MissingOrNotFoundCommandOperationException(
+                error(),
+                new CommandResult(
+                    ExitFail,
+                    Syntax));
 
         if (methodInfo.ReturnType != typeof(void)
             || target is null
             || target is not Command)
-            throw new InvalidCommandOperationException(error());
+            throw new InvalidCommandOperationException(
+                error(),
+                new CommandResult(
+                    ExitFail,
+                    Syntax));
 
         return DoMethod(
             expression.ToString(),
