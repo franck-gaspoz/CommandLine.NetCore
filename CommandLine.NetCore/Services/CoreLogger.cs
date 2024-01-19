@@ -22,7 +22,9 @@ public sealed class CoreLogger
     /// <summary>
     /// global settings
     /// </summary>
+#pragma warning disable IDE0052 // Supprimer les membres privés non lus
     readonly GlobalSettings _globalSettings;
+#pragma warning restore IDE0052 // Supprimer les membres privés non lus
 
     /// <summary>
     /// build a new instance of the core logger
