@@ -34,7 +34,7 @@ sealed class GetInfo : Command
 
         For(
             Param("env"),
-            Opt("l")
+            Flag("l")
             )
                 .Do(DumpAllVars)
 
