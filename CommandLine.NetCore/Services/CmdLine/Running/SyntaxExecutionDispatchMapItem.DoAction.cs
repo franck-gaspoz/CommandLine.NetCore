@@ -26,7 +26,10 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         Delegate = (CommandContext context) =>
         {
             @delegate.Invoke(context);
-            return new();
+            return new(
+                ExitOk,
+                Syntax
+                );
         };
         Syntax.SetName(Name);
         return SyntaxMatcherDispatcher;
@@ -49,7 +52,10 @@ public sealed partial class SyntaxExecutionDispatchMapItem
         Delegate = (CommandContext context) =>
         {
             @delegate.Invoke();
-            return new();
+            return new(
+                ExitOk,
+                Syntax
+                );
         };
         Syntax.SetName(Name);
         return SyntaxMatcherDispatcher;

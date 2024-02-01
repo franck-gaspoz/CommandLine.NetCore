@@ -19,7 +19,7 @@ public class CommandResultTests
     public void Given_unknown_result_fail_with_argument_exception()
     {
         var cr = new CommandLineInterfaceBuilder()
-            .Build(new string[] { "unknown-command" })
+            .Build(new string[] { CommandName })
             .Run();
         Assert.NotNull(cr.Exception);
         Assert.IsType<ArgumentException>(cr.Exception);

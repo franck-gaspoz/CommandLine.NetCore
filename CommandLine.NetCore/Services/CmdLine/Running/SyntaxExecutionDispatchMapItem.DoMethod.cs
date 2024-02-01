@@ -230,7 +230,10 @@ public sealed partial class SyntaxExecutionDispatchMapItem
             else
                 action!.DynamicInvoke(callParameters.ToArray());
 
-            return new();
+            return new(
+                ExitOk,
+                Syntax
+                );
         };
 
         return SyntaxMatcherDispatcher;

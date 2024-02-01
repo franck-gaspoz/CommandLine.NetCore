@@ -26,7 +26,7 @@ public sealed partial class CommandBuilder
     /// <summary>
     /// the run method of the builded command
     /// </summary>
-    Func<string[], CommandLineResult>? _runMethod;
+    Func<string[], CommandResult>? _runMethod;
 
     /// <summary>
     /// console service
@@ -67,7 +67,7 @@ public sealed partial class CommandBuilder
     internal CommandBuilder(
         Dependencies dependencies,
         string commandName,
-        Func<string[], CommandLineResult>? runMethod = null)
+        Func<string[], CommandResult>? runMethod = null)
     {
         _configuration = dependencies.GlobalSettings.Configuration;
         _commandName = commandName;
@@ -91,7 +91,7 @@ public sealed partial class CommandBuilder
         Dependencies dependencies,
         string commandName,
         DynamicCommandSpecification specification,
-        Func<string[], CommandLineResult>? runMethod = null)
+        Func<string[], CommandResult>? runMethod = null)
     {
         DynamicCommandSpecification = specification;
         _configuration = dependencies.GlobalSettings.Configuration;
@@ -109,6 +109,6 @@ public sealed partial class CommandBuilder
     /// set the run method
     /// </summary>
     /// <param name="runMethod">run method</param>
-    internal void SetRunMethod(Func<string[], CommandLineResult> runMethod)
+    internal void SetRunMethod(Func<string[], CommandResult> runMethod)
         => _runMethod = runMethod;
 }

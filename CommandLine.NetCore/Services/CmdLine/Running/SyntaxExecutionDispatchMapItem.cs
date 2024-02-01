@@ -35,7 +35,7 @@ public sealed partial class SyntaxExecutionDispatchMapItem
     /// <summary>
     /// execute action delegate
     /// </summary>
-    public Func<CommandContext, CommandLineResult>? Delegate { get; private set; }
+    public Func<CommandContext, CommandResult>? Delegate { get; private set; }
 
     /// <summary>
     /// the syntax matcher dispatcher owner of this

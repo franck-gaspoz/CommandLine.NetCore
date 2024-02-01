@@ -154,7 +154,7 @@ public abstract partial class Command
     /// </summary>
     /// <param name="args">command line arguments</param>
     /// <returns>operation result</returns>
-    public CommandLineResult RunCommand(params string[] args)
+    public CommandResult RunCommand(params string[] args)
     {
         var commandLineInterfaceBuilder = GlobalSettings
             .CommandLineInterfaceBuilder!;
@@ -169,9 +169,7 @@ public abstract partial class Command
             .ConfigureGlobalSettings()
             .ConfigureOutput();
 
-        return new(
-            commandLineInterfaceBuilder.Run()
-            );
+        return commandLineInterfaceBuilder.Run();
     }
 
     /// <summary>
@@ -179,9 +177,8 @@ public abstract partial class Command
     /// </summary>
     /// <param name="args">command line arguments</param>
     /// <returns>operation result</returns>
-    public CommandLineResult RunCommandInSeparateHost(params string[] args) =>
-        new(
-            new CommandLineInterfaceBuilder()
+    public CommandResult RunCommandInSeparateHost(params string[] args)
+        => new CommandLineInterfaceBuilder()
                 .UseAssemblySet(GlobalSettings.AssemblySet)
                 .UseConfigureDelegate(GlobalSettings
                     .AppHostConfiguration
@@ -190,7 +187,7 @@ public abstract partial class Command
                     .AppHostConfiguration
                     .BuildDelegate)
                 .Build(args)
-                .Run());
+                .Run();
 
     #endregion
 }

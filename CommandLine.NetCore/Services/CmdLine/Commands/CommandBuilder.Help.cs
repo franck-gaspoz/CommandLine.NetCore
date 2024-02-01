@@ -83,7 +83,7 @@ public sealed partial class CommandBuilder
                     .Do(HelpAboutCommandSyntax)
             .Options(Opt("v"), Opt("info"));
 
-    CommandLineResult HelpAboutCommandSyntax(CommandContext context)
+    CommandResult HelpAboutCommandSyntax(CommandContext context)
     {
         var args =
             new List<string>{

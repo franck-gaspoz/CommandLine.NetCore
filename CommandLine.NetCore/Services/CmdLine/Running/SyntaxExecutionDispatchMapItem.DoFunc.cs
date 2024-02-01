@@ -1,4 +1,5 @@
 ﻿using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
+using CommandLine.NetCore.Services.CmdLine.Commands;
 
 namespace CommandLine.NetCore.Services.CmdLine.Running;
 
@@ -12,7 +13,7 @@ public sealed partial class SyntaxExecutionDispatchMapItem
     /// </summary>
     /// <param name="delegate">with parameter operation context and OperationResult result delegate</param>
     /// <returns>syntax matcher dispatcher</returns>
-    public SyntaxMatcherDispatcher Do(Func<CommandContext, CommandLineResult> @delegate)
+    public SyntaxMatcherDispatcher Do(Func<CommandContext, CommandResult> @delegate)
     {
         Delegate = @delegate;
         Name = Delegate.Method.Name;

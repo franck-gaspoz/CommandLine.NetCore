@@ -19,11 +19,13 @@ ___
     - [2. Testing the integrated **help** command](#2-testing-the-integrated-help-command)
     - [3. Configuring the library and a console application built with it](#3-configuring-the-library-and-a-console-application-built-with-it)
     - [4. Implementing a command](#4-implementing-a-command)
-        - [4.1. Implementing a command with a <b>class</b>](#4-1-implementing-a-command-with-a-class)
+
+        - [4.1 Implementing a command with a <b>class</b>](#4-1-implementing-a-command-with-a-class)
             - [Arguments to concrete types mapping of Do(LambdaExpression expression) expression parameters](#arguments-to-concrete-types-mapping-of-dolambdaexpression-expression-expression-parameters)
             - [Exemple of the command `help` defined in `CommandLine.NetCore.Commands.CmdLine`](#exemple-of-the-command-help-defined-in-commandlinenetcorecommandscmdline)
             - [Exemple of the command `get-info` defined in `CommandLine.NetCore.Example.Commands.GetInfo`](#exemple-of-the-command-get-info-defined-in-commandlinenetcoreexamplecommandsgetinfo)
-        - [4.2. Implementing a <b>classless</b> command with a lambda expression](#4-2-implementing-a-classless-command-with-a-lambda-expression) 
+        - [4.2 Implementing a <b>classless</b> command with a lambda expression](#4-2-implementing-a-classless-command-with-a-lambda-expression) 
+    
     - [5. Setup an unique command console app (without command argument)](#5-setup-an-unique-command-console-app-without-command-argument)
     - [6. Command classes attributes](#6-command-classes-attributes)
     - [7. Debug and troobleshoot](#7-debug-and-troobleshoot)
@@ -672,13 +674,19 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
-`1.0.12` - 02/10/2024
+`1.0.18` - 02/01/2024
+- fix bug command without tag not displayed in help command list
+
+`1.0.12,1.0.13,1.0.14,1.0.15,1.0.16,1.0.17` - 01/02/2024
 - set Opt default value count to 1 (distinguish from Flag)
 - fix nullable parameter identification in case of classes (string, ..)
 - add command class attributes Tag,Package + dynamic commands specification methods Tag,Package
 - fix dynamic commands set injection scope
+- /!\ breaking change: removed class CommandLineResult, use CommandResult instead
 - add tests project
 - improve help display
+- fix nuget
+- fix help -t behavior
 - doc update
 
 `1.0.11` - 10/01/2024 (since 09/12/2023)

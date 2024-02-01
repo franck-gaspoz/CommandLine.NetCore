@@ -1,5 +1,4 @@
 ﻿using CommandLine.NetCore.Services.CmdLine.Arguments.Parsing;
-using CommandLine.NetCore.Services.CmdLine.Running;
 
 namespace CommandLine.NetCore.Services.CmdLine.Commands;
 
@@ -7,7 +6,7 @@ namespace CommandLine.NetCore.Services.CmdLine.Commands;
 /// command result
 /// <para>can implicitly cast to int exit code</para>
 /// </summary>
-public sealed class CommandResult : CommandLineResult
+public sealed class CommandResult
 {
     /// <summary>
     /// list of parse errors (if any else empty)
@@ -25,6 +24,16 @@ public sealed class CommandResult : CommandLineResult
     public Syntax? Syntax { get; }
 
     /// <summary>
+    /// résult
+    /// </summary>
+    public object? Result { get; }
+
+    /// <summary>
+    /// an exit code
+    /// </summary>
+    public int ExitCode { get; set; }
+
+    /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="exitCode">exit code</param>
@@ -34,16 +43,21 @@ public sealed class CommandResult : CommandLineResult
         int exitCode,
         List<string> parseErrors,
         object? result = null)
-        : base(exitCode, result)
-            => ParseErrors = parseErrors;
+    {
+        ParseErrors = parseErrors;
+        ExitCode = exitCode;
+        Result = result;
+    }
 
     /// <summary>
     /// build a new instance
     /// </summary>
     /// <param name="exitCode">exit code</param>
     public CommandResult(int exitCode)
-        : base(exitCode)
-            => ParseErrors = new List<string>();
+    {
+        ExitCode = exitCode;
+        ParseErrors = new List<string>();
+    }
 
     /// <summary>
     /// build a new instance
@@ -51,8 +65,8 @@ public sealed class CommandResult : CommandLineResult
     /// <param name="exitCode">exit code</param>
     /// <param name="exception">exception</param>
     public CommandResult(int exitCode, Exception exception)
-        : base(exitCode)
     {
+        ExitCode = exitCode;
         ParseErrors = new List<string>();
         Exception = exception;
     }
@@ -63,8 +77,8 @@ public sealed class CommandResult : CommandLineResult
     /// <param name="exitCode">exit code</param>
     /// <param name="syntax">syntax of the command</param>
     public CommandResult(int exitCode, Syntax syntax)
-        : base(exitCode)
     {
+        ExitCode = exitCode;
         ParseErrors = new List<string>();
         Syntax = syntax;
     }
@@ -76,8 +90,8 @@ public sealed class CommandResult : CommandLineResult
     /// <param name="exception">exception</param>
     /// <param name="syntax">syntax of the command</param>
     public CommandResult(int exitCode, Exception exception, Syntax syntax)
-        : base(exitCode)
     {
+        ExitCode = exitCode;
         ParseErrors = new List<string>();
         Exception = exception;
         Syntax = syntax;
@@ -89,8 +103,8 @@ public sealed class CommandResult : CommandLineResult
     /// <param name="exitCode">exit code</param>
     /// <param name="result">result</param>
     public CommandResult(int exitCode, object? result = null)
-        : base(exitCode)
     {
+        ExitCode = exitCode;
         ParseErrors = new List<string>();
         Result = result;
     }

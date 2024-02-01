@@ -266,9 +266,13 @@ sealed class Help : Command
 
         var maxCommandNameLength = commands.Any() ? commands.Max(
             x => x.Value.Length) : 0;
+
         foreach (var command in commands)
         {
             var comProps = _commandsSet.GetProperties(command.Value);
+            var tags = comProps.Tags.Any() ?
+                comProps.Tags
+                : new string[] { MatchAny };
 
             if (FileSystemName.MatchesSimpleExpression(
                     namespaceFilter,
@@ -278,7 +282,7 @@ sealed class Help : Command
                     comProps.Package)
                 && FileSystemName.MatchesSimpleExpression(
                     tagsFilter,
-                    string.Join(",", comProps.Tags)
+                    string.Join(",", tags)
                     )
                 )
 
