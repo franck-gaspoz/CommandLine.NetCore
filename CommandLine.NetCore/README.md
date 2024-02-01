@@ -673,11 +673,13 @@ DumpCommandHelp: 0:Param<String>? 1:Opt?<String>-v 2:Opt?<String>--info 3:Opt?<S
 If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
-
+`1.0.19` - 02/01/2024		
+- fix command get-info --all syntax was not recognized
+- 
 `1.0.18` - 02/01/2024
 - fix bug command without tag not displayed in help command list
 
-`1.0.12,1.0.13,1.0.14,1.0.15,1.0.16,1.0.17` - 01/02/2024
+`1.0.12,1.0.13,1.0.14,1.0.15,1.0.16,1.0.17` - 02/01/2024
 - set Opt default value count to 1 (distinguish from Flag)
 - fix nullable parameter identification in case of classes (string, ..)
 - add command class attribute Tag,Namespace,Package + dynamic commands specification method Tag,Namespace,Package
