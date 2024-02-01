@@ -60,7 +60,7 @@ sealed class GetInfo : Command
         // --all
 
         .For(
-            Opt("all"))
+            Flag("all"))
                 .Do(DumpAll);
 
     void DumpAll()

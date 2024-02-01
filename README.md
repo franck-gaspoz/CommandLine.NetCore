@@ -680,7 +680,7 @@ If this option is set syntaxes of a command can't be ambiguous
 `1.0.12,1.0.13,1.0.14,1.0.15,1.0.16,1.0.17` - 01/02/2024
 - set Opt default value count to 1 (distinguish from Flag)
 - fix nullable parameter identification in case of classes (string, ..)
-- add command class attributes Tag,Package + dynamic commands specification methods Tag,Package
+- add command class attribute Tag,Namespace,Package + dynamic commands specification method Tag,Namespace,Package
 - fix dynamic commands set injection scope
 - /!\ breaking change: removed class CommandLineResult, use CommandResult instead
 - add tests project
