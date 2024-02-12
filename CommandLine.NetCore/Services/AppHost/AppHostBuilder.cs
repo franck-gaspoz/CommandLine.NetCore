@@ -35,32 +35,53 @@ sealed class AppHostBuilder
     {
         AppHostConfiguration = hostConfiguration;
         var hostBuilder = Host.CreateDefaultBuilder();
-
+        const string sep = ".";
+        var envs = new string[] { "Development", "Release", "Staging", "Production" };
+        var cname = Thread.CurrentThread.CurrentCulture.Name;
         hostBuilder
             .ConfigureAppConfiguration(
                 configure =>
                 {
+                    // appSettings.core.json
                     configure.AddJsonFile(
                         Path.Combine(
                             Environment.CurrentDirectory,
                             ConfigFilePrefix + ConfigFileCoreName + ConfigFilePostfix),
                         optional: false);
 
+                    // appSettings.core.<cname>.json
+                    // cname ::= languagecode2-country/regioncode2
                     configure.AddJsonFile(
                         Path.Combine(
                             Environment.CurrentDirectory,
-                            ConfigFilePrefix + ConfigFileCoreName + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix),
+                            ConfigFilePrefix + ConfigFileCoreName + sep + cname + ConfigFilePostfix),
                         optional: true);
 
+                    // appSettings.json
                     configure.AddJsonFile(
                         Path.Combine(
                             Environment.CurrentDirectory, ConfigFilePrefix + ConfigFilePostfix),
                         optional: true);
 
+                    // appSettings.<env>.json
+                    foreach (var env in envs)
+                        configure.AddJsonFile(
+                            Path.Combine(
+                                Environment.CurrentDirectory, ConfigFilePrefix + sep + env + ConfigFilePostfix),
+                            optional: true);
+
+                    // appSettings.<cname>.json
                     configure.AddJsonFile(
                         Path.Combine(
-                            Environment.CurrentDirectory, ConfigFilePrefix + "." + Thread.CurrentThread.CurrentCulture.Name + ConfigFilePostfix),
+                            Environment.CurrentDirectory, ConfigFilePrefix + sep + cname + ConfigFilePostfix),
                         optional: true);
+
+                    // appSettings.<env>.<cname>.json
+                    foreach (var env in envs)
+                        configure.AddJsonFile(
+                            Path.Combine(
+                                Environment.CurrentDirectory, ConfigFilePrefix + sep + env + sep + cname + ConfigFilePostfix),
+                            optional: true);
                 });
 
         if (hostConfiguration.ConfigureDelegate is not null)

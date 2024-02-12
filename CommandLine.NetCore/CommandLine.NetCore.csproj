@@ -5,10 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<Version>1.0.19.0</Version>
-		<AssemblyVersion>1.0.19.0</AssemblyVersion>
-		<InformationalVersion>1.0.19.0</InformationalVersion>
-		<FileVersion>1.0.19.0</FileVersion>
+		<Version>1.0.20.0</Version>
+		<AssemblyVersion>1.0.20.0</AssemblyVersion>
+		<InformationalVersion>1.0.20.0</InformationalVersion>
+		<FileVersion>1.0.20.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -27,6 +27,9 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
+`1.0.20` - 02/12/2024		
+- add support for settings with Environment name
+			
 `1.0.19` - 02/01/2024		
 - fix command get-info --all and env -l syntax was not recognized
 

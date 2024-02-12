@@ -673,9 +673,13 @@ DumpCommandHelp: 0:Param<String>? 1:Opt?<String>-v 2:Opt?<String>--info 3:Opt?<S
 If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
+
+`1.0.20` - 02/12/2024		
+- add support for settings with Environment name
+
 `1.0.19` - 02/01/2024		
 - fix command get-info --all syntax was not recognized
-- 
+
 `1.0.18` - 02/01/2024
 - fix bug command without tag not displayed in help command list
 
