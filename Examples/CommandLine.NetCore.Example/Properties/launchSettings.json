@@ -74,7 +74,10 @@
     },
     "help": {
       "commandName": "Project",
-      "commandLineArgs": "help"
+      "commandLineArgs": "help",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
     }
   }
 }

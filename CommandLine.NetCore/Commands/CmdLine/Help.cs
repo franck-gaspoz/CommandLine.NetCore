@@ -15,6 +15,7 @@ using CommandLine.NetCore.Services.CmdLine.Settings;
 using CommandLine.NetCore.Services.Text;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CommandLine.NetCore.Commands.CmdLine;
 
@@ -30,6 +31,7 @@ sealed class Help : Command
     readonly GlobalSettings _globalSettings;
     readonly IServiceProvider _serviceProvider;
     readonly Configuration _config;
+    readonly IHostEnvironment _env;
 
     const string SepColor = "(uon,f=cyan,bon)";
     const string SectionTitleColor = "(uon,f=yellow,bon)";
@@ -48,13 +50,15 @@ sealed class Help : Command
         Dependencies dependencies,
         CommandsSet commands,
         IServiceProvider serviceProvider,
-        Configuration config) : base(dependencies)
+        Configuration config,
+        IHostEnvironment env) : base(dependencies)
     {
         _globalOptsSet = dependencies.GlobalSettings.GlobalOptsSet;
         _globalSettings = dependencies.GlobalSettings;
         _serviceProvider = serviceProvider;
         _commandsSet = commands;
         _config = config;
+        _env = env;
     }
 
     /// <inheritdoc/>
@@ -220,9 +224,14 @@ sealed class Help : Command
     }
 
     void DumpInformationalData()
-        => Console.Out.WriteLine(
+    {
+        Console.Out.WriteLine(
+            InformationalDataMessage +
+            Texts._("CurrentEnv", _env.EnvironmentName));
+        Console.Out.WriteLine(
             InformationalDataMessage +
             Texts._("CurrentCulture", Thread.CurrentThread.CurrentCulture.Name));
+    }
 
     void DumpGlobalOptList()
     {

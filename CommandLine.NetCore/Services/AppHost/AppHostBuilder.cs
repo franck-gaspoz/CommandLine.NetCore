@@ -24,6 +24,8 @@ sealed class AppHostBuilder
     /// </summary>
     public AppHostConfiguration AppHostConfiguration { get; private set; }
 
+    internal const string DotNetEnvironmentVariableName = "DOTNET_ENVIRONMENT";
+
     /// <summary>
     /// build the app host and run it async
     /// </summary>
@@ -36,12 +38,17 @@ sealed class AppHostBuilder
         AppHostConfiguration = hostConfiguration;
         var hostBuilder = Host.CreateDefaultBuilder();
         const string sep = ".";
-        var envs = new string[] { "Development", "Release", "Staging", "Production" };
         var cname = Thread.CurrentThread.CurrentCulture.Name;
+        var env = Environment.GetEnvironmentVariable(DotNetEnvironmentVariableName)
+            ?? Environments.Development;
+
         hostBuilder
             .ConfigureAppConfiguration(
                 configure =>
                 {
+                    // environment variables
+                    configure.AddEnvironmentVariables();
+
                     // appSettings.core.json
                     configure.AddJsonFile(
                         Path.Combine(
@@ -63,25 +70,23 @@ sealed class AppHostBuilder
                             Environment.CurrentDirectory, ConfigFilePrefix + ConfigFilePostfix),
                         optional: true);
 
-                    // appSettings.<env>.json
-                    foreach (var env in envs)
-                        configure.AddJsonFile(
-                            Path.Combine(
-                                Environment.CurrentDirectory, ConfigFilePrefix + sep + env + ConfigFilePostfix),
-                            optional: true);
-
                     // appSettings.<cname>.json
                     configure.AddJsonFile(
                         Path.Combine(
                             Environment.CurrentDirectory, ConfigFilePrefix + sep + cname + ConfigFilePostfix),
                         optional: true);
 
-                    // appSettings.<env>.<cname>.json
-                    foreach (var env in envs)
-                        configure.AddJsonFile(
-                            Path.Combine(
-                                Environment.CurrentDirectory, ConfigFilePrefix + sep + env + sep + cname + ConfigFilePostfix),
-                            optional: true);
+                    // appSettings.<env>.json
+                    configure.AddJsonFile(
+                        Path.Combine(
+                            Environment.CurrentDirectory, ConfigFilePrefix + sep + env + ConfigFilePostfix),
+                        optional: true);
+
+                    // appSettings.<env>.<cname>.json                    
+                    configure.AddJsonFile(
+                        Path.Combine(
+                            Environment.CurrentDirectory, ConfigFilePrefix + sep + env + sep + cname + ConfigFilePostfix),
+                        optional: true);
                 });
 
         if (hostConfiguration.ConfigureDelegate is not null)
@@ -93,7 +98,7 @@ sealed class AppHostBuilder
                 services => services
                     .AddSingleton<Configuration>()
                     .AddSingleton<CoreLogger>()
-                    .AddSingleton<AppHostConfiguration>()
+                    .AddSingleton(AppHostConfiguration)
                     .AddSingleton<Texts>()
                     .AddSingleton<ArgBuilder>()
                     .AddSingleton<ValueConverter>()
