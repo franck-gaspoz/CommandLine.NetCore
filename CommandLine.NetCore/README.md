@@ -674,7 +674,7 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
-`1.0.22` - 02/14/2024
+`1.0.22`,`1.0.23` - 02/14/2024
 - fix version number of app in help title box
 
 `1.0.21` - 02/12/2024		
