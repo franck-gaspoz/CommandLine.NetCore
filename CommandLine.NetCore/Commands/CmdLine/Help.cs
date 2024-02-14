@@ -352,8 +352,8 @@ sealed class Help : Command
                 null);
         var lines = new List<string>
         {
-            Config.Get("App:Title")!
-            + $" ({Assembly.GetExecutingAssembly().GetName().Version} {date})"
+            Config.Get("App:Title") ?? string.Empty
+            + $" ({Assembly.GetEntryAssembly()?.GetName().Version} {date})"
         };
         Console.Out.WriteLine(TextBox(lines));
         Console.Out.WriteLine();
