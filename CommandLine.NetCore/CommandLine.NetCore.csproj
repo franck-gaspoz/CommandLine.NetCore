@@ -5,10 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<Version>1.0.23.0</Version>
-		<AssemblyVersion>1.0.23.0</AssemblyVersion>
-		<InformationalVersion>1.0.23.0</InformationalVersion>
-		<FileVersion>1.0.23.0</FileVersion>
+		<Version>1.0.24.0</Version>
+		<AssemblyVersion>1.0.24.0</AssemblyVersion>
+		<InformationalVersion>1.0.24.0</InformationalVersion>
+		<FileVersion>1.0.24.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -27,6 +27,10 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
+`1.0.24` - 02/15/2024
+- add french translation appSettings.core.fr-FR.json
+- fix nuget content files
+
 `1.0.22`,`1.0.23` - 02/14/2024
 - fix version number of app in help title box
 
@@ -160,6 +164,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 
 	<ItemGroup>
 	  <None Remove="assets\ascii-icon.png" />
+	  <None Remove="Config\appSettings.core.fr-FR.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -167,8 +172,19 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 	    <Pack>True</Pack>
 		<IncludeInPackage>true</IncludeInPackage>
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	    <PackagePath>contentFiles/assets;content/assets;contentFiles;content</PackagePath>
+	    <PackagePath>contentFiles/assets;content/assets;contentFiles;content;</PackagePath>
 	    <PackageCopyToOutput>false</PackageCopyToOutput>
+	  </Content>
+	  <Content Include="Config\appSettings.core.fr-FR.json">
+	    <PackagePath>contentFiles/Config;content/Config;lib/$(TargetFramework)/Config/;content;contentFiles;contentFiles/any/any/Config</PackagePath>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <copyToOuput>true</copyToOuput>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	    <IncludeInPackage>true</IncludeInPackage>
+	    <PackageCopyToOutput>true</PackageCopyToOutput>
+	    <BuildAction>Content</BuildAction>
+	    <copyToOutput>true</copyToOutput>
+	    <Pack>True</Pack>
 	  </Content>
 	  <Content Include="Config\appSettings.core.json">
 		<copyToOuput>true</copyToOuput>
@@ -178,7 +194,7 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 	    <Pack>True</Pack>
-	    <PackagePath>contentFiles/Config;content/Config;lib/$(TargetFramework)/Config/;content;contentFiles</PackagePath>
+	    <PackagePath>contentFiles/Config;content/Config;lib/$(TargetFramework)/Config/;content;contentFiles;contentFiles/any/any/Config</PackagePath>
 	    <PackageCopyToOutput>true</PackageCopyToOutput>		
 	  </Content>
 	  <Content Include="LICENSE.md">
