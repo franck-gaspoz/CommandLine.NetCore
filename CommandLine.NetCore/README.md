@@ -674,9 +674,10 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
-`1.0.24` - 02/15/2024
+`1.0.24,1.0.25,1.0.26` - 02/16/2024
 - add french translation appSettings.core.fr-FR.json
 - fix nuget content files
+- update lib ansi
 
 `1.0.22`,`1.0.23` - 02/14/2024
 - fix version number of app in help title box

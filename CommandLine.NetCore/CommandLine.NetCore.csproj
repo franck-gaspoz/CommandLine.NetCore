@@ -5,10 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<Version>1.0.24.0</Version>
-		<AssemblyVersion>1.0.24.0</AssemblyVersion>
-		<InformationalVersion>1.0.24.0</InformationalVersion>
-		<FileVersion>1.0.24.0</FileVersion>
+		<Version>1.0.26.0</Version>
+		<AssemblyVersion>1.0.26.0</AssemblyVersion>
+		<InformationalVersion>1.0.26.0</InformationalVersion>
+		<FileVersion>1.0.26.0</FileVersion>
 
 		<RootNamespace>CommandLine.NetCore</RootNamespace>
 		<AssemblyName>CommandLine.NetCore</AssemblyName>
@@ -27,9 +27,10 @@
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<PackageReleaseNotes>
-`1.0.24` - 02/15/2024
+`1.0.24,1.0.25,1.0.26` - 02/16/2024
 - add french translation appSettings.core.fr-FR.json
 - fix nuget content files
+- update lib ansi
 
 `1.0.22`,`1.0.23` - 02/14/2024
 - fix version number of app in help title box
@@ -206,13 +207,14 @@ You can remove any of these files **EXCEPT Config/appSettings.core.json** wich i
 	  <Content Include="README.md">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    <Pack>True</Pack>
-	    <PackagePath>contentFiles/;content/</PackagePath>
+		<BuildAction>Content</BuildAction>
+	    <PackagePath>content/</PackagePath>
 	    <PackageCopyToOutput>Never</PackageCopyToOutput>
 	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.20" />
+	  <PackageReference Include="AnsiVtConsole.NetCore" Version="1.0.26" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
