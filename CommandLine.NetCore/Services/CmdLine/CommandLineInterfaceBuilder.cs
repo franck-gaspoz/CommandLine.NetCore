@@ -51,6 +51,8 @@ public sealed class CommandLineInterfaceBuilder
     bool _isGlobalHelpEnabled = true;
     static bool _isDumpStackTrace = false;
 
+    readonly List<Type> _ignoreCommandTypes = new();
+
     /// <summary>
     /// app host
     /// </summary>
@@ -119,6 +121,17 @@ public sealed class CommandLineInterfaceBuilder
     public CommandLineInterfaceBuilder DisableGlobalHelp()
     {
         _isGlobalHelpEnabled = false;
+        return this;
+    }
+
+    /// <summary>
+    /// ignore a command by class
+    /// </summary>
+    /// <param name="commandType">type of the command</param>
+    /// <returns>this object</returns>
+    public CommandLineInterfaceBuilder IgnoreCommand(Type commandType)
+    {
+        _ignoreCommandTypes.Add(commandType);
         return this;
     }
 
@@ -405,7 +418,8 @@ public sealed class CommandLineInterfaceBuilder
                     _configureDelegate,
                     _buildDelegate,
                     _dynamicCommands,
-                    _initializationErrors));
+                    _initializationErrors,
+                    _ignoreCommandTypes));
         }
         catch (Exception hostBuilderException)
         {

@@ -54,6 +54,11 @@ public sealed class AppHostConfiguration
     /// </summary>
     public IReadOnlyList<ErrorDescriptor> InitializationErrors { get; private set; }
 
+    /// <summary>
+    /// ignore command types
+    /// </summary>
+    public IReadOnlyList<Type> IgnoreCommandTypes { get; private set; }
+
     #endregion
 
     /// <summary>
@@ -67,6 +72,7 @@ public sealed class AppHostConfiguration
     /// <param name="buildDelegate">build delegate</param>
     /// <param name="dynamicCommands">dynamic commands</param>
     /// <param name="initializationErrors">initialization errors</param>
+    /// <param name="ignoreCommandTypes">ignore command types</param>
     public AppHostConfiguration(
         AssemblySet assemblySet,
         bool isGlobalHelpEnabled,
@@ -75,7 +81,9 @@ public sealed class AppHostConfiguration
         Action<IConfigurationBuilder>? configureDelegate,
         Action<IHostBuilder>? buildDelegate,
         IReadOnlyDictionary<string, DynamicCommandSpecification> dynamicCommands,
-        IReadOnlyList<ErrorDescriptor> initializationErrors)
+        IReadOnlyList<ErrorDescriptor> initializationErrors,
+        IReadOnlyList<Type> ignoreCommandTypes
+        )
     {
         AssemblySet = assemblySet;
         IsGlobalHelpEnabled = isGlobalHelpEnabled;
@@ -85,5 +93,6 @@ public sealed class AppHostConfiguration
         BuildDelegate = buildDelegate;
         DynamicCommands = dynamicCommands.ToDictionary(x => x.Key, x => x.Value);
         InitializationErrors = initializationErrors.ToList();
+        IgnoreCommandTypes = ignoreCommandTypes;
     }
 }
