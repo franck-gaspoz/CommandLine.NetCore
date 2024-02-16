@@ -24,8 +24,9 @@ new CommandLineInterfaceBuilder()
 
     // add this to avoid global help of the command line parser (not mandatory)
     //.DisableGlobalHelp()
-#endif    
+#endif
 
+    //.IgnoreCommand("Echo")  // example: ignore internal command Echo
     .AddCommand("add", (builder, ctx) => builder
 
         .Help("add operator")

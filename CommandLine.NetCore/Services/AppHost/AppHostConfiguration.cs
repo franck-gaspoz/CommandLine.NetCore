@@ -57,7 +57,7 @@ public sealed class AppHostConfiguration
     /// <summary>
     /// ignore command types
     /// </summary>
-    public IReadOnlyList<Type> IgnoreCommandTypes { get; private set; }
+    public IReadOnlyList<string> IgnoreCommandTypes { get; private set; }
 
     #endregion
 
@@ -82,7 +82,7 @@ public sealed class AppHostConfiguration
         Action<IHostBuilder>? buildDelegate,
         IReadOnlyDictionary<string, DynamicCommandSpecification> dynamicCommands,
         IReadOnlyList<ErrorDescriptor> initializationErrors,
-        IReadOnlyList<Type> ignoreCommandTypes
+        IReadOnlyList<string> ignoreCommandTypes
         )
     {
         AssemblySet = assemblySet;

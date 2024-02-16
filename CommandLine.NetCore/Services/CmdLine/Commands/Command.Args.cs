@@ -24,7 +24,7 @@ public abstract partial class Command
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
     /// <returns>Flag</returns>
-    protected Flag Flag(string name, bool isOptional = false)
+    protected Flag Flag(string name, bool isOptional = true)
         => _builder.Flag(name, isOptional);
 
     /// <summary>

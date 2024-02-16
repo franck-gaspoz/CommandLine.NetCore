@@ -51,7 +51,7 @@ public sealed class CommandLineInterfaceBuilder
     bool _isGlobalHelpEnabled = true;
     static bool _isDumpStackTrace = false;
 
-    readonly List<Type> _ignoreCommandTypes = new();
+    readonly List<string> _ignoreCommandTypes = new();
 
     /// <summary>
     /// app host
@@ -131,7 +131,18 @@ public sealed class CommandLineInterfaceBuilder
     /// <returns>this object</returns>
     public CommandLineInterfaceBuilder IgnoreCommand(Type commandType)
     {
-        _ignoreCommandTypes.Add(commandType);
+        _ignoreCommandTypes.Add(commandType.FullName!);
+        return this;
+    }
+
+    /// <summary>
+    /// ignore a command by type name (short or full)
+    /// </summary>
+    /// <param name="commandTypeName">type name of the command</param>
+    /// <returns>this object</returns>
+    public CommandLineInterfaceBuilder IgnoreCommand(string commandTypeName)
+    {
+        _ignoreCommandTypes.Add(commandTypeName);
         return this;
     }
 

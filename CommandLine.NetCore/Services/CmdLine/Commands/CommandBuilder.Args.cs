@@ -26,7 +26,7 @@ public sealed partial class CommandBuilder
     /// <param name="name">name</param>
     /// <param name="isOptional">is optional</param>
     /// <returns>Flag</returns>
-    public Flag Flag(string name, bool isOptional = false)
+    public Flag Flag(string name, bool isOptional = true)
         => _argBuilder.Flag(name, isOptional);
 
     /// <summary>

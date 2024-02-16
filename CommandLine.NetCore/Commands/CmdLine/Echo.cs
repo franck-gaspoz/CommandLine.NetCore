@@ -20,9 +20,14 @@ sealed class Echo : Command
     protected override SyntaxMatcherDispatcher Declare() =>
 
         // Param
-        For(Param())
+        For(Param(), Flag("no-cr"))
             .Do(() => EchoImpl);
 
-    void EchoImpl(string text)
-        => Console.Out.WriteLine(text);
+    void EchoImpl(string text, bool noCr)
+    {
+        if (noCr)
+            Console.Out.Write(text);
+        else
+            Console.Out.WriteLine(text);
+    }
 }

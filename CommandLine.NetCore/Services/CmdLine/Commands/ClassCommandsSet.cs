@@ -69,7 +69,9 @@ sealed class ClassCommandsSet : AbstractCommandsSetBase
                                 .Any()
                             && x.InheritsFrom(typeof(Command))
                             && !appHostConfiguration.IgnoreCommandTypes
-                                .Contains(x)));
+                                .Contains(x.FullName)
+                            && !appHostConfiguration.IgnoreCommandTypes
+                                .Contains(x.Name)));
 
         var selectedTypes = new List<Type>();
         foreach (var type in commandTypes)
