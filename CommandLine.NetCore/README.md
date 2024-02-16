@@ -677,6 +677,7 @@ If this option is set syntaxes of a command can't be ambiguous
 `1.0.27` - 02/16/2024
 - add ignore class command method by type and by name
 - add echo option --no-cr
+- Flag default is optional set to true
 
 `1.0.24,1.0.25,1.0.26` - 02/16/2024
 - add french translation appSettings.core.fr-FR.json
