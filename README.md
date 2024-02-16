@@ -674,6 +674,10 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
+`1.0.27` - 02/16/2024
+- add ignore class command method by type and by name
+- add echo option --no-cr
+
 `1.0.24,1.0.25,1.0.26` - 02/16/2024
 - add french translation appSettings.core.fr-FR.json
 - fix nuget content files
