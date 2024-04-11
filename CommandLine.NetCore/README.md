@@ -674,6 +674,9 @@ If this option is set syntaxes of a command can't be ambiguous
 
 # Versions history
 
+`1.0.28,1.0.29,1.0.30` - 04/11/2024
+- AppHostBuilder call ConfigureDelegate prior to configure
+
 `1.0.27` - 02/16/2024
 - add ignore class command method by type and by name
 - add echo option --no-cr

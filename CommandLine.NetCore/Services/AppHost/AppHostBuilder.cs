@@ -46,6 +46,8 @@ sealed class AppHostBuilder
             .ConfigureAppConfiguration(
                 configure =>
                 {
+                    // Add config sources from lowest priority to highest
+
                     // environment variables
                     configure.AddEnvironmentVariables();
 
